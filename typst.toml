@@ -1,0 +1,24 @@
+[package]
+name = "min-book"
+version = "0.1.0"
+entrypoint = "src/lib.typ"
+authors = ["Maycon F. Melo <https://mayconfmelo.netlify.app>"]
+license = "MIT-0"
+description = "Simple and complete books without introducing new sintax"
+categories = [ "layout", "book" ]
+keywords = [ "book", "structuring automation" ]
+exclude = [
+  "dev/",
+  "test/",
+  "docs/",
+  "scripts/",
+  ".git",
+  ".gitignore",
+  "justfile"
+]
+
+[template]
+path = "template"
+entrypoint = "main.typ"
+thumbnail = "/docs/assets/thumbnail.png"
+  
