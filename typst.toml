@@ -2,11 +2,12 @@
 name = "min-book"
 version = "0.1.0"
 entrypoint = "src/lib.typ"
-authors = ["Maycon F. Melo <https://mayconfmelo.netlify.app>"]
+authors = ["Maycon F. Melo <@mayconfmelo>"]
 license = "MIT-0"
 description = "Simple and complete books without introducing new sintax"
 categories = [ "layout", "book" ]
-keywords = [ "book", "structuring automation" ]
+keywords = [ "book", "document structuring" ]
+repository = "https://github.com/mayconfmelo/min-book"
 exclude = [
   "dev/",
   "test/",
