@@ -8,7 +8,7 @@
   authors: "Author",
   date: (2025, 01, 12),
   titlepage: true,
-  cover: image("assets/cover.jpeg"),
+  cover: image("assets/cover.png"),
   paper: "a5",
   part: "Subject",
   chapter: "Detail",
