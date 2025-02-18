@@ -15,11 +15,13 @@ exclude = [
   "scripts/",
   ".git",
   ".gitignore",
-  "justfile"
+  "justfile",
+  "CHANGELOG.md",
+  "SETUP.md"
 ]
 
 [template]
 path = "template"
 entrypoint = "main.typ"
-thumbnail = "/docs/assets/thumbnail.png"
+thumbnail = "/template/assets/thumbnail.png"
   
