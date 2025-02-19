@@ -1,5 +1,4 @@
 // Template for writing books
-// TODO: refactor book-notes-state to make reference links work both ways.
 
 #import "@preview/numbly:0.1.0": numbly
 
@@ -287,23 +286,38 @@
       width: 100%,
       height: 100%
     )
-    set page(background: cover)
+    if cover.func() == image {
+      set page(background: cover)
+    }
+    else if type(cover) == content {
+      cover
+    }
+    else {
+      panic("Invalid page argument value: \"" + cover + "\"")
+    }
     pagebreak()
   }
 
   // Generate titlepage
-  if titlepage == true {
-    align(center + top)[
-      #text(size: 27.5pt)[#title]
-      #linebreak()
-      #v(5pt)
-      #text(size: 15pt)[#subtitle]
-    ]
-    align(center + bottom)[
-      #text(size: 13pt)[#authors]
-      #linebreak()
-      #text(size: 13pt)[#date.display("[year]")]
-    ]
+  if titlepage != none and titlepage != false {
+    if type(titlepage) == content {
+      titlepage
+    } else if titlepage == true {
+      align(center + top)[
+        #text(size: 27.5pt)[#title]
+        #linebreak()
+        #v(5pt)
+        #text(size: 15pt)[#subtitle]
+      ]
+      align(center + bottom)[
+        #text(size: 13pt)[#authors]
+        #linebreak()
+        #text(size: 13pt)[#date.display("[year]")]
+      ]
+    }
+    else {
+      panic("Invalid titlepage argument value: \"" + cover + "\"")
+    }
     pagebreak(weak: true)
   }
 
@@ -323,19 +337,15 @@
     [#metadata("Marker for situating titles after/before outline") <outline>]
     pagebreak(weak: true)
   }
-
-  // Start page numbering
-  // TODO: must start at the first heading level 1
-  counter(page).update(1)
+  
+  
+  pagebreak(weak:true, to: "even")
+  
+  // Start page numbering at the next even page:
   set page(numbering: "1")
+  counter(page).update(1)
 
   body
-  // context for level in book-notes-state.final().keys() {
-  //   for number in book-notes-state.final().at(level) {
-  //     let a = query(label(level+"-"+str(number.at(0))))
-  //     a
-  //   }
-  // }
 }
 
 
