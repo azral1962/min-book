@@ -5,7 +5,7 @@
 </center>
 
 
-# Quick Start
+## Quick Start
 
 ```typst
 #import "@preview/min-book:0.1.0": book
@@ -18,7 +18,7 @@
 ```
 
 
-# Description
+## Description
 
 Generate complete and complex books, without any annoying new commands or syntax,
 just good old pure Typst. This package works by manipulating the standard Typst
@@ -26,7 +26,7 @@ elements, adapting them to the needs of a book structure. All of this is managed
 behind the scenes, so that nothing changes in the Typst code itself.
 
 
-# More Information
+## More Information
 
 - [Official manual](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/0.1.0/docs/pdf/manual.pdf)
 - [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/0.1.0/docs/pdf/example.pdf)
