@@ -2,7 +2,7 @@
 
 #show: manual.with(
   title: "Minimal Books",
-  description: "Simple and complete books without introducing new sintax.",
+  description: "Simple and complete books without introducing new syntax.",
   authors: "Maycon F. Melo <https://github.com/mayconfmelo>",
   cmd: "min-book",
   version: "0.1.0",
@@ -26,13 +26,13 @@
 
 = Description
 
-Generate complete and complex books, without any annoying new commands or sintax,
+Generate complete and complex books, without any annoying new commands or syntax,
 just good old pure Typst. All the magic occurs in initialization: you set it
 with the right options, and the package will manage all formatting and
 structuring all by itself --- as it should be.
 
 While it makes it possible to play with some complex book structures like _parts_
-and _chapters_, and creative numberings, this package comes with a lot of
+and _chapters_, and creative numbering, this package comes with a lot of
 ready-to-go defaults; so its really up to you to customize it your way or ride
 along the defaults and just start writing: both ways are possible and encouraged.
 
@@ -72,7 +72,7 @@ Those are the full list of options available and its default values:
 )
 ```
 
-Seems like an awfull lot to start with, but let's just break down all this to
+Seems like an awful lot to start with, but let's just break down all this to
 understand it better, shall we?
 
 #arg(
@@ -160,7 +160,7 @@ understand it better, shall we?
 #arg(
   "justify:", "boolean"
 )[
-  Defines if the text will have justified aligment.
+  Defines if the text will have justified alignment.
 ]
 
 #arg(
@@ -177,7 +177,7 @@ understand it better, shall we?
 ]
 
 #arg(
-  "first-line-indent:", "lenght"
+  "first-line-indent:", "length"
 )[
   Defines the first line indentation of all paragraphs, but the first one, in a sequence of paragraphs.
 ]
@@ -191,13 +191,13 @@ understand it better, shall we?
 #arg(
   "font:", ("string", "array")
 )[
-  Defines the font families used for the text: a principal font and its falbacks.
+  Defines the font families used for the text: a principal font and its fallback.
 ]
 
 #arg(
   "font-size:", "length"
 )[
-  Defines the size of the text in tue document.
+  Defines the size of the text in the document.
 ]
 
 
@@ -233,7 +233,7 @@ into _book parts_ automatically. To enable, just give a string value to the
 = Book Chapters
 
 In most cases, books are divided into smaller sections called chapters.
-Generaly, each chapter contains a single minor story, or event, or scene,
+Generally, each chapter contains a single minor story, or event, or scene,
 or any type of subtle plot change.
 
 Chapters are used in a smart way, too, depending of the use of
@@ -277,8 +277,8 @@ into _book chapters_. Seems complex, but it turns to be very intuitive:
 = Advanced Numbering
 
 The book headings can be numbered two ways: using a standard numbering string,
-or a #univ("numbly") numering array. While numbering strings are indicated for
-simpler cases, the numbly arrays are used in more complex book numberings.
+or a #univ("numbly") numbering array. While numbering strings are indicated for
+simpler cases, the numbly arrays are used in more complex book numbering.
 
 By default, when the book have _parts_ enabled, the following numbering is used:
 
@@ -293,7 +293,7 @@ By default, when the book have _parts_ enabled, the following numbering is used:
 )
 ```
 
-But when the _parts_ are disabled, the following numberingis used:
+But when the _parts_ are disabled, the following numbering is used:
 
 ```typ
 (
@@ -307,12 +307,12 @@ But when the _parts_ are disabled, the following numberingis used:
 ```
 
 Additionally, a `numbering-style` argument can be set to override these default
-numberings above.
+numbering above.
 
 
 = Additional Features
 
-As said before, this package does not introduce any new sintax nor commands to
+As said before, this package does not introduce any new syntax nor commands to
 write a complete book. But, well... it does offers some additional commands.
 These are completely optional and are available only by explicit import,
 separate from the `book` main function:
@@ -320,8 +320,8 @@ separate from the `book` main function:
 
 == Notes
 
-Adds endnotes to the book. Endnotes are more common in books than footnotes,
-and while footnotes appear at the footer of the same page, endnotes appears at
+Adds end notes to the book. End notes are more common in books than footnotes,
+and while footnotes appear at the footer of the same page, end notes appears at
 its own page at the end of the current section, right before the next heading:
 
 #pagebreak()
@@ -331,9 +331,9 @@ its own page at the end of the current section, right before the next heading:
  
 = Current heading
 
-This text have a endnote#note[This is a endnote]
+This text have a end note#note[This is a end note]
 
-// The endnote will automatically appear here.
+// The end note will automatically appear here.
 
 = Next heading
 ```
@@ -341,7 +341,7 @@ This text have a endnote#note[This is a endnote]
 
 == Horizontal Rule
 
-Adds horizontal rules, used to separate suble changes of subject in book texts.
+Adds horizontal rules, used to separate subtle changes of subject in book texts.
 Can be called by its name or its alias:
 
 ```typ
@@ -382,7 +382,7 @@ This command have the following optional arguments:
 #pagebreak()
 
 
-== Blockquote
+== Block quote
 
 Adds a block version of the `quote` command. In fact, it is just a simple
 wrapper of ```typc quote(block: true)``` with some modifications:
@@ -391,7 +391,7 @@ wrapper of ```typc quote(block: true)``` with some modifications:
 #import "@local/min-book:0.1.0": blockquote
 
 #blockquote(by: "Einstein")[
-  Don't believe everithing you read on the internet.
+  Don't believe everything you read on the internet.
 ]
 ```
 

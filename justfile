@@ -4,7 +4,7 @@ root := justfile_directory()
 default:
 	@just --list --unsorted
   
-# Continuous compilaton
+# Continuous compilation
 watch file="template/main.typ":
   bash scripts/package.sh check "local" "{{root}}"
   mkdir "dev" 2>/dev/null || true
