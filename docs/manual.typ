@@ -27,14 +27,14 @@
 = Description
 
 Generate complete and complex books, without any annoying new commands or syntax,
-just good old pure Typst. All the magic occurs in initialization: you set it
-with the right options, and the package will manage all formatting and
-structuring all by itself --- as it should be.
+just good old pure Typst. This package works by manipulating the standard Typst
+elements, adapting them to the needs of a book structure. All of this is managed
+behind the scenes, so that nothing changes in the Typst code itself.
 
-While it makes it possible to play with some complex book structures like _parts_
-and _chapters_, and creative numbering, this package comes with a lot of
-ready-to-go defaults; so its really up to you to customize it your way or ride
-along the defaults and just start writing: both ways are possible and encouraged.
+While it is possible to play with complex structures, such as parts and chapters
+and creative numbering, this package comes with several ready to use default
+values; so its really up to you to customize it your way or ride along the
+defaults and just start writing: both ways are possible and encouraged.
 
 This manual will be updated only when new versions break or modify something;
 otherwise, it will be valid to all newer versions starting by the one documented
@@ -318,7 +318,7 @@ These are completely optional and are available only by explicit import,
 separate from the `book` main function:
 
 
-== Notes
+== Note Command
 
 Adds end notes to the book. End notes are more common in books than footnotes,
 and while footnotes appear at the footer of the same page, end notes appears at
@@ -331,7 +331,7 @@ its own page at the end of the current section, right before the next heading:
  
 = Current heading
 
-This text have a end note#note[This is a end note]
+This text have an end note#note[This is an end note]
 
 // The end note will automatically appear here.
 
@@ -339,7 +339,7 @@ This text have a end note#note[This is a end note]
 ```
 
 
-== Horizontal Rule
+== Horizontal Rule Command
 
 Adds horizontal rules, used to separate subtle changes of subject in book texts.
 Can be called by its name or its alias:
@@ -382,7 +382,7 @@ This command have the following optional arguments:
 #pagebreak()
 
 
-== Block quote
+== Block Quote Command
 
 Adds a block version of the `quote` command. In fact, it is just a simple
 wrapper of ```typc quote(block: true)``` with some modifications:

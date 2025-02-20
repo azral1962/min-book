@@ -142,7 +142,7 @@ fn main() {
 = Optional Commands
 
 
-== Endnotes
+== End notes
 
 A
 #lorem(20)#note[Note A] #lorem(20)#note[Note B]
