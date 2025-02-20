@@ -15,25 +15,11 @@
 )
 
 
-= Heading Levels
+= Page Availability
 
-== Level 2
+== Usable Space
 
-=== Level 3
-
-==== Level 4
-
-===== Level 5
-
-====== Level 6
-
-
-= Default Elements
-
-
-== Page Space
-
-#lorem(230)
+#lorem(507)
 
 
 == Paragraphs Style
@@ -49,15 +35,46 @@
 #lorem(25)
 
 
-== Quotes
+= Heading Levels
 
-Inline quotation: #quote[#lorem(25)].
 
-#blockquote(by: "Einstein")[
-  Don't believe everything you read on the internet.
-]
+== Level 2
 
-#lorem(45)
+#lorem(25)
+
+
+=== Level 3
+
+#lorem(25)
+
+
+==== Level 4
+
+#lorem(25)
+
+
+===== Level 5
+
+#lorem(18)
+
+
+====== Level 6
+
+#lorem(18)
+
+
+= Some Default Elements
+
+
+== Inline Markup
+
+_#lorem(40)_
+
+*#lorem(40)*
+
+#quote[#lorem(40)]
+
+#raw(lorem(40))
 
 #pagebreak()
 
@@ -67,43 +84,50 @@ Inline quotation: #quote[#lorem(25)].
 
 === Simple lists
 
-#lorem(25)
+#lorem(40)
+
+#lorem(40)
 
 - Item A
 - Item B
 - Item C
 
-#lorem(25)
+#lorem(40)
+
+#lorem(40)
 
 
 === Numbered lists
 
-#lorem(25)
+#lorem(40)
+
+#lorem(40)
 
 + Item A
 + Item B
 + Item C
 
-#lorem(25)
+#lorem(40)
+
+#lorem(40)
 
 #pagebreak()
 
 
 == Terms
 
-#lorem(25)
+#lorem(75)
 
-/ Foo: #lorem(8)
-/ Bar: #lorem(8)
-/ Baz: #lorem(8)
+/ Term A: #lorem(20)
+/ Term B: #lorem(20)
+/ Term C: #lorem(20)
 
-#lorem(25)
+#lorem(75)
 
 
 == Raw Code
 
-This is an inline Rust raw code: ```rust prinln!()``` and ```rust main()```
-
+#lorem(80)
 
 ```rust
 // This is a block Rust raw code:
@@ -112,7 +136,7 @@ fn main() {
 }
 ```
 
-#lorem(25)
+#lorem(80) ```rust main()```
 
 
 = Optional Commands
@@ -120,8 +144,27 @@ fn main() {
 
 == Endnotes
 
-This text have the first note.#note[This note will appear at the end of this heading.]
-And here it comes the second one!#note[A ```typm #pagebreak()``` will be inserted before and after it.]
+A
+#lorem(20)#note[Note A] #lorem(20)#note[Note B]
+
+#lorem(40)#note[Note C]
+
+#lorem(40)#note[Note D]
+
+#lorem(40)#note[Note E]
+
+#lorem(40)#note[Note F]
+
+
+== Block Quotes
+
+#lorem(80)
+
+#blockquote(by: "Author")[
+  #lorem(40)
+]
+
+#lorem(80)
 
 
 == Horizontal Rule
