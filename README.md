@@ -21,9 +21,9 @@
 # Description
 
 Generate complete and complex books, without any annoying new commands or syntax,
-just good old pure Typst. All the magic occurs in initialization: you set it
-with the right options, and the package will manage all formatting and
-structuring all by itself --- as it should be.
+just good old pure Typst. This package works by manipulating the standard Typst
+elements, adapting them to the needs of a book structure. All of this is managed
+behind the scenes, so that nothing changes in the Typst code itself.
 
 
 # More Information

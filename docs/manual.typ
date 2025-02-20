@@ -315,7 +315,7 @@ numbering above.
 As said before, this package does not introduce any new syntax nor commands to
 write a complete book. But, well... it does offers some additional commands.
 These are completely optional and are available only by explicit import,
-separate from the `book` main function:
+separate from the `#book` main function:
 
 
 == Note Command

@@ -9,4 +9,4 @@
   - Level 1 headings used as _chapters_ when _parts_ are not used
 - Additional `#endnotes` command
 - Additional `#horizontalrule` command
-- Additional `#blockquote@m` command
+- Additional `#blockquote` command
