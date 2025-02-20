@@ -169,13 +169,13 @@ A
 
 == Horizontal Rule
 
-#lorem(45)
+#lorem(65)
 
 #horizontalrule()
 
-#lorem(45)
+#lorem(65)
 
 #hr()
 
-#lorem(45)
+#lorem(65)
 

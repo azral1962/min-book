@@ -66,7 +66,7 @@ Those are the full list of options available and its default values:
   line-space: 0.5em,
   par-margin: 0.75em,
   first-line-indent: 1em,
-  margin: 15%,
+  margin: (x: 15%, y: 14%),
   font: ("Book Antiqua", "Times New Roman"),
   font-size: 11pt,
 )
