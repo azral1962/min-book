@@ -22,7 +22,7 @@
   line-space: 0.5em,
   par-margin: 0.75em,
   first-line-indent: 1em,
-  margin: 15%,
+  margin: (x: 15%, y: 14%),
   font: ("Book Antiqua", "Times New Roman"),
   font-size: 11pt,
   body
@@ -38,7 +38,7 @@
     }
   }
 
-  // Tranform authors array into string
+  // Transform authors array into string
   if type(authors) != str {
     authors = authors.join(", ", last: ".")
   }
@@ -78,7 +78,11 @@
     size: font-size,
     lang: lang
   )
-  set terms(separator: [: ], tight: true)
+  set terms(
+    separator: [: ],
+    tight: true,
+    hanging-indent: 1em,
+  )
   
   // Define numbering pattern:
   let numpattern = ()
@@ -204,7 +208,7 @@
   }
 
   // Insert notes of a section at its end, before next heading.
-  // TODO: Try to find a less clunsy way to do it
+  // TODO: Try to find a less clumsy way to do it
 
   // Get index of all headings from body.children
   let new-body = body.children
@@ -263,9 +267,9 @@
     }
   }
 
-  // Tranform the note markers in links to note content:
+  // Transform the note markers in links to note content:
   show super: it => {
-    // RegEx to find note label:
+    // Regex to find note label:
     let note-regex = regex("::[0-9-.]+::")
 
     if it.body.text.ends-with(note-regex) {
@@ -355,27 +359,44 @@
   content,
   numbering-style: "1"
 ) = context {
+  context book-note-counter.step()
+  
   // Find the level (numbering) of current heading:
   let selector = selector(heading).before(here())
   let level = counter(selector).display()
   
-  book-note-counter.step()
-  
   let this-note = (book-note-counter.get().at(0), content)
-  let book-notes-state-old = book-notes-state.get()
+  //let book-notes-state-old = book-notes-state.get()
+
+  
+  if book-notes-state.get().at(level, default: none) == none {
+    book-notes-state.update(notes => {
+      notes.insert(level, (this-note,))
+      notes
+    })
+  }
+  else {
+    book-notes-state.update(notes => {
+      notes.at(level).push(this-note)
+      notes
+    })
+  }
   
   // If already exists other notes in the same level:
-  if book-notes-state-old.keys().contains(level) {
-    book-notes-state-old.at(level).push(this-note)
-    
-  }
-  // If does not exist any note in this level yet:
-  else {
-    book-notes-state-old.insert(level, ())
-    book-notes-state-old.at(level).push(this-note)
-  }
+  // if book-notes-state-old.keys().contains(level) {
+  //   book-notes-state-old.at(level).push(this-note)
+  // }
+  // // If does not exist any note in this level yet:
+  // else {
+  //   book-notes-state-old.insert(level, ())
+  //   book-notes-state-old.at(level).push(this-note)
+  // }
   
-  book-notes-state.update(book-notes-state-old)
+  // book-notes-state.update(notes => {
+  //   notes.insert(level, (this-note,))
+  //   notes
+  // })
+  // //book-notes-state.update(book-notes-state-old)
   
   let note-number = numbering(numbering-style, ..book-note-counter.get())
   let note-label = level + "-" + note-number
