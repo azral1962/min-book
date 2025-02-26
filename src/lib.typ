@@ -86,7 +86,7 @@
   )
   
   // Define numbering pattern:
-  // TODO: When numbering-style == none, set numering in only parts
+  // TODO: When numbering-style == none, set numbering in parts only
   let numpattern = ()
   if numbering-style != none {
     // numbering-style overrides the default numbering
@@ -193,7 +193,7 @@
     context if type(part) != none {
       // Get the current level 2 heading count:
       let current-h2-count = book-h2-counter.get()
-      // Level 2 heading numberings will not restart after level 1 headings now:
+      // Level 2 heading numbering will not restart after level 1 headings now:
       counter(heading).update((h1, ..n) => (h1, ..current-h2-count))
     }
   }
@@ -215,7 +215,7 @@
   ): set block(above: font-size, below: font-size)
 
   // Insert notes of a section at its end, before next heading:
-  // TODO: Find a less clunsy way to handle #note
+  // TODO: Find a less clumsy way to handle #note
 
   let new-body = body.children
   let h-index = ()
