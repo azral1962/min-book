@@ -53,7 +53,7 @@ Those are the full list of options available and its default values:
   title: none,
   subtitle: none,
   authors: none,
-  date: auto,
+  date: datetime.today(),
   cover: none,
   titlepage: true,
   part: "Part",
