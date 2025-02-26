@@ -9,7 +9,7 @@
   title: none,
   subtitle: none,
   authors: none,
-  date: auto,
+  date: datetime.today(),
   cover: none,
   titlepage: true,
   part: "Part",
@@ -38,16 +38,17 @@
     }
   }
 
-  // Tranform authors array into string
+  // Transform authors array into string
   if type(authors) != str {
-    authors = authors.join(", ", last: ".")
+    authors = authors.join(", ")
   }
 
   if type(date) == array {
-    date = datetime(year: date.at(0), month: date.at(1), day: date.at(2))
-  }
-  else {
-    date = datetime.today()
+    date = datetime(
+      year: date.at(0),
+      month: date.at(1),
+      day: date.at(2)
+    )
   }
 
   // Join title and subtitle, if any
@@ -85,10 +86,13 @@
   )
   
   // Define numbering pattern:
+  // TODO: When numbering-style == none, set numering in only parts
   let numpattern = ()
   if numbering-style != none {
+    // numbering-style overrides the default numbering
     numpattern = numbering-style
-  } else if type(part) == str {
+  } else if type(part) != none {
+    // Used if _part_ is set
     numpattern = (
       "{1:I}:\n",
       "{2:I}.\n",
@@ -98,6 +102,7 @@
       "{2:I}.{3:1}.{4:1}.{5:1}.{6:a}. ",
     )
   } else {
+    // Used if _part_ is not set
     numpattern = (
       "{1:I}.\n",
       "{1:I}.{2:1}.\n",
@@ -109,9 +114,15 @@
   }
   
   // Manage numbering cases:
+  // - Receives numbering ..patterns
+  // - Receives numbers as ..nums
+  // - Insert part and chapter names before numbering, if set
+  // - Returns numbering
   let set-numbering(
     ..patterns
-  ) = (..nums) => {
+  ) = (
+    ..nums
+  ) => {
     context {
       let patterns = patterns.pos()
       let contents = ()
@@ -122,9 +133,10 @@
       }
 
       // Numbering showed after TOC.
+      // TODO: part and chapter default names based on text.lang with linguify.
       if query(selector(label("outline")).before(here())).len() != 0 {
-        // Heading level 1 become part:
         if part != none and patterns.len() >= 1 {
+          // Heading level 1 become part
           patterns.at(0) = part + " " + patterns.at(0)
 
           // Heading level 2 become chapter
@@ -140,14 +152,17 @@
         
         contents = patterns
       }
-      // In TOC, use just the numbering:
+      // Numbering showed in TOC:
       else {
         for pattern in patterns {
-          contents.push( pattern.trim(regex("\n$")) )
+          // Remove any "\n" at the end of numbering patterns:
+          contents.push(
+            pattern.trim(regex("\n$"))
+          )
         }
       }
 
-      // When using numbly numbering array:
+      // Get numbering using numbly
       numbly(default: "I.I.1.1.1.a", ..contents)(..nums)
     }
   }
@@ -157,8 +172,8 @@
     hanging-indent: 0pt,
   )
 
+  // Count every level 2 heading:
   let book-h2-counter = counter("book-h2")
-  // Count every level 2 heading to make it independent when part is used:
   show heading.where(level: 2): it => {
     book-h2-counter.step()
     it
@@ -168,21 +183,17 @@
     // Create part page, if any:
     if type(part) != none {
       pagebreak(weak: true, to: "even")
-      
       set align(center + horizon)
       it
-      
       pagebreak(weak: true)
     } else {
       it
     }
 
-    // Set independent level 2 heading numbering when parts are used:
     context if type(part) != none {
       // Get the current level 2 heading count:
       let current-h2-count = book-h2-counter.get()
-
-      // Do not restart level 2 heading count at each  new level 1:
+      // Level 2 heading numberings will not restart after level 1 headings now:
       counter(heading).update((h1, ..n) => (h1, ..current-h2-count))
     }
   }
@@ -196,64 +207,65 @@
   show heading.where(level: 6): set text(size: font-size * 1.1)
   show raw: set text(font: "Inconsolata", size: font-size)
   show quote.where(block: true): set pad(x: 1em)
-  show raw.where(block: true): it => pad(left: 1em)[#it]
+  show raw.where(block: true): it => pad(left: 1em, it)
   
   show selector.or(
     terms, enum, list, quote.where(block: true),
     table, figure, raw.where(block: true),
-  ): it => {
-    v(font-size, weak: true)
-    it
-    v(font-size, weak: true)
-  }
+  ): set block(above: font-size, below: font-size)
 
-  // Insert notes of a section at its end, before next heading.
-  // TODO: Try to find a less clunsy way to do it
+  // Insert notes of a section at its end, before next heading:
+  // TODO: Find a less clunsy way to handle #note
 
-  // Get index of all headings from body.children
   let new-body = body.children
   let h-index = ()
   
+  // Get index of all headings in body.children
   for n in range(new-body.len()) {
     let item = new-body.at(n)
-
-    // Find heading index in body:
+    
     if item.func() == heading {
       h-index.push(n)
     }
   }
 
-  // Insert <note> before each heading obtained
+  // Insert anchor <note> before each heading obtained
   for n in range(h-index.len()) {
     new-body.insert(h-index.at(n) + n, [#metadata("Note anchor") <note>])
   }
 
-  // Insert a <note> at the document ending to be used by the last heading
+  // Insert a final anchor <note> at the end of the document
   new-body.push([#metadata("Note anchor") <note>])
 
-  // Make the edited new-body into the documents body
+  // Make the edited new-body into the document body
   body = new-body.join()
 
   // Make the first note be note 1, instead of note 0.
   book-note-counter.update(1)
 
-  // Swap <note> for the notes in the anterior heading, if any.
+  // Swap the <note> for the actual notes in the current section, if any.
   show <note>: it => {
     context if book-notes-state.final() != (:) {
-      // Get the heading of the <note> section.
+      // Find the level (numbering) of current section heading:
       let selector = selector(heading).before(here())
       let level = counter(selector).display()
 
-      // Show notes only if there are any
+      // Show notes only if there are any in this section
       if book-notes-state.get().keys().contains(level) {
         pagebreak(weak: true)
 
-        // Insert note where <note> stood:
+        // Insert the notes:
         for note in book-notes-state.get().at(level) {
-          par(first-line-indent: 0pt, spacing: 0.75em, hanging-indent: 1em)[
-            #link(label(level + "-" + str(note.at(0))))[
+          par(
+            first-line-indent: 0pt,
+            spacing: 0.75em,
+            hanging-indent: 1em
+          )[
+            // Link to the note marker in the text:
+            #link(label(level + "-" + str(note.at(0)) ))[
               #text(weight: "bold", [#note.at(0):])
             ]
+            // Insert <LEVEl-content> for cross-reference
             #label(level + "-" + str(note.at(0)) + "-content")
             #note.at(1)
           ]
@@ -262,21 +274,22 @@
         pagebreak(weak: true)
       }
 
-      // Make every heading's notes start at note 1
+      // Make every section notes start at note 1
       book-note-counter.update(1)
     }
   }
 
-  // Tranform the note markers in links to note content:
   show super: it => {
-    // RegEx to find note label:
     let note-regex = regex("::[0-9-.]+::")
-
+    
+    // Transform note markers in links to the actual notes:
+    // - Targets the `#super("NUMBER ::LABEL::")` returned by `#note`
+    // - After handled, turn them into `#link(<LABEL>)[#super("NUMBER")]`
     if it.body.text.ends-with(note-regex) {
       let note-label = it.body.text.find(note-regex).trim(":") + "-content"
       let note-number = it.body.text.replace(note-regex, "").trim()
 
-      // Create link to note content:
+      // Link to the actual note content:
       link(label(note-label))[#super(note-number)]
     } else {
       it
@@ -284,13 +297,14 @@
   }
 
   // Generate cover
+  // TODO: Default cover generation (then turn default titlepage: none)
   if cover != none {
-    set image(
-      fit: "stretch",
-      width: 100%,
-      height: 100%
-    )
     if cover.func() == image {
+      set image(
+        fit: "stretch",
+        width: 100%,
+        height: 100%
+      )
       set page(background: cover)
     }
     else if type(cover) == content {
@@ -328,8 +342,14 @@
   // Generate TOC
   if toc == true {
     show outline.entry.where(level: 1): it => {
-      v(font-size, weak: true)
-      strong(it)
+      // Special formatting to parts in TOC:
+      if part != none {
+        v(font-size, weak: true)
+        strong(it)
+      }
+      else {
+        it
+      }
     }
     show outline.entry: it => {
       h(1.5em)
@@ -338,14 +358,14 @@
 
     pagebreak(weak: true, to: "even")
     outline()
+    // <outline> anchor allows different numbering styles in TOC and in the actual text.
     [#metadata("Marker for situating titles after/before outline") <outline>]
     pagebreak(weak: true)
   }
   
   
-  pagebreak(weak:true, to: "even")
-  
   // Start page numbering at the next even page:
+  pagebreak(weak:true, to: "even")
   set page(numbering: "1")
   counter(page).update(1)
 
@@ -353,29 +373,30 @@
 }
 
 
-// Collect notes and the level of its owner heading to book-notes-state.
-// Insert note number in place.
+// Insert end notes.
+// - Collect notes and section data to book-notes-state.
+// - Insert the superscript note number in place.
+// TODO: Store numbering-style in book-notes-state.
 #let note(
   content,
   numbering-style: "1"
 ) = context {
   context book-note-counter.step()
   
-  // Find the level (numbering) of current heading:
+  // Find the level (numbering) of current section heading:
   let selector = selector(heading).before(here())
   let level = counter(selector).display()
   
   let this-note = (book-note-counter.get().at(0), content)
-  //let book-notes-state-old = book-notes-state.get()
-
-  // Insert `(label: this-note)`:
+  
+  // Insert book-notes-state.at(level) = this-note:
   if book-notes-state.get().at(level, default: none) == none {
     book-notes-state.update(notes => {
       notes.insert(level, (this-note,))
       notes
     })
   }
-  // Insert `this-note` to existing _label_:
+  // Insert this-note to existing book-notes-state.at(label):
   else {
     book-notes-state.update(notes => {
       notes.at(level).push(this-note)
@@ -386,7 +407,7 @@
   let note-number = numbering(numbering-style, ..book-note-counter.get())
   let note-label = level + "-" + note-number
   
-  // Set note as [NUMBER ::LABEL::] to be managed later
+  // Set note as #super[NUMBER ::LABEL::] to be managed later
   [#super(note-number + " ::" + note-label + "::")#label(note-label)]
 }
 
@@ -412,6 +433,7 @@
 
 // Alias for `#horizontalrule` command:
 #let hr = horizontalrule
+
 
 // Alias for `#quote(block: true)` command:
 #let blockquote(by: none, ..args) = quote(block: true, attribution: by, ..args)
