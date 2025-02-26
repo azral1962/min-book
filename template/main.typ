@@ -130,7 +130,7 @@ _#lorem(40)_
 #lorem(80)
 
 ```rust
-// This is a block Rust raw code:
+// This is a Rust code block:
 fn main() {
     println!("Hello World!");
 }
@@ -144,8 +144,8 @@ fn main() {
 
 == End notes
 
-A
-#lorem(20)#note[Note A] #lorem(20)#note[Note B]
+#lorem(20)#note[Note A]
+#lorem(20)#note[Note B]
 
 #lorem(40)#note[Note C]
 
