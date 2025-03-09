@@ -217,12 +217,12 @@
   ): set block(above: font-size, below: font-size)
 
   // Insert notes of a section at its end, before next heading:
-  // TODO: Find a less clumsy way to handle #note
+  // NOFIX: This really clumsy code is the only way found to implement #note.
 
   let new-body = body.children
   let h-index = ()
   
-  // Get index of all headings in body.children
+  // #note: Get index of all headings in body.children
   for n in range(new-body.len()) {
     let item = new-body.at(n)
     
@@ -231,21 +231,21 @@
     }
   }
 
-  // Insert anchor <note> before each heading obtained
+  // #note: Insert anchor <note> before each heading obtained
   for n in range(h-index.len()) {
     new-body.insert(h-index.at(n) + n, [#metadata("Note anchor") <note>])
   }
 
-  // Insert a final anchor <note> at the end of the document
+  // #note:Insert a final anchor <note> at the end of the document
   new-body.push([#metadata("Note anchor") <note>])
 
-  // Make the edited new-body into the document body
+  // #note: Make the edited new-body into the document body
   body = new-body.join()
 
-  // Make the first note be note 1, instead of note 0.
+  // #note: Make the first note be note 1, instead of note 0.
   book-note-counter.update(1)
 
-  // Swap the <note> for the actual notes in the current section, if any.
+  // #note: Swap the <note> for the actual notes in the current section, if any.
   show <note>: it => {
     context if book-notes-state.final() != (:) {
       // Find the level (numbering) of current section heading:
@@ -284,7 +284,7 @@
   show super: it => {
     let note-regex = regex("::[0-9-.]+::")
     
-    // Transform note markers in links to the actual notes:
+    // #note: Transform note markers in links to the actual notes:
     // - Targets the `#super("NUMBER ::LABEL::")` returned by `#note`
     // - After handled, turn them into `#link(<LABEL>)[#super("NUMBER")]`
     if it.body.text.ends-with(note-regex) {
