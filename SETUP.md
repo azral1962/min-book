@@ -4,6 +4,8 @@
 This project uses `just` to automate all development processes. Run `just` or
 refer to the _justfile_ for more information.
 
+Codetags like _TODO_ or _FIXME_ can be easily viewed using todo.
+
 
 ## Release
 

@@ -2,8 +2,6 @@
   book, note, horizontalrule, hr, blockquote
 )
 
-#set page(width:200mm, height:275mm)
-
 #show: book.with(
   title: "Book Title",
   subtitle: "Complementary subtitle, not more than two lines long",
