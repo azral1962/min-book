@@ -9,8 +9,6 @@
   subtitle: "Complementary subtitle, not more than two lines long",
   authors: "Author",
   date: (2025, 01, 12),
-  titlepage: true,
-  //paper: (x: 200mm, y: 275mm),
   part: "Subject",
   chapter: "Detail",
 )
