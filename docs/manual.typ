@@ -1,12 +1,10 @@
 #import "@preview/min-manual:0.1.0": manual, arg, univ
-// TODO: Change #arg(title)
 
 #show: manual.with(
   title: "Minimal Books",
   description: "Simple and complete books without introducing new syntax.",
   authors: "Maycon F. Melo <https://github.com/mayconfmelo>",
-  cmd: "min-book",
-  version: "0.1.0",
+  package: "min-book:0.1.1",
   license: "MIT",
   logo: image("assets/manual-logo.png")
 )
@@ -20,7 +18,6 @@
   title: "Book Title",
   subtitle: "Complementary subtitle, not more than two lines long",
   authors: "Author",
-  cover: image("assets/cover.jpeg"),
 )
 ```
 

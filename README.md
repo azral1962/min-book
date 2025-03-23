@@ -13,7 +13,6 @@
   title: "Book Title",
   subtitle: "Complementary subtitle, not more than two lines long",
   authors: "Author",
-  cover: image("assets/cover.jpeg"),
 )
 ```
 
