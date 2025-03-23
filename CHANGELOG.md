@@ -23,5 +23,5 @@
 
 - Added automatic default cover generation
 - `#book(titlepage)` defaults to `false`
-- Fixed table of contents
 - `#book(paper)` can be paper type or custom (_x_, _y_) sizes
+- Fixed table of contents

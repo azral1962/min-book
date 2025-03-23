@@ -1,6 +1,5 @@
 // NAME: Minimal Books
 // REQ: numbly:0.1.0
-// TODOC: Change to min-manual doc-comments
 
 #import "@preview/numbly:0.1.0": numbly
 
