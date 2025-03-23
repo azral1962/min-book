@@ -38,7 +38,7 @@ behind the scenes, so that nothing changes in the Typst code itself.
 <table>
   <tr>
     <td>Text:</td>
-    <td>Book Antiqua or Times New Roman</td>
+    <td>Book Antiqua, or<br/>Times New Roman</td>
   </tr>
   <tr>
     <td>Cover title:</td>

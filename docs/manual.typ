@@ -94,9 +94,9 @@ understand it better, shall we?
   date if not set, or set to `auto`.
 ]
 
-#arg("cover: <- image | content | none")[
-  The book cover. Instead of using a image, it is possible to create the cover
-  using a `content` block.
+#arg("cover: <- auto | content | none")[
+  The book cover; `auto`matically generates a default cover, or set a custom
+  `content` as cover.
 ]
 
 #arg("titlepage: <- boolean | content")[
