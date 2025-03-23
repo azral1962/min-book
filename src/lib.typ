@@ -12,7 +12,7 @@
   subtitle: none,
   authors: none,
   date: datetime.today(),
-  cover: none,
+  cover: auto,
   titlepage: true,
   part: "Part",
   chapter: "Chapter",
@@ -22,7 +22,7 @@
   lang: "en",
   justify: true,
   line-space: 0.5em,
-  par-margin: 0.75em,
+  par-margin: 0.65em,
   first-line-indent: 1em,
   margin: (x: 15%, y: 14%),
   font: ("Book Antiqua", "Times New Roman"),
@@ -45,6 +45,7 @@
     authors = authors.join(", ")
   }
 
+  // Transform date array into datetime
   if type(date) == array {
     date = datetime(
       year: date.at(0),
@@ -60,6 +61,15 @@
   } else {
     full-title = title
   }
+  
+  // Set page size
+  let page-size = if type(paper) == str {
+    (paper: paper)
+  } else if type(paper) == dictionary {
+    (width: paper.x, height: paper.y)
+  } else {
+    panic("Invalid value for paper argument: " + paper)
+  }
 
   set document(
     title: full-title,
@@ -67,8 +77,8 @@
     date: date
   )
   set page(
-    paper: paper,
-    margin: margin
+    margin: margin,
+    ..page-size
   )
   set par(
     justify: justify,
@@ -301,13 +311,58 @@
   // Generate cover
   // TODO: Default cover generation (then turn default titlepage: none)
   if cover != none {
-    if cover.func() == image {
-      set image(
-        fit: "stretch",
-        width: 100%,
-        height: 100%
+    if cover == auto {
+      let cover-bg =  image(
+          fit: "stretch",
+          width: 100%,
+          height: 100%,
+          "assets/cover-bg.png"
+        )
+      
+      // title = title.replace(regex("\s+"), "\n")
+      // title = title.replace(regex("\s+[A-Z][^\s]*|[A-Z][^\s]*\s+[a-z][^\s]*"), it => {
+      //     it.text.replace(regex("\s+"), "\n")
+      //   })
+      
+      set text(
+        fill: luma(200),
+        hyphenate: false
       )
-      set page(background: cover)
+      set par(justify: false)
+      
+      page(
+        margin: (x: 12%, y: 12%),
+        background: cover-bg
+      )[
+        #align(center + horizon)[
+          #set par(leading: 2em)
+          #context text(
+            size: page.width * 0.09,
+            font: "Cinzel",
+            title
+          )
+          #linebreak()
+          #set par(leading: line-space)
+          #if subtitle != none {
+          v(1cm)
+            context text(
+              size: page.width * 0.04,
+              font: "Alice",
+              subtitle
+            )
+            //v(4cm)
+          }
+        ]
+        #align(center + bottom)[
+          #block(width: 52%)[
+            #context text(
+              size: page.width * 0.035,
+              font: "Alice",
+              authors + "\n" + date.display("[year]")
+            )
+          ]
+        ]
+      ]
     }
     else if type(cover) == content {
       cover
@@ -323,16 +378,30 @@
     if type(titlepage) == content {
       titlepage
     } else if titlepage == true {
-      align(center + top)[
-        #text(size: 27.5pt)[#title]
+      align(center + horizon)[
+        #set par(leading: 2em)
+        #context text(
+          size: page.width * 0.09,
+          title
+        )
         #linebreak()
-        #v(5pt)
-        #text(size: 15pt)[#subtitle]
+        #set par(leading: line-space)
+        #if subtitle != none {
+        v(1cm)
+          context text(
+            size: page.width * 0.04,
+            subtitle
+          )
+          //v(4cm)
+        }
       ]
       align(center + bottom)[
-        #text(size: 13pt)[#authors]
-        #linebreak()
-        #text(size: 13pt)[#date.display("[year]")]
+        #block(width: 52%)[
+          #context text(
+            size: page.width * 0.035,
+            authors + "\n" + date.display("[year]")
+          )
+        ]
       ]
     }
     else {
@@ -353,13 +422,9 @@
         it
       }
     }
-    show outline.entry: it => {
-      h(1.5em)
-      it
-    }
 
     pagebreak(weak: true, to: "even")
-    outline()
+    outline(indent: lvl => if lvl > 0 {1.5em} else {0em})
     // <outline> anchor allows different numbering styles in TOC and in the actual text.
     [#metadata("Marker for situating titles after/before outline") <outline>]
     pagebreak(weak: true)
