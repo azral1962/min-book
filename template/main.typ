@@ -1,6 +1,8 @@
-#import "@preview/min-book:0.1.0": (
+#import "@preview/min-book:0.1.1": (
   book, note, horizontalrule, hr, blockquote
 )
+
+#set page(width:200mm, height:275mm)
 
 #show: book.with(
   title: "Book Title",
@@ -8,12 +10,10 @@
   authors: "Author",
   date: (2025, 01, 12),
   titlepage: true,
-  cover: image("assets/cover.png"),
-  paper: "a5",
+  //paper: (x: 200mm, y: 275mm),
   part: "Subject",
   chapter: "Detail",
 )
-
 
 = Page Availability
 
@@ -44,11 +44,6 @@
 
 
 === Level 3
-
-#lorem(25)
-
-
-==== Level 4
 
 #lorem(25)
 
