@@ -1,4 +1,5 @@
 #import "@preview/min-manual:0.1.0": manual, arg, univ
+// TODO: Change #arg(title)
 
 #show: manual.with(
   title: "Minimal Books",
@@ -75,128 +76,90 @@ Those are the full list of options available and its default values:
 Seems like an awful lot to start with, but let's just break down all this to
 understand it better, shall we?
 
-#arg(
-  "title:", ("string", "content"),
-  required: true
-)[
+#arg("title: <- string | content <required>")[
   The main title of the book.
 ]
 
-#arg(
-  "subtitle:", ("string", "content", "none")
-)[
+#arg("subtitle: <- string | content | none")[
   The book subtitle; generally two lines long or less.
 ]
 
-#arg(
-  "authors:", ("string", "array"),
-  required: true
-)[
+#arg("authors: <- string | array <required>")[
   A string or array containing the name of each author of the book, in format
   `( NAME, NAME )`.
 ]
 
-#arg(
-  "date:", ("array", "auto")
-)[
+#arg("date: <- array | auto")[
   The book publication date, in format `(yyyy, mm, dd)`. Fallback to current
   date if not set, or set to `auto`.
 ]
 
-#arg(
-  "cover:", ("image", "content", "none")
-)[
+#arg("cover: <- image | content | none")[
   The book cover. Instead of using a image, it is possible to create the cover
   using a `content` block.
 ]
 
-#arg(
-  "titlepage:", ("boolean", "content")
-)[
+#arg("titlepage: <- boolean | content")[
   The page after the cover; by default, contains the title, subtitle, author,
   and year of publication. It is possible to create the titlepage using a
   `content` block.
 ]
 
-#arg(
-  "part:", ("string", "none")
-)[
+#arg("part: <- string | none")[
   The name given to the book's main divisions --- something like LaTeX's
   ```tex \part``` command.
 ]
 
-#arg(
-  "chapter:", ("string", "none")
-)[
+#arg("chapter: <- string | none")[
   The name given to the book's main sections --- something like LaTeX's
   ```tex \chapter``` command.
 ]
 
-#arg(
-  "numbering-style:", ("array", "string", "none")
-)[
+#arg("numbering-style: <- array | string | none")[
   Defines a custom heading numbering. Can be a standard numbering string, or a
   #univ("numbly") numbering array in more complex cases.
 ]
 
-#arg(
-  "toc:", "boolean"
-)[
+#arg("toc: <- boolean")[
   Defines whether the book will have a table of contents or not.
 ]
 
-#arg(
-  "paper:", "string"
-)[
-  Defines the page paper type --- and its size therefore.
+#arg("paper: <- string | dictionary")[
+  Defines the page paper type, or its custom size; a dictionary \
+  `(x: LENGTH, y: LENGTH)` can be used to set custom sizes for page width (`x`)
+  and length (`y`).
 ]
 
-#arg(
-  "lang:", "string"
-)[
+#arg("lang: <- string")[
   Defines the language of the written text.
 ]
 
-#arg(
-  "justify:", "boolean"
-)[
+#arg("justify: <- boolean")[
   Defines if the text will have justified alignment.
 ]
 
-#arg(
-  "line-space:", "length"
-)[
+#arg("line-space: <- length")[
   Defines the space between lines in the document.
 ]
 
-#arg(
-  "par-margin:", "length"
-)[
+#arg("par-margin: <- length")[
   Defines the margin space after each paragraph. Set it the same as `line-space`
   to remove get paragraphs without additional space in between.
 ]
 
-#arg(
-  "first-line-indent:", "length"
-)[
+#arg("first-line-indent: <- length")[
   Defines the first line indentation of all paragraphs, but the first one, in a sequence of paragraphs.
 ]
 
-#arg(
-  "margin:", "length"
-)[
+#arg("margin: <- length")[
   Defines the document margins.
 ]
 
-#arg(
-  "font:", ("string", "array")
-)[
+#arg("font: <- string | array")[
   Defines the font families used for the text: a principal font and its fallback.
 ]
 
-#arg(
-  "font-size:", "length"
-)[
+#arg("font-size: <- length")[
   Defines the size of the text in the document.
 ]
 
@@ -360,22 +323,16 @@ And this text have some other subject.
 
 This command have the following optional arguments:
 
-#arg(
-  ```typc symbol: [#sym.ast.op #sym.ast.op #sym.ast.op]```, "content"
-)[
+#arg("```typc symbol: [#sym.ast.op #sym.ast.op #sym.ast.op]``` <- content")[
   Defines the content at the center of the horizontal rule. By default, its line
   is struck by three #sym.ast.op in its center.
 ]
 
-#arg(
-  ```typc spacing: 1em```, "length"
-)[
+#arg("```typc spacing: 1em``` <- length")[
   Defines the vertical space before and after the horizontal rule.
 ]
 
-#arg(
-  ```typc line-size: 15%```, "length"
-)[
+#arg("```typc line-size: 15%``` <- length")[
   Defines the size of the horizontal rule line.
 ]
 

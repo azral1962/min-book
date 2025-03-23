@@ -18,3 +18,10 @@
 - Additional `#note` command
 - Additional `#horizontalrule` and `#hr` commands
 - Additional `#blockquote` command
+
+## 0.1.1
+
+- Added automatic default cover generation
+- `#book(titlepage)` defaults to `false`
+- Fixed table of contents
+- `#book(paper)` can be paper type or custom (_x_, _y_) sizes

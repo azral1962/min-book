@@ -32,3 +32,22 @@ behind the scenes, so that nothing changes in the Typst code itself.
 - [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/0.1.0/docs/pdf/example.pdf)
 - [Example Typst code](https://github.com/mayconfmelo/min-book/blob/0.1.0/template/main.typ)
 - [Changelog](https://github.com/mayconfmelo/min-book/blob/main/CHANGELOG.md)
+
+## Fonts
+
+<table>
+  <tr>
+    <td>Text:</td>
+    <td>Book Antiqua or Times New Roman</td>
+  </tr>
+  <tr>
+    <td>Cover title:</td>
+    <td><a href="https://fonts.google.com/specimen/Cinzel">Cinzel</a></td>
+  </tr>
+  <tr>
+    <td>Cover text:</td>
+    <td><a href="https://fonts.google.com/specimen/Alice">Alice</a></td>
+  </tr>
+</table>
+
+
