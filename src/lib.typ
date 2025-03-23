@@ -13,7 +13,7 @@
   authors: none,
   date: datetime.today(),
   cover: auto,
-  titlepage: true,
+  titlepage: none,
   part: "Part",
   chapter: "Chapter",
   numbering-style: none,
@@ -309,7 +309,6 @@
   }
 
   // Generate cover
-  // TODO: Default cover generation (then turn default titlepage: none)
   if cover != none {
     if cover == auto {
       let cover-bg =  image(
@@ -367,7 +366,7 @@
     else if type(cover) == content {
       cover
     }
-    else {
+    else if cover != none {
       panic("Invalid page argument value: \"" + cover + "\"")
     }
     pagebreak()
