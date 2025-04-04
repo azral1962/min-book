@@ -1,5 +1,6 @@
 // NAME: Minimal Books
-// REQ: numbly:0.1.0
+// REQ: numbly
+// TODO: #book(catalog: dictionary) -> Catalographic sheet (ISBN)
 
 #import "@preview/numbly:0.1.0": numbly
 
@@ -25,6 +26,7 @@
   first-line-indent: 1em,
   margin: (x: 15%, y: 14%),
   font: ("Book Antiqua", "Times New Roman"),
+  font-math: "Asana Math",
   font-size: 11pt,
   body
 ) = {
@@ -193,11 +195,16 @@
   show heading.where(level: 1, outlined: true): it => {
     // Create part page, if any:
     if type(part) != none {
+      // Set page background if cover == auto
+      let part-bg = if cover == auto {image("assets/part-bg.png")} else {none}
+      
+      // Part only if numbering != none
       pagebreak(weak: true, to: "even")
-      set align(center + horizon)
-      it
+      set page(background: part-bg)
+      align(center + horizon, it)
       pagebreak(weak: true)
-    } else {
+    }
+    else {
       it
     }
 
@@ -210,6 +217,7 @@
   }
 
   show heading: set align(center)
+  show heading: set text(hyphenate: false)
   show heading.where(level: 1): set text(size: font-size * 2)
   show heading.where(level: 2): set text(size: font-size * 1.6)
   show heading.where(level: 3): set text(size: font-size * 1.4)
@@ -219,10 +227,11 @@
   show raw: set text(font: "Inconsolata", size: font-size)
   show quote.where(block: true): set pad(x: 1em)
   show raw.where(block: true): it => pad(left: 1em, it)
+  show math.equation: set text(font: font-math)
   
   show selector.or(
-    terms, enum, list, quote.where(block: true),
-    table, figure, raw.where(block: true),
+    terms, enum, list, table, figure, math.equation.where(block: true),
+    quote.where(block: true), raw.where(block: true)
   ): set block(above: font-size, below: font-size)
 
   // Insert notes of a section at its end, before next heading:
