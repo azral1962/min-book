@@ -13,7 +13,7 @@
 = Quick Start
 
 ```typ
-#import "@preview/min-book:0.1.0": book
+#import "@preview/min-book:0.1.1": book
 #show: book.with(
   title: "Book Title",
   subtitle: "Complementary subtitle, not more than two lines long",
@@ -46,7 +46,7 @@ here.
 Those are the full list of options available and its default values:
 
 ```typm
-#import "@preview/min-book:0.1.0": book
+#import "@preview/min-book:0.1.1": book
 #show: book.with(
   title: none,
   subtitle: none,
@@ -293,7 +293,7 @@ its own page at the end of the current section, right before the next heading:
 #pagebreak()
 
 ```typ
-#import "@preview/min-book:0.1.0": note
+#import "@preview/min-book:0.1.1": note
  
 = Current heading
 
@@ -311,7 +311,7 @@ Adds horizontal rules, used to separate subtle changes of subject in book texts.
 Can be called by its name or its alias:
 
 ```typ
-#import "@preview/min-book:0.1.0": horizontalrule, hr
+#import "@preview/min-book:0.1.1": horizontalrule, hr
 
 This text have a subject.
 
@@ -348,7 +348,7 @@ Adds a block version of the `quote` command. In fact, it is just a simple
 wrapper of ```typc quote(block: true)``` with some modifications:
 
 ```typ
-#import "@local/min-book:0.1.0": blockquote
+#import "@local/min-book:0.1.1": blockquote
 
 #blockquote(by: "Einstein")[
   Don't believe everything you read on the internet.

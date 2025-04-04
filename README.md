@@ -27,9 +27,9 @@ behind the scenes, so that nothing changes in the Typst code itself.
 
 ## More Information
 
-- [Official manual](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/0.1.0/docs/pdf/manual.pdf)
-- [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/0.1.0/docs/pdf/example.pdf)
-- [Example Typst code](https://github.com/mayconfmelo/min-book/blob/0.1.0/template/main.typ)
+- [Official manual](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/0.1.1/docs/pdf/manual.pdf)
+- [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/0.1.1/docs/pdf/example.pdf)
+- [Example Typst code](https://github.com/mayconfmelo/min-book/blob/0.1.1/template/main.typ)
 - [Changelog](https://github.com/mayconfmelo/min-book/blob/main/CHANGELOG.md)
 
 ## Default Fonts
