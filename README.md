@@ -32,12 +32,18 @@ behind the scenes, so that nothing changes in the Typst code itself.
 - [Example Typst code](https://github.com/mayconfmelo/min-book/blob/0.1.0/template/main.typ)
 - [Changelog](https://github.com/mayconfmelo/min-book/blob/main/CHANGELOG.md)
 
-## Fonts
+## Default Fonts
 
 <table>
   <tr>
     <td>Text:</td>
     <td>Book Antiqua, or<br/>Times New Roman</td>
+  </tr>
+  <tr>
+    <td>Math:</td>
+    <td><a href="https://mirrors.ctan.org/fonts/Asana-Math/Asana-Math.otf">
+      Asana Math
+    </a></td>
   </tr>
   <tr>
     <td>Cover title:</td>
