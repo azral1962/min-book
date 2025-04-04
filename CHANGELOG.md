@@ -21,7 +21,7 @@
 
 ## 0.1.1
 
-- Added automatic default cover generation
-- `#book(titlepage)` defaults to `false`
-- `#book(paper)` can be paper type or custom (_x_, _y_) sizes
+- Added: automatic default cover generation
+- Changed: `#book(titlepage)` defaults to `false`
+- Updated: `#book(paper)` can be paper `"type"` or `(x: , y: )` page size
 - Fixed table of contents
