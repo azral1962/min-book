@@ -53,7 +53,7 @@ Those are the full list of options available and its default values:
   authors: none,
   date: datetime.today(),
   cover: auto,
-  titlepage: none,
+  titlepage: false,
   part: "Part",
   chapter: "Chapter",
   numbering-style: none,
@@ -66,6 +66,7 @@ Those are the full list of options available and its default values:
   first-line-indent: 1em,
   margin: (x: 15%, y: 14%),
   font: ("Book Antiqua", "Times New Roman"),
+  font-math: "Asana Math",
   font-size: 11pt,
 )
 ```
@@ -124,7 +125,7 @@ understand it better, shall we?
 #arg("paper: <- string | dictionary")[
   Defines the page paper type, or its custom size; a dictionary \
   `(x: LENGTH, y: LENGTH)` can be used to set custom sizes for page width (`x`)
-  and length (`y`).
+  and height (`y`).
 ]
 
 #arg("lang: <- string")[
@@ -154,6 +155,11 @@ understand it better, shall we?
 
 #arg("font: <- string | array")[
   Defines the font families used for the text: a principal font and its fallback.
+]
+
+#arg("font-math: <- string | array")[
+  Defines the font families used for the math and equations: a principal font
+  and its fallback.
 ]
 
 #arg("font-size: <- length")[
