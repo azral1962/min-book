@@ -195,8 +195,35 @@
   show heading.where(level: 1, outlined: true): it => {
     // Create part page, if any:
     if type(part) != none {
-      // Set page background if cover == auto
-      let part-bg = if cover == auto {image("assets/part-bg.png")} else {none}
+    
+      // Set page background
+      let part-bg = if cover == auto {
+          let m = page.margin
+          let frame = image(
+              width: 93%,
+              "assets/frame-gray.svg"
+            )
+            
+          if type(m) != dictionary {
+            m = (
+              top: m,
+              bottom: m,
+              left: m,
+              right: m
+            )
+          }
+          
+          v(m.top * 0.25)
+          align(center + top, frame)
+          
+          align(center + bottom,
+            rotate(180deg, frame)
+          )
+          v(m.bottom * 0.25)
+        } else {
+          none
+        }
+        
       
       // Part only if numbering != none
       pagebreak(weak: true, to: "even")
@@ -319,12 +346,30 @@
   // Generate cover
   if cover != none {
     if cover == auto {
-      let cover-bg =  image(
-          fit: "stretch",
-          width: 100%,
-          height: 100%,
-          "assets/cover-bg.png"
-        )
+      let cover-bg = context {
+          let m = page.margin
+          let frame = image(
+              width: 93%,
+              "assets/frame.svg"
+            )
+            
+          if type(m) != dictionary {
+            m = (
+              top: m,
+              bottom: m,
+              left: m,
+              right: m
+            )
+          }
+          
+          v(m.top * 0.25)
+          align(center + top, frame)
+          
+          align(center + bottom,
+            rotate(180deg, frame)
+          )
+          v(m.bottom * 0.25)
+        }
       
       // title = title.replace(regex("\s+"), "\n")
       // title = title.replace(regex("\s+[A-Z][^\s]*|[A-Z][^\s]*\s+[a-z][^\s]*"), it => {
@@ -339,6 +384,7 @@
       
       page(
         margin: (x: 12%, y: 12%),
+        fill: rgb("#3E210B"),
         background: cover-bg
       )[
         #align(center + horizon)[
@@ -444,6 +490,42 @@
   counter(page).update(1)
 
   body
+  
+  if cover == auto {
+    let cover-bg = context {
+          let m = page.margin
+          let frame = image(
+              width: 93%,
+              "assets/frame.svg"
+            )
+            
+          if type(m) != dictionary {
+            m = (
+              top: m,
+              bottom: m,
+              left: m,
+              right: m
+            )
+          }
+          
+          v(m.top * 0.25)
+          align(center + top, frame)
+          
+          align(center + bottom,
+            rotate(180deg, frame)
+          )
+          v(m.bottom * 0.25)
+        }
+    
+    pagebreak(weak: true, to: "even")
+    pagebreak(weak: true, to: "odd")
+    page(
+      footer: none,
+      background: cover-bg,
+      fill: rgb("#3E210B"),
+      []
+    )
+  }
 }
 
 
