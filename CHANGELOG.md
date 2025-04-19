@@ -22,6 +22,9 @@
 ## 0.1.1
 
 - Added: automatic default cover generation
-- Changed: `#book(titlepage)` defaults to `false`
-- Updated: `#book(paper)` can be paper `"type"` or `(x: , y: )` page size
-- Fixed table of contents
+- Added: `#appendices` additional command
+- Added: `#annexes` additional command
+- Updated: `#book(titlepage)` defaults to `false`
+- Updated: `#book(paper)` can be paper `"type"` or `(x: LENGHT, y: LENGHT)` page size
+- Fixed: no part name was shown when `#book(toc: false)`
+- Fixed: broken `@ref` to headings with `\n` in its numbering

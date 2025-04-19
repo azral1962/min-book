@@ -1,5 +1,5 @@
 #import "@preview/min-book:0.1.1": (
-  book, note, horizontalrule, hr, blockquote
+  book, note, horizontalrule, hr, blockquote, appendices, annexes
 )
 
 #show: book.with(
@@ -170,3 +170,33 @@ fn main() {
 
 #lorem(65)
 
+
+#appendices[
+  = Some Extra Data
+
+  #lorem(150)
+  
+  == Some Additional Things
+  
+  #lorem(50)
+  
+  = Even More Extra Data
+  
+  
+  #lorem(220)
+]
+
+
+#annexes[
+  = An Important Document Create by Someone Else
+
+  #lorem(150)
+  
+  == Important Explanation
+  
+  #lorem(100)
+  
+  = Another Important Third-party Document
+  
+  #lorem(220)
+]

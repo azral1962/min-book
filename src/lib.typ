@@ -1,6 +1,7 @@
 // NAME: Minimal Books
 // REQ: numbly
 // TODO: #book(catalog: dictionary) -> Catalographic sheet (ISBN)
+// TODO: Implement web book (HTML) when stable
 
 #import "@preview/numbly:0.1.0": numbly
 
@@ -183,6 +184,15 @@
   set heading(
     numbering: set-numbering(..numpattern),
     hanging-indent: 0pt,
+    supplement: it => {
+        if part != none {
+          context if it.depth == 1 {part}
+          else if chapter != none {chapter}
+          else {auto}
+        }
+        else if chapter != none {chapter}
+        else {auto}
+      }
   )
 
   // Count every level 2 heading:
@@ -194,7 +204,7 @@
 
   show heading.where(level: 1, outlined: true): it => {
     // Create part page, if any:
-    if type(part) != none {
+    if part != none {
     
       // Set page background
       let part-bg = if cover == auto {
@@ -260,6 +270,26 @@
     terms, enum, list, table, figure, math.equation.where(block: true),
     quote.where(block: true), raw.where(block: true)
   ): set block(above: font-size, below: font-size)
+
+  show ref: it => {
+    let el = it.element
+    //repr(it)
+    
+    // When referencing headings in "normal" form
+    if el != none and el.func() == heading and it.form == "normal" {
+      // Remove \n and trim full stops
+      let numpattern = numpattern.map(
+          item => item.replace("\n", "").trim(regex("[.:]"))
+        )
+      let number = numbly(..numpattern)(..counter(heading).at(el.location()))
+      
+      // New reference without \n
+      link(el.location())[#el.supplement #number]
+    }
+    else {
+      it
+    }
+  }
 
   // Insert notes of a section at its end, before next heading:
   // NOFIX: This really clumsy code is the only way found to implement #note.
@@ -479,9 +509,9 @@
     pagebreak(weak: true, to: "even")
     outline(indent: lvl => if lvl > 0 {1.5em} else {0em})
     // <outline> anchor allows different numbering styles in TOC and in the actual text.
-    [#metadata("Marker for situating titles after/before outline") <outline>]
     pagebreak(weak: true)
   }
+  [#metadata("Marker for situating titles after/before outline") <outline>]
   
   
   // Start page numbering at the next even page:
@@ -566,6 +596,85 @@
   // Set note as #super[NUMBER ::LABEL::] to be managed later
   [#super(note-number + " ::" + note-label + "::")#label(note-label)]
 }
+
+
+// TODOC
+#let appendices(
+  title: ("Appendices", "Appendix"),
+  numbering-style: (
+    "",
+    "{2:A}.\n",
+    "{2:A}.{3:1}. ",
+    "{2:A}.{3:1}.{4:1}. ",
+    "{2:A}.{3:1}.{4:1}.{5:1}. ",
+    "{2:A}.{3:1}.{4:1}.{5:1}.{6:a}. ",
+  ),
+  body
+) = {
+  heading(
+    title.at(0),
+    level: 1,
+    numbering: none
+  )
+  counter(heading).update(0)
+  
+  let set-numbering(
+    ..patterns
+  ) = (
+    ..nums
+  ) => context {
+    let patterns = patterns.pos()
+    let contents = ()
+    
+    // When using a default numbering string:
+    if patterns.len() == 1 and not patterns.at(0).contains(regex("\{.*\}")) {
+      return numbering(..patterns, ..nums)
+    }
+
+    // Numbering showed after TOC.
+    // TODO: part and chapter default names based on text.lang with linguify.
+    if query(selector(label("outline")).before(here())).len() != 0 {
+      if title != none {
+        patterns.at(1) = title.at(1) + " " + patterns.at(1)
+      }
+      
+      contents = patterns
+    }
+    // Numbering showed in TOC:
+    else {
+      for pattern in patterns {
+        // Remove any "\n" at the end of numbering patterns:
+        contents.push(
+          pattern.trim(regex("\n$"))
+        )
+      }
+    }
+
+    // Get numbering using numbly
+    numbly(..contents)(..nums)
+  }
+  
+  set heading(
+    offset: 1,
+    numbering: set-numbering(..numbering-style),
+    supplement: title.at(1)
+  )
+  
+  show heading.where(level: 2): it => {
+    pagebreak()
+    it
+  }
+  
+  body
+}
+
+#let annexes(
+  title: ("Annexes", "Annex"),
+  ..args
+) = appendices(
+  title: title,
+  ..args
+)
 
 
 // Adds a horizontal rule to the text
