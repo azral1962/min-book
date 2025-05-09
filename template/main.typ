@@ -16,13 +16,13 @@
 
 
 == First Chapter
-*Subject* part.
 
 This document is divided in _parts_ and _chapters_ --- headings of levels 1
 and 2, respectivelly; here, each part is called a
 *Subject*, while each chapter is called a *Detail*. 
 
 The *Detail* chapter numbering is sequential and do not restart at every new
+*Subject* part.
 
 
 = Page Availability
