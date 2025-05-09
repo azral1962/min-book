@@ -238,7 +238,10 @@
       // Part only if numbering != none
       pagebreak(weak: true, to: "even")
       set page(background: part-bg)
+      set par(justify: false)
+      
       align(center + horizon, it)
+      
       pagebreak(weak: true)
     }
     else {
@@ -254,6 +257,7 @@
   }
 
   show heading: set align(center)
+  show heading: set par(justify: false)
   show heading: set text(hyphenate: false)
   show heading.where(level: 1): set text(size: font-size * 2)
   show heading.where(level: 2): set text(size: font-size * 1.6)
@@ -547,7 +551,6 @@
           v(m.bottom * 0.25)
         }
     
-    pagebreak(weak: true, to: "even")
     pagebreak(weak: true, to: "odd")
     page(
       footer: none,
