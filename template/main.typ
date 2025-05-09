@@ -11,11 +11,23 @@
   chapter: "Detail",
 )
 
+
+= Parts & Chapters
+
+
+== First Chapter
+*Subject* part.
+
+This document is divided in _parts_ and _chapters_ --- headings of levels 1
+and 2, respectivelly; here, each part is called a
+*Subject*, while each chapter is called a *Detail*. 
+
+The *Detail* chapter numbering is sequential and do not restart at every new
+
+
 = Page Availability
 
-== Usable Space
-
-#lorem(507)
+#lorem(269)
 
 
 == Paragraphs Style
@@ -40,6 +52,11 @@
 
 
 === Level 3
+
+#lorem(25)
+
+
+==== Level 4
 
 #lorem(25)
 
