@@ -38,6 +38,8 @@ dev-link:
 
 # Release a new package version.
 version v:
+  @just pdf
+  mv dev/*.pdf docs/pdf/
   bash scripts/version.sh "{{v}}" "{{root}}"
 
 # Init Typst template project in dev/
