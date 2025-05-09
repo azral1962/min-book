@@ -56,7 +56,7 @@ Those are the full list of options available and its default values:
   titlepage: false,
   part: "Part",
   chapter: "Chapter",
-  numbering-style: none,
+  numbering-style: auto,
   toc: true,
   paper: "a5",
   lang: "en",
@@ -113,7 +113,7 @@ understand it better, shall we?
   ```tex \chapter``` command.
 ]
 
-#arg("numbering-style: <- array | string | none")[
+#arg("numbering-style: <- auto | array | string | none")[
   Defines a custom heading numbering. Can be a standard numbering string, or a
   #univ("numbly") numbering array in more complex cases.
 ]
@@ -354,6 +354,44 @@ wrapper of ```typc quote(block: true)``` with some modifications:
   Don't believe everything you read on the internet.
 ]
 ```
+
+
+== Appendices Command
+
+Creates an special ambient to write or include multiple appendices, with special
+heading styling.
+
+```typ
+#import "@local/min-book:0.1.1": appendices
+
+#appendices[
+  #include("appendix-a.typ")
+  #include("appendix-b.typ")
+  #include("appendix-c.typ")
+]
+```
+
+Appendices are important additional data left out of the main document for some
+reason, but directly cited or referenced by it.
+
+
+== Annexes Command
+
+Creates an special ambient to write or include multiple annexes, with special
+heading styling.
+
+```typ
+#import "@local/min-book:0.1.1": annexes
+
+#annexes[
+  #include("appendix-a.typ")
+  #include("appendix-b.typ")
+  #include("appendix-c.typ")
+]
+```
+
+Annexes are important third-party data directly cited or referenced in the main
+document.
 
 
 = Copyright

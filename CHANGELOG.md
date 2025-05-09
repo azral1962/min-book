@@ -22,8 +22,9 @@
 ## 0.1.1
 
 - Added: automatic default cover generation
-- Added: `#appendices` additional command
-- Added: `#annexes` additional command
+- Added: `#appendices` command
+- Added: `#annexes` command
+- Added: Unnumbered _part_ and _chapter_ with `#book(numbering-style: none)`
 - Updated: `#book(titlepage)` defaults to `false`
 - Updated: `#book(paper)` can be paper `"type"` or `(x: LENGHT, y: LENGHT)` page size
 - Fixed: no part name was shown when `#book(toc: false)`
