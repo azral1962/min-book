@@ -1,13 +1,17 @@
 // NAME: Minimal Books
 // REQ: numbly
 // TODO: #book(catalog: dictionary) -> Catalographic sheet (ISBN)
-// TODO: Implement web book (HTML) when stable
+// TODO: Implement ePub output when available
+// TODO: Move #set-numbering to utils.typ
+// TODO: part and chapter default names based on text.lang with linguify.
 
 #import "@preview/numbly:0.1.0": numbly
 
 #let book-notes-state = state("book-notes", (:))
 #let book-note-counter = counter("book-note-count")
 
+
+// FEATURE: #book() used in #show rule to re-structure the document as book.
 #let book(
   title: none,
   subtitle: none,
@@ -17,7 +21,7 @@
   titlepage: none,
   part: "Part",
   chapter: "Chapter",
-  numbering-style: none,
+  numbering-style: auto,
   toc: true,
   paper: "a5",
   lang: "en",
@@ -100,9 +104,8 @@
   )
   
   // Define numbering pattern:
-  // TODO: When numbering-style == none, set numbering in parts only
   let numpattern = ()
-  if numbering-style != none {
+  if numbering-style != auto {
     // numbering-style overrides the default numbering
     numpattern = numbering-style
   } else if type(part) != none {
@@ -140,14 +143,27 @@
     context {
       let patterns = patterns.pos()
       let contents = ()
+      let part = part
+      let chapter = chapter
       
       // When using a default numbering string:
       if patterns.len() == 1 and not patterns.at(0).contains(regex("\{.*\}")) {
         return numbering(..patterns, ..nums)
       }
+      
+      // when numbering-style == none
+      if patterns == () {
+        if part != none {
+          patterns.push("\n")
+          part = part + ":"
+        }
+        if chapter != none {
+          patterns.push("\n")
+          chapter = chapter + ":"
+        }
+      }
 
       // Numbering showed after TOC.
-      // TODO: part and chapter default names based on text.lang with linguify.
       if query(selector(label("outline")).before(here())).len() != 0 {
         if part != none and patterns.len() >= 1 {
           // Heading level 1 become part
@@ -159,7 +175,7 @@
           }
         } else {
           // Heading level 1 become chapter, if no part
-          if chapter != none and patterns.len() > 1 {
+          if chapter != none and patterns.len() >= 1 {
             patterns.at(0) = chapter + " " + patterns.at(0)
           }
         }
@@ -177,7 +193,7 @@
       }
 
       // Get numbering using numbly
-      numbly(default: "I.I.1.1.1.a", ..contents)(..nums)
+      numbly(default: none, ..contents)(..nums)
     }
   }
 
@@ -562,10 +578,8 @@
 }
 
 
-// Insert end notes.
-// - Collect notes and section data to book-notes-state.
-// - Insert the superscript note number in place.
-// TODO: Store numbering-style in book-notes-state.
+// FEATURE: #note() insert end notes in text; the notes appear one page before next heading.
+// TODO: Store #note(numbering-style) in #book-notes-state.
 #let note(
   content,
   numbering-style: "1"
@@ -601,7 +615,7 @@
 }
 
 
-// TODOC
+// FEATURE: #appendices() is an ambient to insert multiple appendices.
 #let appendices(
   title: ("Appendices", "Appendix"),
   numbering-style: (
@@ -635,7 +649,6 @@
     }
 
     // Numbering showed after TOC.
-    // TODO: part and chapter default names based on text.lang with linguify.
     if query(selector(label("outline")).before(here())).len() != 0 {
       if title != none {
         patterns.at(1) = title.at(1) + " " + patterns.at(1)
@@ -671,6 +684,7 @@
   body
 }
 
+// FEATURE: #annexes() is an ambient to insert multiple annexes.
 #let annexes(
   title: ("Annexes", "Annex"),
   ..args
@@ -680,7 +694,7 @@
 )
 
 
-// Adds a horizontal rule to the text
+// FEATURE: #horizontalrule() adds a visual separator in the text flow
 #let horizontalrule(
   symbol: [#sym.ast.op #sym.ast.op #sym.ast.op],
   spacing: 1em,
@@ -699,9 +713,10 @@
   #v(spacing, weak: true)
 ]
 
-// Alias for `#horizontalrule` command:
+
+// FEATURE: #hr() is an alias to #horizontalrule()
 #let hr = horizontalrule
 
 
-// Alias for `#quote(block: true)` command:
+// FEATURE: #blockquote() is an alias for `#quote(block: true)`
 #let blockquote(by: none, ..args) = quote(block: true, attribution: by, ..args)
