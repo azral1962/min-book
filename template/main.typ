@@ -5,10 +5,22 @@
 #show: book.with(
   title: "Book Title",
   subtitle: "Complementary subtitle, not more than two lines long",
-  authors: "Author",
+  authors: "A. Author",
   date: (2025, 01, 12),
   part: "Subject",
   chapter: "Detail",
+  catalog: (
+    id: "A000",
+    place: "Place",
+    publisher: "Publisher",
+    isbn: "000-00-0000-000-0",
+    subjects: ("Subject one", "Subject two"),
+    access: ("Title", "Serie"),
+    ddc: "DDC 000.000",
+    udc: "UDC 000.000",
+    before: [Content before catalog sheet],
+    after: [Content after catalog sheet],
+  )
 )
 
 

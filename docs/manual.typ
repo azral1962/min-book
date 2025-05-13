@@ -56,11 +56,12 @@ Those are the full list of options available and its default values:
   authors: none,
   date: datetime.today(),
   cover: auto,
-  titlepage: false,
+  titlepage: none,
+  catalog: none,
+  toc: true,
   part: auto,
   chapter: auto,
   numbering-style: auto,
-  toc: true,
   page-cfg: "a5",
   lang: "en",
   lang-data: toml("assets/lang.toml"),
@@ -107,6 +108,58 @@ understand it better, shall we?
   `content` block.
 ]
 
+#arg("catalog: <- none | dictionary")[
+  Set the data for catalographic sheet (ISBN) generation; can receive the
+  following data below:
+]
+
+#arg("catalog.id: <- string | content")[
+  A Cutter-Sanborn identification code, used to identify the book author.
+]
+
+#arg("catalog.place: <- string | content")[
+  The city or region where tye book was created or published.
+]
+
+#arg("catalog.publisher: <- string | content")[
+  The organization or enterprised responsible for publishing the book.
+]
+
+#arg("catalog.isbn: <- string | content")[
+  The _International Standard Book Number_, used to indentify tue book.
+]
+
+#arg("catalog.subjects: <- array")[
+  A list of subjects related to the book; must be an array os strings.
+]
+
+#arg("catalog.access: <- array")[
+  A list of access points used to find the book, like by `"title"` or
+  `"series"`; must be an array os strings.
+]
+
+#arg("catalog.ddc: <- string | content")[
+  A _Dewey Decimal Classification_ number, used to catalogue the book in a
+  specific category.
+]
+
+#arg("catalog.udc: <- string | content")[
+  A _Universal Decimal Classification_ number, used to catalogue the book in a
+  specific category.
+]
+
+#arg("catalog.before: <- content")[
+  Content showed before (above) the catalog.
+]
+
+#arg("catalog.after: <- content")[
+  Content showed after (below) the catalog.
+]
+
+#arg("toc: <- boolean")[
+  Defines whether the book will have a table of contents or not.
+]
+
 #arg("part: <- auto | string | none")[
   The name given to the book's main divisions --- something like LaTeX's
   ```tex \part``` command; when `auto` an automatic name will be retrieved
@@ -122,10 +175,6 @@ understand it better, shall we?
 #arg("numbering-style: <- auto | array | string | none")[
   Defines a custom heading numbering. Can be a standard numbering string, or a
   #univ("numbly") numbering array in more complex cases.
-]
-
-#arg("toc: <- boolean")[
-  Defines whether the book will have a table of contents or not.
 ]
 
 #arg("page-cfg: <- string | dictionary")[

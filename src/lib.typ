@@ -1,6 +1,5 @@
 // NAME: Minimal Books
 // REQ: numbly
-// TODO: #book(catalog: dictionary) -> Catalographic sheet (ISBN)
 // TODO: Implement ePub output when available
 
 #import "@preview/numbly:0.1.0": numbly
@@ -19,10 +18,11 @@
   date: datetime.today(),
   cover: auto,
   titlepage: none,
+  catalog: none,
+  toc: true,
   part: auto,
   chapter: auto,
   numbering-style: auto,
-  toc: true,
   page-cfg: "a5",
   lang: "en",
   lang-data: toml("assets/lang.toml"),
@@ -166,7 +166,7 @@
           
         
         // Part only if numbering != none
-        pagebreak(weak: true, to: "even")
+        pagebreak(to: "odd")
         set page(background: part-bg)
         set par(justify: false)
         
@@ -384,12 +384,16 @@
       }
       pagebreak()
     }
+    
+    // Enable automatic titlepage when generating catalog
+    let titlepage = if titlepage == none and catalog != none {auto}
+      else {titlepage}
   
     // Generate titlepage
-    if titlepage != none and titlepage != false {
-      if type(titlepage) == content {
-        titlepage
-      } else if titlepage == true {
+    if titlepage != none {
+      pagebreak(to: "odd")
+      
+      if titlepage == auto {
         align(center + horizon)[
           #set par(leading: 2em)
           #context text(
@@ -416,10 +420,94 @@
           ]
         ]
       }
+      else if type(titlepage) == content {
+        titlepage
+      }
       else {
         panic("Invalid titlepage argument value: \"" + repr(titlepage) + "\"")
       }
+      
       pagebreak(weak: true)
+    }
+  
+    // Generate catalographic sheet (ISBN)
+    if catalog != none {
+      set box(width: 1fr)
+      set par(
+        first-line-indent: 0pt,
+        hanging-indent: 1.5em
+      )
+      
+      show rect: set align(center + bottom)
+      
+      let catalog = (
+        id: none,
+        place: none,
+        publisher: none,
+        isbn: none,
+        subjects: (),
+        access: (),
+        ddc: none,
+        udc: none,
+        before: none,
+        after: none,
+        ..catalog,
+      )
+      let author = if type(authors) == array {authors.at(0)} else {authors}
+      author = author.replace(regex("^(.+)\s([^\s]+)$"), m => {
+        if m.captures.len() >= 2 {
+          m.captures.last()
+          ", "
+          m.captures.first()
+        }
+        else {
+          m.text
+        }
+      })
+      
+      pagebreak(to: "even")
+      
+      if catalog.before != none {align(top, catalog.before)}
+      
+      rect(
+        width: 12cm,
+        inset: 1cm,
+        align(left + top)[
+          #if catalog.id != none [#catalog.id]
+          
+          #author. #title
+          #if subtitle != none [: #subtitle].\
+          #if catalog.place != none [#catalog.place:]
+          #if catalog.publisher != none [#catalog.publisher,]
+          #date.year().
+          #v(1em)
+          #if catalog.isbn != none [
+            ISBN #catalog.isbn
+            #v(1em)
+          ]
+          #if catalog.subjects != () {
+            for item in catalog.subjects.enumerate() {
+              str(item.at(0) + 1) + ". " + item.at(1)
+              h(7pt)
+            }
+          }
+          #if catalog.access != () {
+            let access = if type(catalog.access) == str {(author, catalog.access)}
+              else {(author, ..catalog.access)}
+            
+            for item in access.enumerate() {
+              numbering("I.", item.at(0) + 1) + " " + item.at(1)
+              h(7pt)
+            }
+          }
+          #v(1em)
+          #if catalog.ddc != none {box[]}
+          #if catalog.udc != none {box(align(center, catalog.udc))}
+          #if catalog.ddc != none {box(align(right, catalog.ddc))}
+        ]
+      )
+      
+      if catalog.after != none {align(top, catalog.after)}
     }
   
     // Generate TOC
@@ -435,7 +523,7 @@
         }
       }
   
-      pagebreak(weak: true, to: "even")
+      pagebreak(to: "odd")
       outline(
         indent: lvl => if lvl > 0 {1.5em} else {0em},
         depth: if numbering-style == none {2} else {none},
@@ -447,7 +535,7 @@
     
     
     // Start page numbering at the next even page:
-    pagebreak(weak:true, to: "even")
+    pagebreak(weak:true, to: "odd")
     set page(numbering: "1")
     counter(page).update(1)
   

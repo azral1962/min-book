@@ -36,6 +36,8 @@
 - Added: Custom TOML translation file with `#book(lang-data)`
 - Added: `#book(page-cfg)` act as `#set page(..page-cfg)`
 - Added: `#note(numbering-style)` set numbering for all future `#note`
+- Added: `#book(catalog)` for catalographic sheet (ISBN) generation
 - Updated: ~~`#book(paper)`~~ &rarr; `#book(page-cfg)`
 - Updated: Reorganized internal structure
 - Updated: `#outline(depth: 2)` when `#book(numbering-style: none)`
+- Fixed: titlepage, toc, part, and content begining moved to odd pages
