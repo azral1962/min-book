@@ -169,7 +169,7 @@ fn main() {
 
 #lorem(40)#note[Note C]
 
-#lorem(40)#note[Note D]|
+#lorem(40)#note[Note D]
 
 #lorem(40)#note[Note E]
 

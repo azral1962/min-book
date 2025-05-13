@@ -7,7 +7,7 @@
 
 
 #let book-tr-state = state("book-tr", (:))
-#let book-notes-state = state("book-notes", (:))
+#let book-notes-state = state("book-notes", (curr-numbering: "1"))
 #let book-note-counter = counter("book-note-count")
 
 
@@ -273,9 +273,10 @@
               hanging-indent: 1em
             )[
               // Link to the note marker in the text:
-              #link(label(level + "-" + str(note.at(0)) ))[
-                #text(weight: "bold", [#note.at(0):])
-              ]
+              #link(
+                label(level + "-" + str(note.at(0)) ),
+                strong(numbering(note.at(2), note.at(0)) + ":")
+              )
               // Insert <LEVEl-content> for cross-reference
               #label(level + "-" + str(note.at(0)) + "-content")
               #note.at(1)
@@ -491,18 +492,34 @@
 
 
 // FEATURE: #note() insert end notes in text; the notes appear one page before next heading.
-// TODO: Store #note(numbering-style) in #book-notes-state.
 #let note(
   content,
-  numbering-style: "1"
+  numbering-style: auto
 ) = context {
-  context book-note-counter.step()
   
   // Find the level (numbering) of current section heading:
   let selector = selector(heading).before(here())
   let level = counter(selector).display()
   
-  let this-note = (book-note-counter.get().at(0), content)
+  let numbering-style = numbering-style
+  if numbering-style == auto {
+    numbering-style = book-notes-state.get().curr-numbering
+  }
+  else {
+    book-notes-state.update(notes => {
+      notes.insert("curr-numbering", numbering-style)
+      notes
+    })
+  }
+  
+  let this-note = (
+    book-note-counter.get().at(0),
+    content,
+    numbering-style
+  )
+  
+  book-note-counter.step()
+  
   
   // Insert book-notes-state.at(level) = this-note:
   if book-notes-state.get().at(level, default: none) == none {
@@ -520,7 +537,7 @@
   }
   
   let note-number = numbering(numbering-style, ..book-note-counter.get())
-  let note-label = level + "-" + note-number
+  let note-label = level + "-" + numbering("1", ..book-note-counter.get())
 
   // Set note as #super[NUMBER ::LABEL::] to be managed later
   [#super(note-number + " ::" + note-label + "::")#label(note-label)]

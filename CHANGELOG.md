@@ -35,6 +35,7 @@
 - Added: Default _part, chapter, appendix_ and _annex_ titles in `#lang.text` language
 - Added: Custom TOML translation file with `#book(lang-data)`
 - Added: `#book(page-cfg)` act as `#set page(..page-cfg)`
+- Added: `#note(numbering-style)` set numbering for all future `#note`
 - Updated: ~~`#book(paper)`~~ &rarr; `#book(page-cfg)`
 - Updated: Reorganized internal structure
 - Updated: `#outline(depth: 2)` when `#book(numbering-style: none)`
