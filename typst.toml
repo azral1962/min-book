@@ -1,6 +1,6 @@
 [package]
 name = "min-book"
-version = "0.1.1"
+version = "0.2.0"
 entrypoint = "src/lib.typ"
 authors = ["Maycon F. Melo <@mayconfmelo>"]
 license = "MIT-0"
@@ -17,7 +17,8 @@ exclude = [
   ".gitignore",
   "justfile",
   "CHANGELOG.md",
-  "SETUP.md"
+  "SETUP.md",
+  ".todo"
 ]
 
 [template]

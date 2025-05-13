@@ -1,3 +1,4 @@
+// TODO: review manual structure
 #import "@preview/min-manual:0.1.0": manual, arg, univ
 
 #show: manual.with(
@@ -54,12 +55,13 @@ Those are the full list of options available and its default values:
   date: datetime.today(),
   cover: auto,
   titlepage: false,
-  part: "Part",
-  chapter: "Chapter",
+  part: auto,
+  chapter: auto,
   numbering-style: auto,
   toc: true,
   paper: "a5",
   lang: "en",
+  lang-data: toml("assets/lang.toml"),
   justify: true,
   line-space: 0.5em,
   par-margin: 0.75em,
@@ -103,14 +105,16 @@ understand it better, shall we?
   `content` block.
 ]
 
-#arg("part: <- string | none")[
+#arg("part: <- auto | string | none")[
   The name given to the book's main divisions --- something like LaTeX's
-  ```tex \part``` command.
+  ```tex \part``` command; when `auto` an automatic name will be retrieved
+  from `#book(lang-data)` file.
 ]
 
 #arg("chapter: <- string | none")[
   The name given to the book's main sections --- something like LaTeX's
-  ```tex \chapter``` command.
+  ```tex \chapter``` command; when `auto` an automatic name will be retrieved
+  from `#book(lang-data)` file.
 ]
 
 #arg("numbering-style: <- auto | array | string | none")[
@@ -130,6 +134,11 @@ understand it better, shall we?
 
 #arg("lang: <- string")[
   Defines the language of the written text.
+]
+
+#arg("lang-data: <- toml")[
+  A TOML translation file; the current structure can be found in the default
+  `src/assets/lang.toml` file.
 ]
 
 #arg("justify: <- boolean")[
@@ -169,30 +178,21 @@ understand it better, shall we?
 
 = Book Parts
 
-Some larger books are internally divided into multiple _parts_. This feature
+Some larger books are internally divided into multiple _parts_. This structure
 allows to better organize and understand a text with multiple sequential plots,
 or tales, or time jumps, or anything that internally differentiate parts of the
 story. While the name used here is _part_, different books uses different names
-for it: parts, subjects, books, acts, etc.
+for it: parts, subjects, books, acts, units, modules, etc.
 
-Parts are used in a smart way: when enabled, every level 1 headings are turned
-into _book parts_ automatically. To enable, just give a string value to the
-`part` argument; and to disable it, set to `none`:
+By default, every _level 1 heading_ is a part named as _"Part"_ in `text.lang`
+document language; setting `#book(part)` change this name, or disable parts if
+set to `none`.
 
 ```typ
-// Enable part with name "Act":
 #show: book.with(
   part: "Act",
 )
-
-= This is Act 1
-
-// Disable part to turn it back to normal.
-#show: book.with(
-  part: none,
-)
-
-= This is a normal level 1 heading
+= This heading is the Act 1 part
 ```
 
 
@@ -202,42 +202,24 @@ In most cases, books are divided into smaller sections called chapters.
 Generally, each chapter contains a single minor story, or event, or scene,
 or any type of subtle plot change.
 
-Chapters are used in a smart way, too, depending of the use of
-_book parts_: if _parts_ are enabled, every level 2 headings are turned into
-_book chapters_; but if _parts_ are disabled, all level 1 headings are turned
-into _book chapters_. Seems complex, but it turns to be very intuitive:
+Chapters are smart: by default, every _level 2 heading_ is a chapter named
+_"Chapter"_ in `text.lang` document language, when parts are enabled; but when
+parts are disabled, every _level 1 heading_ will be a chapter. Setting
+`#book(chapter)` change the default chapter name, or disable chapters if set to
+`none`.
 
 ```typ
-// Book with parts and chapters:
 #show: book.with(
-  part: "Act",
   chapter: "Scene",
 )
+== This is Scene 1 chapter
 
-= This is Act 1
-
-== This is Scene 1
-
-// Book with just chapters:
 #show: book.with(
   part: none,
-  chapter: "Scene"
+  chapter: "Scene",
 )
-
-= This is Scene 1
-
-// Boom with no part, nor chapter:
-#show: book.with(
-  part: none,
-  chapter: none,
-)
-
-= This is a level 1 heading
-
-== This is a level 2 heading
+= This is Scene 1 chapter
 ```
-
-#pagebreak()
 
 
 = Advanced Numbering
@@ -272,7 +254,7 @@ But when the _parts_ are disabled, the following numbering is used:
 )
 ```
 
-Additionally, a `numbering-style` argument can be set to override these default
+Additionally, `#book(numbering-style)` can be set to override the default
 numbering above.
 
 
@@ -339,8 +321,6 @@ This command have the following optional arguments:
   Defines the size of the horizontal rule line.
 ]
 
-#pagebreak()
-
 
 == Block Quote Command
 
@@ -358,40 +338,90 @@ wrapper of ```typc quote(block: true)``` with some modifications:
 
 == Appendices Command
 
-Creates an special ambient to write or include multiple appendices, with special
-heading styling.
+Creates an special ambient to write or include multiple appendices. An appendix
+is any important additional data left out of the main document for some reason,
+but directly referenced or needed by it.
 
 ```typ
 #import "@local/min-book:0.1.1": appendices
 
-#appendices[
-  #include("appendix-a.typ")
-  #include("appendix-b.typ")
-  #include("appendix-c.typ")
-]
+#appendices(
+  title: auto,
+  numbering-style: auto,
+  body
+)
 ```
 
-Appendices are important additional data left out of the main document for some
-reason, but directly cited or referenced by it.
+#arg("title <- auto | array")[
+  Set custom singular and plural titles for appendices. An array in
+  `(SINGULAR, PLURAL)` format for "Appendices" and "Appendix" custom titles
+  respectivelly; when `auto`, set as `#book(lang-data.appendix)` value.
+]
+
+#arg("numbering-style <- auto | array | string")[
+  Set custom numbering style for appendices. Can be a numbly numbering array or
+  a standard numbering string;  when `auto`, set as:
+  
+  ```
+  (
+    "",
+    "{2:A}.\n",
+    "{2:A}.{3:1}. ",
+    "{2:A}.{3:1}.{4:1}. ",
+    "{2:A}.{3:1}.{4:1}.{5:1}. ",
+    "{2:A}.{3:1}.{4:1}.{5:1}.{6:a}. ",
+  )
+  ```
+]
+
+#arg("body <- content")[
+  The appendices content; every _level 1 heading_ will be treated as a new
+  appendix.
+]
 
 
 == Annexes Command
 
 Creates an special ambient to write or include multiple annexes, with special
-heading styling.
+heading styling. An annex is any important third-party data directly cited or
+referenced in the main document.
 
 ```typ
 #import "@local/min-book:0.1.1": annexes
 
-#annexes[
-  #include("appendix-a.typ")
-  #include("appendix-b.typ")
-  #include("appendix-c.typ")
-]
+#annexes(
+  title: auto,
+  numbering-style: auto,
+  body
+)
 ```
 
-Annexes are important third-party data directly cited or referenced in the main
-document.
+#arg("title <- auto | array")[
+  Set custom singular and plural titles for annexes. An array in
+  `(SINGULAR, PLURAL)` format for "Annexes" and "Annex" custom titles
+  respectivelly; when `auto`, set as `#book(lang-data.annex)` value.
+]
+
+#arg("numbering-style <- auto | array | string")[
+  Set custom numbering style for appendices. Can be a numbly numbering array or
+  a standard numbering string;  when `auto`, set as:
+  
+  ```
+  (
+    "",
+    "{2:A}.\n",
+    "{2:A}.{3:1}. ",
+    "{2:A}.{3:1}.{4:1}. ",
+    "{2:A}.{3:1}.{4:1}.{5:1}. ",
+    "{2:A}.{3:1}.{4:1}.{5:1}.{6:a}. ",
+  )
+  ```
+]
+
+#arg("body <- content")[
+  The annexes content; every _level 1 heading_ will be treated as a new
+  annex.
+]
 
 
 = Copyright

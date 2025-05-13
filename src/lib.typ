@@ -3,10 +3,11 @@
 // TODO: #book(catalog: dictionary) -> Catalographic sheet (ISBN)
 // TODO: Implement ePub output when available
 // TODO: Move #set-numbering to utils.typ
-// TODO: part and chapter default names based on text.lang with linguify.
 
 #import "@preview/numbly:0.1.0": numbly
 
+
+#let book-tr-state = state("book-tr", (:))
 #let book-notes-state = state("book-notes", (:))
 #let book-note-counter = counter("book-note-count")
 
@@ -19,12 +20,13 @@
   date: datetime.today(),
   cover: auto,
   titlepage: none,
-  part: "Part",
-  chapter: "Chapter",
+  part: auto,
+  chapter: auto,
   numbering-style: auto,
   toc: true,
   paper: "a5",
   lang: "en",
+  lang-data: toml("assets/lang.toml"),
   justify: true,
   line-space: 0.5em,
   par-margin: 0.65em,
@@ -52,6 +54,7 @@
   }
 
   // Transform date array into datetime
+  let date = date
   if type(date) == array {
     date = datetime(
       year: date.at(0),
@@ -61,12 +64,7 @@
   }
 
   // Join title and subtitle, if any
-  let full-title
-  if subtitle != none {
-    full-title = title + " - " + subtitle
-  } else {
-    full-title = title
-  }
+  let full-title = if subtitle != none {title + " - " + subtitle} else {title}
   
   // Set page size
   let page-size = if type(paper) == str {
@@ -74,7 +72,7 @@
   } else if type(paper) == dictionary {
     (width: paper.x, height: paper.y)
   } else {
-    panic("Invalid value for paper argument: " + paper)
+    panic("Invalid value for paper argument: " + str(paper))
   }
 
   set document(
@@ -103,6 +101,7 @@
     hanging-indent: 1em,
   )
   
+  
   // Define numbering pattern:
   let numpattern = ()
   if numbering-style != auto {
@@ -130,21 +129,28 @@
     )
   }
   
-  // Manage numbering cases:
-  // - Receives numbering ..patterns
-  // - Receives numbers as ..nums
-  // - Insert part and chapter names before numbering, if set
-  // - Returns numbering
-  let set-numbering(
-    ..patterns
-  ) = (
-    ..nums
-  ) => {
-    context {
+  // Context to make translations available
+  context {
+    // Set part and chapter translations based on text.lang
+    let translation = lang-data.at("lang").at(text.lang)
+    let part = if part == auto {translation.part} else {part}
+    let chapter = if chapter == auto {translation.chapter} else {chapter}
+    
+    // Set translations state to be used outside #book()
+    book-tr-state.update(translation)
+    
+    // Manage numbering cases:
+    // - Receives numbering ..patterns
+    // - Receives numbers as ..nums
+    // - Insert part and chapter names before numbering, if set
+    // - Returns numbering
+    let set-numbering(
+      ..patterns
+    ) = (
+      ..nums
+    ) => context {
       let patterns = patterns.pos()
       let contents = ()
-      let part = part
-      let chapter = chapter
       
       // When using a default numbering string:
       if patterns.len() == 1 and not patterns.at(0).contains(regex("\{.*\}")) {
@@ -162,13 +168,13 @@
           chapter = chapter + ":"
         }
       }
-
+  
       // Numbering showed after TOC.
       if query(selector(label("outline")).before(here())).len() != 0 {
         if part != none and patterns.len() >= 1 {
           // Heading level 1 become part
           patterns.at(0) = part + " " + patterns.at(0)
-
+  
           // Heading level 2 become chapter
           if chapter != none and patterns.len() >= 2 {
             patterns.at(1) = chapter + " " + patterns.at(1)
@@ -191,257 +197,299 @@
           )
         }
       }
-
+  
       // Get numbering using numbly
       numbly(default: none, ..contents)(..nums)
     }
-  }
 
-  set heading(
-    numbering: set-numbering(..numpattern),
-    hanging-indent: 0pt,
-    supplement: it => {
-        if part != none {
-          context if it.depth == 1 {part}
+    set heading(
+      numbering: set-numbering(..numpattern),
+      hanging-indent: 0pt,
+      supplement: it => {
+          if part != none {
+            context if it.depth == 1 {part}
+            else if chapter != none {chapter}
+            else {auto}
+          }
           else if chapter != none {chapter}
           else {auto}
         }
-        else if chapter != none {chapter}
-        else {auto}
-      }
-  )
-
-  // Count every level 2 heading:
-  let book-h2-counter = counter("book-h2")
-  show heading.where(level: 2): it => {
-    book-h2-counter.step()
-    it
-  }
-
-  show heading.where(level: 1, outlined: true): it => {
-    // Create part page, if any:
-    if part != none {
-    
-      // Set page background
-      let part-bg = if cover == auto {
-          let m = page.margin
-          let frame = image(
-              width: 93%,
-              "assets/frame-gray.svg"
-            )
+    )
+  
+    // Count every level 2 heading:
+    let book-h2-counter = counter("book-h2")
+    show heading.where(level: 2): it => {
+      book-h2-counter.step()
+      it
+    }
+  
+    show heading.where(level: 1, outlined: true): it => {
+      // Create part page, if any:
+      if part != none {
+      
+        // Set page background
+        let part-bg = if cover == auto {
+            let m = page.margin
+            let frame = image(
+                width: 93%,
+                "assets/frame-gray.svg"
+              )
+              
+            if type(m) != dictionary {
+              m = (
+                top: m,
+                bottom: m,
+                left: m,
+                right: m
+              )
+            }
             
-          if type(m) != dictionary {
-            m = (
-              top: m,
-              bottom: m,
-              left: m,
-              right: m
+            v(m.top * 0.25)
+            align(center + top, frame)
+            
+            align(center + bottom,
+              rotate(180deg, frame)
             )
+            v(m.bottom * 0.25)
+          } else {
+            none
           }
           
-          v(m.top * 0.25)
-          align(center + top, frame)
-          
-          align(center + bottom,
-            rotate(180deg, frame)
-          )
-          v(m.bottom * 0.25)
-        } else {
-          none
-        }
         
-      
-      // Part only if numbering != none
-      pagebreak(weak: true, to: "even")
-      set page(background: part-bg)
-      set par(justify: false)
-      
-      align(center + horizon, it)
-      
-      pagebreak(weak: true)
-    }
-    else {
-      it
-    }
-
-    context if type(part) != none {
-      // Get the current level 2 heading count:
-      let current-h2-count = book-h2-counter.get()
-      // Level 2 heading numbering will not restart after level 1 headings now:
-      counter(heading).update((h1, ..n) => (h1, ..current-h2-count))
-    }
-  }
-
-  show heading: set align(center)
-  show heading: set par(justify: false)
-  show heading: set text(hyphenate: false)
-  show heading.where(level: 1): set text(size: font-size * 2)
-  show heading.where(level: 2): set text(size: font-size * 1.6)
-  show heading.where(level: 3): set text(size: font-size * 1.4)
-  show heading.where(level: 4): set text(size: font-size * 1.3)
-  show heading.where(level: 5): set text(size: font-size * 1.2)
-  show heading.where(level: 6): set text(size: font-size * 1.1)
-  show raw: set text(font: "Inconsolata", size: font-size)
-  show quote.where(block: true): set pad(x: 1em)
-  show raw.where(block: true): it => pad(left: 1em, it)
-  show math.equation: set text(font: font-math)
-  
-  show selector.or(
-    terms, enum, list, table, figure, math.equation.where(block: true),
-    quote.where(block: true), raw.where(block: true)
-  ): set block(above: font-size, below: font-size)
-
-  show ref: it => {
-    let el = it.element
-    //repr(it)
-    
-    // When referencing headings in "normal" form
-    if el != none and el.func() == heading and it.form == "normal" {
-      // Remove \n and trim full stops
-      let numpattern = numpattern.map(
-          item => item.replace("\n", "").trim(regex("[.:]"))
-        )
-      let number = numbly(..numpattern)(..counter(heading).at(el.location()))
-      
-      // New reference without \n
-      link(el.location())[#el.supplement #number]
-    }
-    else {
-      it
-    }
-  }
-
-  // Insert notes of a section at its end, before next heading:
-  // NOFIX: This really clumsy code is the only way found to implement #note.
-
-  let new-body = body.children
-  let h-index = ()
-  
-  // #note: Get index of all headings in body.children
-  for n in range(new-body.len()) {
-    let item = new-body.at(n)
-    
-    if item.func() == heading {
-      h-index.push(n)
-    }
-  }
-
-  // #note: Insert anchor <note> before each heading obtained
-  for n in range(h-index.len()) {
-    new-body.insert(h-index.at(n) + n, [#metadata("Note anchor") <note>])
-  }
-
-  // #note:Insert a final anchor <note> at the end of the document
-  new-body.push([#metadata("Note anchor") <note>])
-
-  // #note: Make the edited new-body into the document body
-  body = new-body.join()
-
-  // #note: Make the first note be note 1, instead of note 0.
-  book-note-counter.update(1)
-
-  // #note: Swap the <note> for the actual notes in the current section, if any.
-  show <note>: it => {
-    context if book-notes-state.final() != (:) {
-      // Find the level (numbering) of current section heading:
-      let selector = selector(heading).before(here())
-      let level = counter(selector).display()
-
-      // Show notes only if there are any in this section
-      if book-notes-state.get().keys().contains(level) {
-        pagebreak(weak: true)
-
-        // Insert the notes:
-        for note in book-notes-state.get().at(level) {
-          par(
-            first-line-indent: 0pt,
-            spacing: 0.75em,
-            hanging-indent: 1em
-          )[
-            // Link to the note marker in the text:
-            #link(label(level + "-" + str(note.at(0)) ))[
-              #text(weight: "bold", [#note.at(0):])
-            ]
-            // Insert <LEVEl-content> for cross-reference
-            #label(level + "-" + str(note.at(0)) + "-content")
-            #note.at(1)
-          ]
-        }
-
+        // Part only if numbering != none
+        pagebreak(weak: true, to: "even")
+        set page(background: part-bg)
+        set par(justify: false)
+        
+        align(center + horizon, it)
+        
         pagebreak(weak: true)
       }
-
-      // Make every section notes start at note 1
-      book-note-counter.update(1)
+      else {
+        it
+      }
+  
+      context if type(part) != none {
+        // Get the current level 2 heading count:
+        let current-h2-count = book-h2-counter.get()
+        // Level 2 heading numbering will not restart after level 1 headings now:
+        counter(heading).update((h1, ..n) => (h1, ..current-h2-count))
+      }
     }
-  }
-
-  show super: it => {
-    let note-regex = regex("::[0-9-.]+::")
+  
+    show heading: set align(center)
+    show heading: set par(justify: false)
+    show heading: set text(hyphenate: false)
+    show heading.where(level: 1): set text(size: font-size * 2)
+    show heading.where(level: 2): set text(size: font-size * 1.6)
+    show heading.where(level: 3): set text(size: font-size * 1.4)
+    show heading.where(level: 4): set text(size: font-size * 1.3)
+    show heading.where(level: 5): set text(size: font-size * 1.2)
+    show heading.where(level: 6): set text(size: font-size * 1.1)
+    show raw: set text(font: "Inconsolata", size: font-size)
+    show quote.where(block: true): set pad(x: 1em)
+    show raw.where(block: true): it => pad(left: 1em, it)
+    show math.equation: set text(font: font-math)
     
-    // #note: Transform note markers in links to the actual notes:
-    // - Targets the `#super("NUMBER ::LABEL::")` returned by `#note`
-    // - After handled, turn them into `#link(<LABEL>)[#super("NUMBER")]`
-    if it.body.text.ends-with(note-regex) {
-      let note-label = it.body.text.find(note-regex).trim(":") + "-content"
-      let note-number = it.body.text.replace(note-regex, "").trim()
-
-      // Link to the actual note content:
-      link(label(note-label))[#super(note-number)]
-    } else {
-      it
-    }
-  }
-
-  // Generate cover
-  if cover != none {
-    if cover == auto {
-      let cover-bg = context {
-          let m = page.margin
-          let frame = image(
-              width: 93%,
-              "assets/frame.svg"
-            )
-            
-          if type(m) != dictionary {
-            m = (
-              top: m,
-              bottom: m,
-              left: m,
-              right: m
-            )
-          }
-          
-          v(m.top * 0.25)
-          align(center + top, frame)
-          
-          align(center + bottom,
-            rotate(180deg, frame)
+    show selector.or(
+      terms, enum, list, table, figure, math.equation.where(block: true),
+      quote.where(block: true), raw.where(block: true)
+    ): set block(above: font-size, below: font-size)
+  
+    show ref: it => {
+      let el = it.element
+      //repr(it)
+      
+      // When referencing headings in "normal" form
+      if el != none and el.func() == heading and it.form == "normal" {
+        // Remove \n and trim full stops
+        let numpattern = numpattern.map(
+            item => item.replace("\n", "").trim(regex("[.:]"))
           )
-          v(m.bottom * 0.25)
+        let number = numbly(..numpattern)(..counter(heading).at(el.location()))
+        
+        // New reference without \n
+        link(el.location())[#el.supplement #number]
+      }
+      else {
+        it
+      }
+    }
+  
+    // Insert notes of a section at its end, before next heading:
+    // NOFIX: This really clumsy code is the only way found to implement #note.
+  
+    let new-body = body.children
+    let h-index = ()
+    
+    // #note: Get index of all headings in body.children
+    for n in range(new-body.len()) {
+      let item = new-body.at(n)
+      
+      if item.func() == heading {
+        h-index.push(n)
+      }
+    }
+  
+    // #note: Insert anchor <note> before each heading obtained
+    for n in range(h-index.len()) {
+      new-body.insert(h-index.at(n) + n, [#metadata("Note anchor") <note>])
+    }
+  
+    // #note:Insert a final anchor <note> at the end of the document
+    new-body.push([#metadata("Note anchor") <note>])
+  
+    // #note: Make the edited new-body into the document body
+    let body = new-body.join()
+  
+    // #note: Make the first note be note 1, instead of note 0.
+    book-note-counter.update(1)
+  
+    // #note: Swap the <note> for the actual notes in the current section, if any.
+    show <note>: it => {
+      context if book-notes-state.final() != (:) {
+        // Find the level (numbering) of current section heading:
+        let selector = selector(heading).before(here())
+        let level = counter(selector).display()
+  
+        // Show notes only if there are any in this section
+        if book-notes-state.get().keys().contains(level) {
+          pagebreak(weak: true)
+  
+          // Insert the notes:
+          for note in book-notes-state.get().at(level) {
+            par(
+              first-line-indent: 0pt,
+              spacing: 0.75em,
+              hanging-indent: 1em
+            )[
+              // Link to the note marker in the text:
+              #link(label(level + "-" + str(note.at(0)) ))[
+                #text(weight: "bold", [#note.at(0):])
+              ]
+              // Insert <LEVEl-content> for cross-reference
+              #label(level + "-" + str(note.at(0)) + "-content")
+              #note.at(1)
+            ]
+          }
+  
+          pagebreak(weak: true)
         }
+  
+        // Make every section notes start at note 1
+        book-note-counter.update(1)
+      }
+    }
+  
+    show super: it => {
+      let note-regex = regex("::[0-9-.]+::")
       
-      // title = title.replace(regex("\s+"), "\n")
-      // title = title.replace(regex("\s+[A-Z][^\s]*|[A-Z][^\s]*\s+[a-z][^\s]*"), it => {
-      //     it.text.replace(regex("\s+"), "\n")
-      //   })
-      
-      set text(
-        fill: luma(200),
-        hyphenate: false
-      )
-      set par(justify: false)
-      
-      page(
-        margin: (x: 12%, y: 12%),
-        fill: rgb("#3E210B"),
-        background: cover-bg
-      )[
-        #align(center + horizon)[
+      // #note: Transform note markers in links to the actual notes:
+      // - Targets the `#super("NUMBER ::LABEL::")` returned by `#note`
+      // - After handled, turn them into `#link(<LABEL>)[#super("NUMBER")]`
+      if it.body.text.ends-with(note-regex) {
+        let note-label = it.body.text.find(note-regex).trim(":") + "-content"
+        let note-number = it.body.text.replace(note-regex, "").trim()
+  
+        // Link to the actual note content:
+        link(label(note-label))[#super(note-number)]
+      } else {
+        it
+      }
+    }
+  
+    // Generate cover
+    if cover != none {
+      if cover == auto {
+        let cover-bg = context {
+            let m = page.margin
+            let frame = image(
+                width: 93%,
+                "assets/frame.svg"
+              )
+              
+            if type(m) != dictionary {
+              m = (
+                top: m,
+                bottom: m,
+                left: m,
+                right: m
+              )
+            }
+            
+            v(m.top * 0.25)
+            align(center + top, frame)
+            
+            align(center + bottom,
+              rotate(180deg, frame)
+            )
+            v(m.bottom * 0.25)
+          }
+        
+        // title = title.replace(regex("\s+"), "\n")
+        // title = title.replace(regex("\s+[A-Z][^\s]*|[A-Z][^\s]*\s+[a-z][^\s]*"), it => {
+        //     it.text.replace(regex("\s+"), "\n")
+        //   })
+        
+        set text(
+          fill: luma(200),
+          hyphenate: false
+        )
+        set par(justify: false)
+        
+        page(
+          margin: (x: 12%, y: 12%),
+          fill: rgb("#3E210B"),
+          background: cover-bg
+        )[
+          #align(center + horizon)[
+            #set par(leading: 2em)
+            #context text(
+              size: page.width * 0.09,
+              font: "Cinzel",
+              title
+            )
+            #linebreak()
+            #set par(leading: line-space)
+            #if subtitle != none {
+            v(1cm)
+              context text(
+                size: page.width * 0.04,
+                font: "Alice",
+                subtitle
+              )
+              //v(4cm)
+            }
+          ]
+          #align(center + bottom)[
+            #block(width: 52%)[
+              #context text(
+                size: page.width * 0.035,
+                font: "Alice",
+                authors + "\n" + date.display("[year]")
+              )
+            ]
+          ]
+        ]
+      }
+      else if type(cover) == content {
+        cover
+      }
+      else if cover != none {
+        panic("Invalid page argument value: \"" + cover + "\"")
+      }
+      pagebreak()
+    }
+  
+    // Generate titlepage
+    if titlepage != none and titlepage != false {
+      if type(titlepage) == content {
+        titlepage
+      } else if titlepage == true {
+        align(center + horizon)[
           #set par(leading: 2em)
           #context text(
             size: page.width * 0.09,
-            font: "Cinzel",
             title
           )
           #linebreak()
@@ -450,96 +498,54 @@
           v(1cm)
             context text(
               size: page.width * 0.04,
-              font: "Alice",
               subtitle
             )
             //v(4cm)
           }
         ]
-        #align(center + bottom)[
+        align(center + bottom)[
           #block(width: 52%)[
             #context text(
               size: page.width * 0.035,
-              font: "Alice",
               authors + "\n" + date.display("[year]")
             )
           ]
         ]
-      ]
-    }
-    else if type(cover) == content {
-      cover
-    }
-    else if cover != none {
-      panic("Invalid page argument value: \"" + cover + "\"")
-    }
-    pagebreak()
-  }
-
-  // Generate titlepage
-  if titlepage != none and titlepage != false {
-    if type(titlepage) == content {
-      titlepage
-    } else if titlepage == true {
-      align(center + horizon)[
-        #set par(leading: 2em)
-        #context text(
-          size: page.width * 0.09,
-          title
-        )
-        #linebreak()
-        #set par(leading: line-space)
-        #if subtitle != none {
-        v(1cm)
-          context text(
-            size: page.width * 0.04,
-            subtitle
-          )
-          //v(4cm)
-        }
-      ]
-      align(center + bottom)[
-        #block(width: 52%)[
-          #context text(
-            size: page.width * 0.035,
-            authors + "\n" + date.display("[year]")
-          )
-        ]
-      ]
-    }
-    else {
-      panic("Invalid titlepage argument value: \"" + cover + "\"")
-    }
-    pagebreak(weak: true)
-  }
-
-  // Generate TOC
-  if toc == true {
-    show outline.entry.where(level: 1): it => {
-      // Special formatting to parts in TOC:
-      if part != none {
-        v(font-size, weak: true)
-        strong(it)
       }
       else {
-        it
+        panic("Invalid titlepage argument value: \"" + cover + "\"")
       }
+      pagebreak(weak: true)
     }
-
-    pagebreak(weak: true, to: "even")
-    outline(indent: lvl => if lvl > 0 {1.5em} else {0em})
-    // <outline> anchor allows different numbering styles in TOC and in the actual text.
-    pagebreak(weak: true)
+  
+    // Generate TOC
+    if toc == true {
+      show outline.entry.where(level: 1): it => {
+        // Special formatting to parts in TOC:
+        if part != none {
+          v(font-size, weak: true)
+          strong(it)
+        }
+        else {
+          it
+        }
+      }
+  
+      pagebreak(weak: true, to: "even")
+      outline(indent: lvl => if lvl > 0 {1.5em} else {0em})
+      // <outline> anchor allows different numbering styles in TOC and in the actual text.
+      pagebreak(weak: true)
+    }
+    [#metadata("Marker for situating titles after/before outline") <outline>]
+    
+    
+    // Start page numbering at the next even page:
+    pagebreak(weak:true, to: "even")
+    set page(numbering: "1")
+    counter(page).update(1)
+  
+    body
   }
-  [#metadata("Marker for situating titles after/before outline") <outline>]
-  
-  
-  // Start page numbering at the next even page:
-  pagebreak(weak:true, to: "even")
-  set page(numbering: "1")
-  counter(page).update(1)
-
-  body
   
   if cover == auto {
     let cover-bg = context {
@@ -617,7 +623,8 @@
 
 // FEATURE: #appendices() is an ambient to insert multiple appendices.
 #let appendices(
-  title: ("Appendices", "Appendix"),
+  type: "appendix",
+  title: auto,
   numbering-style: (
     "",
     "{2:A}.\n",
@@ -627,9 +634,15 @@
     "{2:A}.{3:1}.{4:1}.{5:1}.{6:a}. ",
   ),
   body
-) = {
+) = context {
+  let (singular-title, plural-title) = if title == auto {
+      book-tr-state.get().at(type)
+    } else {
+      title
+    }
+  
   heading(
-    title.at(0),
+    plural-title,
     level: 1,
     numbering: none
   )
@@ -650,8 +663,8 @@
 
     // Numbering showed after TOC.
     if query(selector(label("outline")).before(here())).len() != 0 {
-      if title != none {
-        patterns.at(1) = title.at(1) + " " + patterns.at(1)
+      if singular-title != none {
+        patterns.at(1) = singular-title + " " + patterns.at(1)
       }
       
       contents = patterns
@@ -673,7 +686,7 @@
   set heading(
     offset: 1,
     numbering: set-numbering(..numbering-style),
-    supplement: title.at(1)
+    supplement: singular-title
   )
   
   show heading.where(level: 2): it => {
@@ -686,10 +699,11 @@
 
 // FEATURE: #annexes() is an ambient to insert multiple annexes.
 #let annexes(
-  title: ("Annexes", "Annex"),
+  type: "annex",
   ..args
 ) = appendices(
-  title: title,
+  type: type,
+  title: auto,
   ..args
 )
 

@@ -1,0 +1,124 @@
+[conf]
+default-lang = "en"
+
+[lang.en]
+part = "Part"
+chapter = "Chapter"
+appendix = [ "Appendix", "Appendices" ]
+annex = [ "Annex", "Annexes" ]
+
+[lang.pt]
+part = "Parte"
+chapter = "Capítulo"
+appendix = [ "Apêndice", "Apêndices" ]
+annex = [ "Anexo", "Anexos" ]
+
+# The following are AI translations, and may contain errors:
+
+[lang.es]
+part = "Parte"
+chapter = "Capítulo"
+appendix = [ "Apéndice", "Apéndices" ]
+annex = [ "Anexo", "Anexos" ]
+
+[lang.fr]
+part = "Partie"
+chapter = "Chapitre"
+appendix = [ "Annexe", "Annexes" ]
+annex = [ "Appendice", "Appendices" ]
+
+[lang.de]
+part = "Teil"
+chapter = "Kapitel"
+appendix = [ "Anhang", "Anhänge" ]
+annex = [ "Anlage", "Anlagen" ]
+
+[lang.id]
+part = "Bagian"
+chapter = "Bab"
+appendix = [ "Lampiran", "Lampiran" ]
+annex = [ "Aneks", "Aneks" ]
+
+[lang.it]
+part = "Parte"
+chapter = "Capitolo"
+appendix = [ "Appendice", "Appendici" ]
+annex = [ "Allegato", "Allegati" ]
+
+[lang.tr]
+part = "Bölüm"
+chapter = "Bap"
+appendix = [ "Ek", "Ekler" ]
+annex = [ "İlave", "İlaveler" ]
+
+[lang.vi]
+part = "Phần"
+chapter = "Chương"
+appendix = [ "Phụ lục", "Phụ lục" ]
+annex = [ "Phụ đính", "Phụ đính" ]
+
+[lang.pl]
+part = "Część"
+chapter = "Rozdział"
+appendix = [ "Dodatek", "Dodatki" ]
+annex = [ "Załącznik", "Załączniki" ]
+
+[lang.ro]
+part = "Partea"
+chapter = "Capitolul"
+appendix = [ "Anexă", "Anexe" ]
+annex = [ "Apéndice", "Apéndicele" ]
+
+[lang.nl]
+part = "Deel"
+chapter = "Hoofdstuk"
+appendix = [ "Bijlage", "Bijlagen" ]
+annex = [ "Aanhangsel", "Aanhangsels" ]
+
+[lang.jv]
+part = "Bagean"
+chapter = "Bab"
+appendix = [ "Llampiran", "Llampiran" ]
+annex = [ "Llampahan", "Llampahan" ]
+
+[lang.fil]
+part = "Bahagi"
+chapter = "Kabanata"
+appendix = [ "Apendiks", "Mga Apendiks" ]
+annex = [ "Ankla", "Mga Ankla" ]
+
+[lang.ha]
+part = "Sashe"
+chapter = "Babi"
+appendix = [ "Ƙari", "Ƙarori" ]
+annex = [ "Ƙari na biyu", "Ƙarori na biyu" ]
+
+[lang.sw]
+part = "Sehemu"
+chapter = "Sura"
+appendix = [ "Kiambatisho", "Viambatisho" ]
+annex = [ "Kiambatanisho", "Viambatanisho" ]
+
+[lang.uk]
+part = "Частина"
+chapter = "Розділ"
+appendix = [ "Додаток", "Додатки" ]
+annex = [ "Додаткова частина", "Додаткові частини" ]
+
+[lang.uz]
+part = "Qism"
+chapter = "Bob"
+appendix = [ "Ilova", "Ilovalar" ]
+annex = [ "Qo‘shimcha", "Qo‘shimchalar" ]
+
+[lang.fa]
+part = "بخش"
+chapter = "فصل"
+appendix = [ "پیوست", "پیوست‌ها" ]
+annex = [ "ضمیمه", "ضمیمه‌ها" ]
+
+[lang.hr]
+part = "Dio"
+chapter = "Poglavlje"
+appendix = [ "Dodatak", "Dodaci" ]
+annex = [ "Prilog", "Prilozi" ]
