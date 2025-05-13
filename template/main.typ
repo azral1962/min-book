@@ -92,32 +92,44 @@ _#lorem(40)_
 
 === Simple lists
 
-#lorem(40)
+#lorem(30)
 
-#lorem(40)
+- Item
+- Item
+- Item
 
-- Item A
-- Item B
-- Item C
+#lorem(30)
 
-#lorem(40)
+- Item
+  - Item
+    - Item
+      - Item
+        - Item
+          - Item
+            - Item
 
-#lorem(40)
+#lorem(30)
 
 
 === Numbered lists
 
-#lorem(40)
+#lorem(30)
 
-#lorem(40)
++ Item
++ Item
++ Item
 
-+ Item A
-+ Item B
-+ Item C
+#lorem(30)
 
-#lorem(40)
++ Item
+  + Item
+    + Item
+      + Item
+        + Item
+          + Item
+            + Item
 
-#lorem(40)
+#lorem(30)
 
 #pagebreak()
 

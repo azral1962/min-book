@@ -330,9 +330,7 @@
             v(m.top * 0.25)
             align(center + top, frame)
             
-            align(center + bottom,
-              rotate(180deg, frame)
-            )
+            align(center + bottom, rotate(180deg, frame))
             v(m.bottom * 0.25)
           }
         
@@ -597,19 +595,32 @@
   symbol: [#sym.ast.op #sym.ast.op #sym.ast.op],
   spacing: 1em,
   line-size: 15%,
-) = [
-  #v(spacing, weak: true)
+) = {
+  v(spacing, weak: true)
   
-  #align(center)[
-    #block(width: 100%)[
-      #box(height: 1em, align(center + horizon)[#line(length: line-size)])
-      #box(height: 1em)[#symbol]
-      #box(height: 1em, align(center + horizon)[#line(length: line-size)])
+  align(
+    center,
+    block(width: 100%)[
+      #box(
+        height: 1em,
+        align(
+          center + horizon,
+          line(length: line-size)
+        )
+      )
+      #box(height: 1em, symbol)
+      #box(
+        height: 1em,
+        align(
+          center + horizon,
+          line(length: line-size)
+        )
+      )
     ]
-  ]
+  )
   
-  #v(spacing, weak: true)
-]
+  v(spacing, weak: true)
+}
 
 
 // FEATURE: #hr() is an alias to #horizontalrule()
