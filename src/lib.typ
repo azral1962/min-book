@@ -2,7 +2,6 @@
 // REQ: numbly
 // TODO: #book(catalog: dictionary) -> Catalographic sheet (ISBN)
 // TODO: Implement ePub output when available
-// TODO: Move #set-numbering to utils.typ
 
 #import "@preview/numbly:0.1.0": numbly
 
@@ -37,37 +36,20 @@
   font-size: 11pt,
   body
 ) = {
-  // Required arguments
-  let req = (
+  import "utils.typ"
+
+  utils.required-args(
     title: title,
-    authors: authors
+    authors: authors,
+    body: body
   )
-  for arg in req.keys() {
-    if req.at(arg) == none {
-      panic("Missing required argument: " + arg)
-    }
-  }
 
-  // Transform authors array into string
-  if type(authors) != str {
-    authors = authors.join(", ")
-  }
-
-  // Transform date array into datetime
-  let date = date
-  if type(date) == array {
-    date = datetime(
-      year: date.at(0),
-      month: date.at(1),
-      day: date.at(2)
-    )
-  }
-  
+  date = utils.date(date)
   page-cfg = if type(page-cfg) == str {(paper: page-cfg)} else {page-cfg}
 
   set document(
     title: if subtitle != none {title + " - " + subtitle} else {title},
-    author: authors, 
+    author: if type(authors) == array {authors.join(", ")} else {authors},
     date: date
   )
   set page(
@@ -91,34 +73,6 @@
     hanging-indent: 1em,
   )
   
-  
-  // Define numbering pattern:
-  let numpattern = ()
-  if numbering-style != auto {
-    // numbering-style overrides the default numbering
-    numpattern = numbering-style
-  } else if type(part) != none {
-    // Used if _part_ is set
-    numpattern = (
-      "{1:I}:\n",
-      "{2:I}.\n",
-      "{2:I}.{3:1}.\n",
-      "{2:I}.{3:1}.{4:1}.\n",
-      "{2:I}.{3:1}.{4:1}.{5:1}.\n",
-      "{2:I}.{3:1}.{4:1}.{5:1}.{6:a}. ",
-    )
-  } else {
-    // Used if _part_ is not set
-    numpattern = (
-      "{1:I}.\n",
-      "{1:I}.{2:1}.\n",
-      "{1:I}.{2:1}.{3:1}.\n",
-      "{1:I}.{2:1}.{3:1}.{4:1}.\n",
-      "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.\n",
-      "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.{6:a}. ",
-    )
-  }
-  
   // Context to make translations available
   context {
     // Set part and chapter translations based on text.lang
@@ -128,72 +82,37 @@
     
     // Set translations state to be used outside #book()
     book-tr-state.update(translation)
+
+    let part-pattern = (
+      "{1:I}:\n",
+      "{2:I}.\n",
+      "{2:I}.{3:1}.\n",
+      "{2:I}.{3:1}.{4:1}.\n",
+      "{2:I}.{3:1}.{4:1}.{5:1}.\n",
+      "{2:I}.{3:1}.{4:1}.{5:1}.{6:a}. ",
+    )
     
-    // Manage numbering cases:
-    // - Receives numbering ..patterns
-    // - Receives numbers as ..nums
-    // - Insert part and chapter names before numbering, if set
-    // - Returns numbering
-    let set-numbering(
-      ..patterns
-    ) = (
-      ..nums
-    ) => context {
-      let patterns = patterns.pos()
-      let contents = ()
-      
-      // When using a default numbering string:
-      if patterns.len() == 1 and not patterns.at(0).contains(regex("\{.*\}")) {
-        return numbering(..patterns, ..nums)
-      }
-      
-      // when numbering-style == none
-      if patterns == () {
-        if part != none {
-          patterns.push("\n")
-          part = part + ":"
-        }
-        if chapter != none {
-          patterns.push("\n")
-          chapter = chapter + ":"
-        }
-      }
-  
-      // Numbering showed after TOC.
-      if query(selector(label("outline")).before(here())).len() != 0 {
-        if part != none and patterns.len() >= 1 {
-          // Heading level 1 become part
-          patterns.at(0) = part + " " + patterns.at(0)
-  
-          // Heading level 2 become chapter
-          if chapter != none and patterns.len() >= 2 {
-            patterns.at(1) = chapter + " " + patterns.at(1)
-          }
-        } else {
-          // Heading level 1 become chapter, if no part
-          if chapter != none and patterns.len() >= 1 {
-            patterns.at(0) = chapter + " " + patterns.at(0)
-          }
-        }
-        
-        contents = patterns
-      }
-      // Numbering showed in TOC:
-      else {
-        for pattern in patterns {
-          // Remove any "\n" at the end of numbering patterns:
-          contents.push(
-            pattern.trim(regex("\n$"))
-          )
-        }
-      }
-  
-      // Get numbering using numbly
-      numbly(default: none, ..contents)(..nums)
-    }
+    let no-part-pattern = (
+      "{1:I}.\n",
+      "{1:I}.{2:1}.\n",
+      "{1:I}.{2:1}.{3:1}.\n",
+      "{1:I}.{2:1}.{3:1}.{4:1}.\n",
+      "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.\n",
+      "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.{6:a}. ",
+    )
 
     set heading(
-      numbering: set-numbering(..numpattern),
+      numbering: utils.numbering(
+          patterns: (
+            numbering-style,
+            part-pattern,
+            no-part-pattern,
+          ),
+          scope: (
+            h1: part,
+            h2: chapter
+          )
+        ),
       hanging-indent: 0pt,
       supplement: it => {
           if part != none {
@@ -208,11 +127,11 @@
   
     // Count every level 2 heading:
     let book-h2-counter = counter("book-h2")
+    
     show heading.where(level: 2): it => {
       book-h2-counter.step()
       it
     }
-  
     show heading.where(level: 1, outlined: true): it => {
       // Create part page, if any:
       if part != none {
@@ -266,7 +185,6 @@
         counter(heading).update((h1, ..n) => (h1, ..current-h2-count))
       }
     }
-  
     show heading: set align(center)
     show heading: set par(justify: false)
     show heading: set text(hyphenate: false)
@@ -280,12 +198,10 @@
     show quote.where(block: true): set pad(x: 1em)
     show raw.where(block: true): it => pad(left: 1em, it)
     show math.equation: set text(font: font-math)
-    
     show selector.or(
       terms, enum, list, table, figure, math.equation.where(block: true),
       quote.where(block: true), raw.where(block: true)
     ): set block(above: font-size, below: font-size)
-  
     show ref: it => {
       let el = it.element
       //repr(it)
@@ -308,7 +224,8 @@
   
     // Insert notes of a section at its end, before next heading:
     // NOFIX: This really clumsy code is the only way found to implement #note.
-  
+    //show: utils.implement-note
+    /**/
     let new-body = body.children
     let h-index = ()
     
@@ -387,7 +304,8 @@
         it
       }
     }
-  
+    /**/
+    
     // Generate cover
     if cover != none {
       if cover == auto {
@@ -580,6 +498,8 @@
   content,
   numbering-style: "1"
 ) = context {
+  //import "utils.typ": book-note-counter, book-notes-state
+
   context book-note-counter.step()
   
   // Find the level (numbering) of current section heading:
@@ -605,7 +525,7 @@
   
   let note-number = numbering(numbering-style, ..book-note-counter.get())
   let note-label = level + "-" + note-number
-  
+
   // Set note as #super[NUMBER ::LABEL::] to be managed later
   [#super(note-number + " ::" + note-label + "::")#label(note-label)]
 }
@@ -625,12 +545,16 @@
   ),
   body
 ) = context {
+  import "utils.typ"
+
+  // Set name for "appendix" and "appendices" titles
   let (singular-title, plural-title) = if title == auto {
       book-tr-state.get().at(type)
     } else {
       title
     }
   
+  // Main title (plural)
   heading(
     plural-title,
     level: 1,
@@ -638,44 +562,16 @@
   )
   counter(heading).update(0)
   
-  let set-numbering(
-    ..patterns
-  ) = (
-    ..nums
-  ) => context {
-    let patterns = patterns.pos()
-    let contents = ()
-    
-    // When using a default numbering string:
-    if patterns.len() == 1 and not patterns.at(0).contains(regex("\{.*\}")) {
-      return numbering(..patterns, ..nums)
-    }
-
-    // Numbering showed after TOC.
-    if query(selector(label("outline")).before(here())).len() != 0 {
-      if singular-title != none {
-        patterns.at(1) = singular-title + " " + patterns.at(1)
-      }
-      
-      contents = patterns
-    }
-    // Numbering showed in TOC:
-    else {
-      for pattern in patterns {
-        // Remove any "\n" at the end of numbering patterns:
-        contents.push(
-          pattern.trim(regex("\n$"))
-        )
-      }
-    }
-
-    // Get numbering using numbly
-    numbly(..contents)(..nums)
-  }
-  
   set heading(
     offset: 1,
-    numbering: set-numbering(..numbering-style),
+    numbering: utils.numbering(
+        patterns: (numbering-style,),
+        scope: (
+          h1: none,
+          h2: singular-title,
+          n: 1
+        )
+      ),
     supplement: singular-title
   )
   
