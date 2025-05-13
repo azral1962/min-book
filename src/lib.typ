@@ -199,20 +199,23 @@
     show raw.where(block: true): it => pad(left: 1em, it)
     show math.equation: set text(font: font-math)
     show selector.or(
-      terms, enum, list, table, figure, math.equation.where(block: true),
-      quote.where(block: true), raw.where(block: true)
-    ): set block(above: font-size, below: font-size)
-    show ref: it => {
+        terms, enum, list, table, figure, math.equation.where(block: true),
+        quote.where(block: true), raw.where(block: true)
+      ): set block(above: font-size, below: font-size)
+    show ref: it => context {
       let el = it.element
-      //repr(it)
       
       // When referencing headings in "normal" form
       if el != none and el.func() == heading and it.form == "normal" {
+        let patterns = if numbering-style != auto {numbering-style}
+          else if part != none {part-pattern}
+          else {no-part-pattern}
         // Remove \n and trim full stops
-        let numpattern = numpattern.map(
-            item => item.replace("\n", "").trim(regex("[.:]"))
-          )
-        let number = numbly(..numpattern)(..counter(heading).at(el.location()))
+        patterns = patterns.map(
+          item => item.replace("\n", "").trim(regex("[.:]"))
+        )
+          
+        let number = numbly(..patterns)(..counter(heading).at(el.location()))
         
         // New reference without \n
         link(el.location())[#el.supplement #number]
