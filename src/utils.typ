@@ -1,9 +1,5 @@
 // NAME: Internal utilities sub-module
 
-#let book-notes-state = state("book-notes", (:))
-#let book-note-counter = counter("book-note-count")
-
-
 // UTIL: Check if given required arguments are provided
 #let required-args(..args) = {
   for arg in args.named().keys() {
@@ -86,95 +82,6 @@
   numbly(default: none, ..patterns)(..nums)
 }
 
-
-// UTIL: #note implementation code
-// TODO: #implement-note
-#let implement-note(
-  body
-) = context {
-  // NOFIX: This really clumsy code is the only way found to implement #note.
-  
-  let new-body = body.children
-  let h-index = ()
-  
-  // #note: Get index of all headings in body.children
-  for n in range(new-body.len()) {
-    let item = new-body.at(n)
-    
-    if item.func() == heading {
-      h-index.push(n)
-    }
-  }
-
-  // #note: Insert anchor <note> before each heading obtained
-  for n in range(h-index.len()) {
-    new-body.insert(h-index.at(n) + n, [#metadata("Note anchor") <note>])
-  }
-
-  // #note:Insert a final anchor <note> at the end of the document
-  new-body.push([#metadata("Note anchor") <note>])
-
-  // #note: Make the edited new-body into the document body
-  let body = new-body.join()
-
-  // #note: Make the first note be note 1, instead of note 0.
-  book-note-counter.update(1)
-
-  // #note: Swap the <note> for the actual notes in the current section, if any.
-  show <note>: it => {
-    if book-notes-state.final() != (:) {
-      // Find the level (numbering) of current section heading:
-      let selector = selector(heading).before(here())
-      let level = counter(selector).display()
-
-      // Show notes only if there are any in this section
-      if book-notes-state.get().keys().contains(level) {
-        pagebreak(weak: true)
-
-        // Insert the notes:
-        for note in book-notes-state.get().at(level) {
-          par(
-            first-line-indent: 0pt,
-            spacing: 0.75em,
-            hanging-indent: 1em
-          )[
-            // Link to the note marker in the text:
-            #link(label(level + "-" + str(note.at(0)) ))[
-              #text(weight: "bold", [#note.at(0):])
-            ]
-            // Insert <LEVEl-content> for cross-reference
-            #label(level + "-" + str(note.at(0)) + "-content")
-            #note.at(1)
-          ]
-        }
-
-        pagebreak(weak: true)
-      }
-
-      // Make every section notes start at note 1
-      book-note-counter.update(1)
-    }
-  }
-
-  show super: it => {
-    let note-regex = regex("::[0-9-.]+::")
-    
-    // #note: Transform note markers in links to the actual notes:
-    // - Targets the `#super("NUMBER ::LABEL::")` returned by `#note`
-    // - After handled, turn them into `#link(<LABEL>)[#super("NUMBER")]`
-    if it.body.text.ends-with(note-regex) {
-      let note-label = it.body.text.find(note-regex).trim(":") + "-content"
-      let note-number = it.body.text.replace(note-regex, "").trim()
-
-      // Link to the actual note content:
-      //link(label(note-label))[#super(note-number)]
-    } else {
-      it
-    }
-  }
-  
-  body
-}
 
 // UTIL: Create a date using named and positional arguments
 #let date(..date) = {

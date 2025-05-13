@@ -224,8 +224,7 @@
   
     // Insert notes of a section at its end, before next heading:
     // NOFIX: This really clumsy code is the only way found to implement #note.
-    //show: utils.implement-note
-    /**/
+    
     let new-body = body.children
     let h-index = ()
     
@@ -304,7 +303,7 @@
         it
       }
     }
-    /**/
+
     
     // Generate cover
     if cover != none {
@@ -498,8 +497,6 @@
   content,
   numbering-style: "1"
 ) = context {
-  //import "utils.typ": book-note-counter, book-notes-state
-
   context book-note-counter.step()
   
   // Find the level (numbering) of current section heading:
