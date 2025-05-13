@@ -59,7 +59,7 @@ Those are the full list of options available and its default values:
   chapter: auto,
   numbering-style: auto,
   toc: true,
-  paper: "a5",
+  page-cfg: "a5",
   lang: "en",
   lang-data: toml("assets/lang.toml"),
   justify: true,
@@ -126,10 +126,9 @@ understand it better, shall we?
   Defines whether the book will have a table of contents or not.
 ]
 
-#arg("paper: <- string | dictionary")[
-  Defines the page paper type, or its custom size; a dictionary \
-  `(x: LENGTH, y: LENGTH)` can be used to set custom sizes for page width (`x`)
-  and height (`y`).
+#arg("page-cfg: <- string | dictionary")[
+  If _dictionary_, used as `#set page(..page-cfg)`; if _string_, used as
+  `#set page(paper: page-cfg)`.
 ]
 
 #arg("lang: <- string")[

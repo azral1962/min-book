@@ -24,7 +24,7 @@
   chapter: auto,
   numbering-style: auto,
   toc: true,
-  paper: "a5",
+  page-cfg: "a5",
   lang: "en",
   lang-data: toml("assets/lang.toml"),
   justify: true,
@@ -62,27 +62,17 @@
       day: date.at(2)
     )
   }
-
-  // Join title and subtitle, if any
-  let full-title = if subtitle != none {title + " - " + subtitle} else {title}
   
-  // Set page size
-  let page-size = if type(paper) == str {
-    (paper: paper)
-  } else if type(paper) == dictionary {
-    (width: paper.x, height: paper.y)
-  } else {
-    panic("Invalid value for paper argument: " + str(paper))
-  }
+  page-cfg = if type(page-cfg) == str {(paper: page-cfg)} else {page-cfg}
 
   set document(
-    title: full-title,
+    title: if subtitle != none {title + " - " + subtitle} else {title},
     author: authors, 
     date: date
   )
   set page(
     margin: margin,
-    ..page-size
+    ..page-cfg
   )
   set par(
     justify: justify,

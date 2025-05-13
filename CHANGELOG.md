@@ -1,4 +1,4 @@
-# 0.1.0
+## 0.1.0
 
 - Optional _cover_
   - Image covers
@@ -19,13 +19,20 @@
 - Additional `#horizontalrule` and `#hr` commands
 - Additional `#blockquote` command
 
-## 0.1.1
+### 0.1.1
 
 - Added: automatic default cover generation
 - Added: `#appendices` command
 - Added: `#annexes` command
 - Added: Unnumbered _part_ and _chapter_ with `#book(numbering-style: none)`
 - Updated: `#book(titlepage)` defaults to `false`
-- Updated: `#book(paper)` can be paper `"type"` or `(x: LENGHT, y: LENGHT)` page size
+- Updated: `#book(paper)` can be a `"type"` or `(x: LENGHT, y: LENGHT)` size
 - Fixed: no part name was shown when `#book(toc: false)`
 - Fixed: broken `@ref` to headings with `\n` in its numbering
+
+## 0.2.0
+
+- Added: Default _part, chapter, appendix_ and _annex_ titles in `#lang.text` language
+- Added: Custom TOML translation file with `#book(lang-data)`
+- Added: `#book(page-cfg)` act as `#set page(..page-cfg)`
+- Updated:  ~~`#book(paper)`~~ &rarr; `#book(page-cfg)`
