@@ -37,3 +37,4 @@
 - Added: `#book(page-cfg)` act as `#set page(..page-cfg)`
 - Updated: ~~`#book(paper)`~~ &rarr; `#book(page-cfg)`
 - Updated: Reorganized internal structure
+- Updated: `#outline(depth: 2)` when `#book(numbering-style: none)`

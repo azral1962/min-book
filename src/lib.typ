@@ -336,11 +336,6 @@
             v(m.bottom * 0.25)
           }
         
-        // title = title.replace(regex("\s+"), "\n")
-        // title = title.replace(regex("\s+[A-Z][^\s]*|[A-Z][^\s]*\s+[a-z][^\s]*"), it => {
-        //     it.text.replace(regex("\s+"), "\n")
-        //   })
-        
         set text(
           fill: luma(200),
           hyphenate: false
@@ -423,7 +418,7 @@
         ]
       }
       else {
-        panic("Invalid titlepage argument value: \"" + cover + "\"")
+        panic("Invalid titlepage argument value: \"" + repr(titlepage) + "\"")
       }
       pagebreak(weak: true)
     }
@@ -442,10 +437,13 @@
       }
   
       pagebreak(weak: true, to: "even")
-      outline(indent: lvl => if lvl > 0 {1.5em} else {0em})
-      // <outline> anchor allows different numbering styles in TOC and in the actual text.
+      outline(
+        indent: lvl => if lvl > 0 {1.5em} else {0em},
+        depth: if numbering-style == none {2} else {none},
+      )
       pagebreak(weak: true)
     }
+    // <outline> anchor allows different numbering styles in TOC and in the actual text.
     [#metadata("Marker for situating titles after/before outline") <outline>]
     
     
