@@ -24,6 +24,8 @@
     else if scope.h1 != none {patterns.at(1, default: none)}
     else {patterns.at(0, default: none)}
   
+  if patterns == none {return none}
+  
   // Transform patterns into positional arguments
   patterns = arguments(..patterns).pos()
   
@@ -78,6 +80,11 @@
     patterns = contents
   }
 
+  // #book(part: "") set part without name nor numbering
+  if scope.h1 == "" {
+    patterns.at(0) = ""
+  }
+  
   // Get numbering using numbly
   numbly(default: none, ..patterns)(..nums)
 }
