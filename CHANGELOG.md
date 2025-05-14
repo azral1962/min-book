@@ -41,4 +41,4 @@
 - Updated: Reorganized internal structure
 - Updated: `#outline(depth: 2)` when `#book(numbering-style: none)`
 - Updated: `#book(part: "")` set an unnunbered and unnamed part (just heading title)
-- Fixed: titlepage, toc, part, and content begining moved to odd pages
+- Fixed: titlepage, toc, part, and content beginning moved to odd pages

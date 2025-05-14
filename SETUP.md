@@ -2,7 +2,7 @@
 # Setup
 
 This project uses `just` to automate all development processes. Run `just` or
-refer to the _justfile_ for more information.
+refer to the [justfile](justfile) for more information.
 
 Codetags like _TODO_ or _FIXME_ can be easily viewed using todo.
 
@@ -50,7 +50,7 @@ just dev-link
 ```
 
 This way, every change made into the package will instantly be available to 
-Typst by using a `@local/min-article:0.0.0` import.
+Typst by using a `@local/min-book:0.0.0` import.
 
 This command is a toggle: run it once, and it creates the link; run it again and
 the link is removed; and so on.
