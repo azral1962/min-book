@@ -1,7 +1,7 @@
-// NAME: min-book manual
+// NAME: Manual for min-book
 // TODO: review manual structure
 
-#import "@preview/min-manual:0.1.0": manual, arg, univ
+#import "@preview/min-manual:0.1.1": manual, arg, univ, url
 
 #show: manual.with(
   title: "Minimal Books",
@@ -110,15 +110,16 @@ understand it better, shall we?
 
 #arg("catalog: <- none | dictionary")[
   Set the data for catalographic sheet (ISBN) generation; can receive the
-  following data below:
+  following data below as keys:
 ]
 
 #arg("catalog.id: <- string | content")[
-  A Cutter-Sanborn identification code, used to identify the book author.
+  A #url("http://www.cutternumber.com/")[Cutter-Sanborn identification code],
+  used to identify the book author.
 ]
 
 #arg("catalog.place: <- string | content")[
-  The city or region where tye book was created or published.
+  The city or region where the book was created or published.
 ]
 
 #arg("catalog.publisher: <- string | content")[
@@ -126,7 +127,7 @@ understand it better, shall we?
 ]
 
 #arg("catalog.isbn: <- string | content")[
-  The _International Standard Book Number_, used to indentify tue book.
+  The _International Standard Book Number_, used to indentify the book.
 ]
 
 #arg("catalog.subjects: <- array")[
@@ -134,18 +135,18 @@ understand it better, shall we?
 ]
 
 #arg("catalog.access: <- array")[
-  A list of access points used to find the book, like by `"title"` or
-  `"series"`; must be an array os strings.
+  A list of access points used to find the book in catalogues, like by `"title"`
+  or `"series"`; must be an array of strings.
 ]
 
 #arg("catalog.ddc: <- string | content")[
-  A _Dewey Decimal Classification_ number, used to catalogue the book in a
-  specific category.
+  A #url("https://www.oclc.org/content/dam/oclc/dewey/ddc23-summaries.pdf")[Dewey Decimal Classification]
+  number, used to set the book specific category.
 ]
 
 #arg("catalog.udc: <- string | content")[
-  A _Universal Decimal Classification_ number, used to catalogue the book in a
-  specific category.
+  An #url("https://udcsummary.info/php/index.php")[Universal Decimal Classification]
+  number, used to set the book specific category.
 ]
 
 #arg("catalog.before: <- content")[
@@ -321,8 +322,6 @@ separate from the `#book` main function:
 Adds end notes to the book. End notes are more common in books than footnotes,
 and while footnotes appear at the footer of the same page, end notes appears at
 its own page at the end of the current section, right before the next heading:
-
-#pagebreak()
 
 ```typ
 #import "@preview/min-book:0.1.1": note

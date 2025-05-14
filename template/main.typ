@@ -15,7 +15,7 @@
     publisher: "Publisher",
     isbn: "000-00-0000-000-0",
     subjects: ("Subject one", "Subject two"),
-    access: ("Title", "Serie"),
+    access: ("Title", "Series"),
     ddc: "DDC 000.000",
     udc: "UDC 000.000",
     before: [Content before catalog sheet],

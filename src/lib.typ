@@ -394,6 +394,12 @@
       pagebreak(to: "odd")
       
       if titlepage == auto {
+        set text(
+          fill: luma(50),
+          hyphenate: false
+        )
+        set par(justify: false)
+      
         align(center + horizon)[
           #set par(leading: 2em)
           #context text(
@@ -472,39 +478,50 @@
       rect(
         width: 12cm,
         inset: 1cm,
-        align(left + top)[
-          #if catalog.id != none [#catalog.id]
+        align(
+          left + top, {
           
-          #author. #title
-          #if subtitle != none [: #subtitle].\
-          #if catalog.place != none [#catalog.place:]
-          #if catalog.publisher != none [#catalog.publisher,]
-          #date.year().
-          #v(1em)
-          #if catalog.isbn != none [
+          if catalog.id != none [#catalog.id #parbreak()]
+          
+          author
+          if author.last() != "." [.]
+          [ ]
+          
+          title
+          if subtitle != none [: #subtitle]
+          [.]
+          linebreak()
+          
+          catalog.place
+          if catalog.publisher != none [: #catalog.publisher]
+          [, #date.year().]
+          v(1em)
+          
+          if catalog.isbn != none [
             ISBN #catalog.isbn
             #v(1em)
           ]
-          #if catalog.subjects != () {
+          if catalog.subjects != () {
             for item in catalog.subjects.enumerate() {
               str(item.at(0) + 1) + ". " + item.at(1)
-              h(7pt)
+              h(10pt)
             }
           }
-          #if catalog.access != () {
+          if catalog.access != () {
             let access = if type(catalog.access) == str {(author, catalog.access)}
               else {(author, ..catalog.access)}
             
             for item in access.enumerate() {
               numbering("I.", item.at(0) + 1) + " " + item.at(1)
-              h(7pt)
+              h(10pt)
             }
           }
-          #v(1em)
-          #if catalog.ddc != none {box[]}
-          #if catalog.udc != none {box(align(center, catalog.udc))}
-          #if catalog.ddc != none {box(align(right, catalog.ddc))}
-        ]
+          v(1em)
+          
+          if catalog.ddc != none {box[]}
+          if catalog.udc != none {box(align(center, catalog.udc))}
+          if catalog.ddc != none {box(align(right, catalog.ddc))}
+        })
       )
       
       if catalog.after != none {align(top, catalog.after)}
