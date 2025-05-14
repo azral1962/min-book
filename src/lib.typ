@@ -438,10 +438,9 @@
   
     // Generate catalographic sheet (ISBN)
     if catalog != none {
-      set box(width: 1fr)
       set par(
         first-line-indent: 0pt,
-        hanging-indent: 1.5em
+        spacing: 1em
       )
       
       show rect: set align(center + bottom)
@@ -473,13 +472,19 @@
       
       pagebreak(to: "even")
       
-      if catalog.before != none {align(top, catalog.before)}
+      if catalog.before != none {catalog.before}
       
       rect(
         width: 12cm,
         inset: 1cm,
         align(
           left + top, {
+          
+          set box(width: 1fr)
+          set par(
+            first-line-indent: 0pt,
+            hanging-indent: 1.5em
+          )
           
           if catalog.id != none [#catalog.id #parbreak()]
           
@@ -524,7 +529,7 @@
         })
       )
       
-      if catalog.after != none {align(top, catalog.after)}
+      if catalog.after != none {catalog.after}
     }
   
     // Generate TOC
