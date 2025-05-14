@@ -85,7 +85,7 @@
 
 // UTIL: Create a date using named and positional arguments
 #let date(..date) = {
-  if type(date) == datetime {return date}
+  if type(date.pos().at(0)) == datetime {return date.pos().at(0)}
   
   if type(date.pos().at(0)) == array {date = arguments(..date.pos().at(0))}
 
