@@ -37,6 +37,7 @@
 - Added: `#note(numbering-style)` set the numbering of all the next `#note` commands also
 - Added: `#book(catalog)` generates cataloging in publication board
 - Added: `#book(page-cfg)` act as `#set page(..page-cfg)`
+- Added: `#book(date)` can be a `(year: YYYY, month: MM, day: DD)` dictionary
 - Updated: ~~`#book(paper)`~~ &rarr; `#book(page-cfg)`
 - Updated: Reorganized internal structure
 - Updated: `#outline(depth: 2)` when `#book(numbering-style: none)`

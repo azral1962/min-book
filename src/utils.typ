@@ -94,7 +94,10 @@
 #let date(..date) = {
   if type(date.pos().at(0)) == datetime {return date.pos().at(0)}
   
-  if type(date.pos().at(0)) == array {date = arguments(..date.pos().at(0))}
+  // Convert array or dictinary to arguments
+  if type(date.pos().at(0)) == array or type(date.pos().at(0)) == dictionary {
+    date = arguments(..date.pos().at(0))
+  }
   
   let year = if date.pos().len() >= 1 {date.pos().at(0)}
     else if date.named().at("year", default: none) != none {date.named().year}

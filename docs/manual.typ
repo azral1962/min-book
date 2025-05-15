@@ -90,9 +90,10 @@ understand it better, shall we?
   A string or array of strings containing the names of each author of the book.
 ]
 
-#arg("date: <- array")[
-  The book publication date, in format `(yyyy, mm, dd)`; fallback to current
-  date if not set.
+#arg("date: <- array | dictionary")[
+  `(year: yyyy, month: mm, day: dd)` dictionary, and defaults to current date
+  The book publication date; can be a `(yyyy, mm, dd)` array or a
+  if not set.
 ]
 
 #arg("cover: <- auto | content | none")[
