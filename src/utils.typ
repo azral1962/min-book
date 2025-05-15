@@ -80,7 +80,7 @@
     patterns = contents
   }
 
-  // #book(part: "") set part without name nor numbering
+  // HACK: #book(part: "") set clean parts, without name nor numbering.
   if scope.h1 == "" {
     patterns.at(0) = ""
   }
@@ -95,7 +95,7 @@
   if type(date.pos().at(0)) == datetime {return date.pos().at(0)}
   
   if type(date.pos().at(0)) == array {date = arguments(..date.pos().at(0))}
-
+  
   let year = if date.pos().len() >= 1 {date.pos().at(0)}
     else if date.named().at("year", default: none) != none {date.named().year}
     else {datetime.today().year()}

@@ -11,6 +11,7 @@
 
 
 // FEATURE: #book() used in #show rule to re-structure the document as book.
+// RFE: Options to generate dedication and publisher pages.
 #let book(
   title: none,
   subtitle: none,

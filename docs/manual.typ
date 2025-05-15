@@ -1,5 +1,4 @@
 // NAME: Manual for min-book
-// TODO: review manual structure
 
 #import "@preview/min-manual:0.1.1": manual, arg, univ, url
 
@@ -88,29 +87,26 @@ understand it better, shall we?
 ]
 
 #arg("authors: <- string | array <required>")[
-  A string or array containing the name of each author of the book, in format
-  `( NAME, NAME )`.
+  A string or array of strings containing the names of each author of the book.
 ]
 
-#arg("date: <- array | auto")[
-  The book publication date, in format `(yyyy, mm, dd)`. Fallback to current
-  date if not set, or set to `auto`.
+#arg("date: <- array")[
+  The book publication date, in format `(yyyy, mm, dd)`; fallback to current
+  date if not set.
 ]
 
 #arg("cover: <- auto | content | none")[
-  The book cover; `auto`matically generates a default cover, or set a custom
-  `content` as cover.
+  The book cover content; when `auto`, generates an automatic cover.
 ]
 
-#arg("titlepage: <- boolean | content")[
-  The page after the cover; by default, contains the title, subtitle, author,
-  and year of publication. It is possible to create the titlepage using a
-  `content` block.
+#arg("titlepage: <- auto | content")[
+  The presentation page content, shown after the cover; when `auto`, generates
+  an automatic title page.
 ]
 
 #arg("catalog: <- none | dictionary")[
-  Set the data for catalographic sheet (ISBN) generation; can receive the
-  following data below as keys:
+  Set the data for the "cataloging in publication" board; a dictionary that can
+  have the following keys:
 ]
 
 #arg("catalog.id: <- string | content")[
@@ -119,11 +115,11 @@ understand it better, shall we?
 ]
 
 #arg("catalog.place: <- string | content")[
-  The city or region where the book was created or published.
+  The city or region where the book was published.
 ]
 
 #arg("catalog.publisher: <- string | content")[
-  The organization or enterprised responsible for publishing the book.
+  The organization or person responsible for releasing the book.
 ]
 
 #arg("catalog.isbn: <- string | content")[
@@ -135,60 +131,62 @@ understand it better, shall we?
 ]
 
 #arg("catalog.access: <- array")[
-  A list of access points used to find the book in catalogues, like by `"title"`
-  or `"series"`; must be an array of strings.
+  A list of access points used to find the book in catalogues, like by `"Title"`
+  or `"Series"`; must be an array of strings.
 ]
 
 #arg("catalog.ddc: <- string | content")[
   A #url("https://www.oclc.org/content/dam/oclc/dewey/ddc23-summaries.pdf")[Dewey Decimal Classification]
-  number, used to set the book specific category.
+  number, which corresponds to the specific category of the book.
 ]
 
 #arg("catalog.udc: <- string | content")[
   An #url("https://udcsummary.info/php/index.php")[Universal Decimal Classification]
-  number, used to set the book specific category.
+  number, which corresponds to the specific category if the book.
 ]
 
 #arg("catalog.before: <- content")[
-  Content showed before (above) the catalog.
+  Content showed before (above) the cataloging in publication board; generally
+  editorial data like publisher, editors, reviewers, copyrights, etc.
 ]
 
 #arg("catalog.after: <- content")[
-  Content showed after (below) the catalog.
+  Content showed after (below) the cataloging in publication board; generally
+  additional information that complements the board data.
 ]
 
 #arg("toc: <- boolean")[
-  Defines whether the book will have a table of contents or not.
+  Defines if the book will have a table of contents.
 ]
 
 #arg("part: <- auto | string | none")[
-  The name given to the book's main divisions --- something like LaTeX's
-  ```tex \part``` command; when `auto` an automatic name will be retrieved
-  from `#book(lang-data)` file.
+  The name of the main divisions of the book; when `auto`, try to retrieve the
+  translation for "Part" in `#text.lang` from `#book(lang-data)`, or fallback to
+  English.
 ]
 
 #arg("chapter: <- string | none")[
-  The name given to the book's main sections --- something like LaTeX's
-  ```tex \chapter``` command; when `auto` an automatic name will be retrieved
-  from `#book(lang-data)` file.
+  The name of the sections of the book; when `auto`, try to retrieve the
+  translation for "Chapter" in `#text.lang` from `#book(lang-data)`, or fallback
+  to English.
 ]
 
 #arg("numbering-style: <- auto | array | string | none")[
-  Defines a custom heading numbering. Can be a standard numbering string, or a
-  #univ("numbly") numbering array in more complex cases.
+  Defines a custom heading numbering; can be a standard numbering string, or a
+  #univ("numbly") numbering array.
 ]
 
-#arg("page-cfg: <- string | dictionary")[
-  If _dictionary_, used as `#set page(..page-cfg)`; if _string_, used as
+#arg("page-cfg: <- dictionary | string")[
+  Set page configuration, acting as `#set page(..page-cfg)`; when string, act as
   `#set page(paper: page-cfg)`.
 ]
 
 #arg("lang: <- string")[
-  Defines the language of the written text.
+  Defines the language of the written text (`text.lang`).
 ]
 
 #arg("lang-data: <- toml")[
-  A TOML translation file; the current structure can be found in the default
+  A TOML translation file; the file structure can be found in the default
   `src/assets/lang.toml` file.
 ]
 
@@ -201,12 +199,13 @@ understand it better, shall we?
 ]
 
 #arg("par-margin: <- length")[
-  Defines the margin space after each paragraph. Set it the same as `line-space`
-  to remove get paragraphs without additional space in between.
+  Defines the margin space after each paragraph. Set it the same as
+  `#book(line-space)` to get paragraphs without additional space between them.
 ]
 
 #arg("first-line-indent: <- length")[
-  Defines the first line indentation of all paragraphs, but the first one, in a sequence of paragraphs.
+  Defines the first line indentation of all paragraphs but the first one, in a
+  sequence of paragraphs.
 ]
 
 #arg("margin: <- length")[
@@ -214,12 +213,11 @@ understand it better, shall we?
 ]
 
 #arg("font: <- string | array")[
-  Defines the font families used for the text: a principal font and its fallback.
+  Defines the font families used for the text.
 ]
 
 #arg("font-math: <- string | array")[
-  Defines the font families used for the math and equations: a principal font
-  and its fallback.
+  Defines the font families used for the math and equations.
 ]
 
 #arg("font-size: <- length")[
@@ -279,7 +277,7 @@ The book headings can be numbered two ways: using a standard numbering string,
 or a #univ("numbly") numbering array. While numbering strings are indicated for
 simpler cases, the numbly arrays are used in more complex book numbering.
 
-By default, when the book have _parts_ enabled, the following numbering is used:
+By default, when `#book(part)` is enabled, the following numbering is used:
 
 ```typ
 (
@@ -292,7 +290,7 @@ By default, when the book have _parts_ enabled, the following numbering is used:
 )
 ```
 
-But when the _parts_ are disabled, the following numbering is used:
+But when `#book(part: none)`, the following numbering is used:
 
 ```typ
 (
@@ -305,91 +303,96 @@ But when the _parts_ are disabled, the following numbering is used:
 )
 ```
 
-Additionally, `#book(numbering-style)` can be set to override the default
-numbering above.
+Additionally, a custom `#book(numbering-style)` can be set to override the default
+numbering behavior above.
 
 
-= Additional Features
+= Additional Commands
 
-As said before, this package does not introduce any new syntax nor commands to
+As said before, this package does not requires any new syntax nor commands to
 write a complete book. But, well... it does offers some additional commands.
-These are completely optional and are available only by explicit import,
-separate from the `#book` main function:
+These are completely optional and exists only to facilitate the book writing
+process; it is perfectly possible to write an entire book without them.
 
 
 == Note Command
 
-Adds end notes to the book. End notes are more common in books than footnotes,
-and while footnotes appear at the footer of the same page, end notes appears at
-its own page at the end of the current section, right before the next heading:
-
 ```typ
 #import "@preview/min-book:0.1.1": note
- 
-= Current heading
 
-This text have an end note#note[This is an end note]
-
-// The end note will automatically appear here.
-
-= Next heading
+#note(
+  numbering-style: auto,
+  content,
+)
 ```
+
+Adds end notes to the book. End notes are more common than footnotes in books,
+and while footnotes appear at the footer of the current page, end notes appears
+at its own page at the end of the current section, right before the next heading.
+
+#arg("numbering-style: <- auto | array | string")[
+  Defines a custom note numbering from this note onwards; can be a standard
+  numbering string, or a #univ("numbly") numbering array.
+]
+
+#arg("content <- content <required>")[
+  The content of the end note.
+]
 
 
 == Horizontal Rule Command
 
-Adds horizontal rules, used to separate subtle changes of subject in book texts.
-Can be called by its name or its alias:
-
 ```typ
-#import "@preview/min-book:0.1.1": horizontalrule, hr
+#import "@preview/min-book:0.1.1": horizontalrule
 
-This text have a subject.
-
-#horizontalrule()
-
-This text have another subject.
-
-#hr()
-
-And this text have some other subject.
+#horizontalrule(
+  symbol: [#sym.ast.op #sym.ast.op #sym.ast.op],
+  spacing: 1em,
+  line-size: 15%,
+)
 ```
 
-This command have the following optional arguments:
+Adds a horizontal rule, visual separators used to distinguish subtle changes of
+subject in extensive texts. Also available as the smaller `#hr` alias.
 
-#arg("```typc symbol: [#sym.ast.op #sym.ast.op #sym.ast.op]``` <- content")[
-  Defines the content at the center of the horizontal rule. By default, its line
-  is struck by three #sym.ast.op in its center.
+#arg("symbol: <- content")[
+  Defines the content of a decoration in the middle of tue horizontal rule;
+  defaults to three asterisks.
 ]
 
-#arg("```typc spacing: 1em``` <- length")[
-  Defines the vertical space before and after the horizontal rule.
+#arg("spacing: 1em <- length")[
+  The vertical space before and after the horizontal rule.
 ]
 
-#arg("```typc line-size: 15%``` <- length")[
-  Defines the size of the horizontal rule line.
+#arg("line-size: 15% <- length")[
+  The sizes of the lines at each side in the horizontal rule.
 ]
 
 
 == Block Quote Command
 
-Adds a block version of the `quote` command. In fact, it is just a simple
-wrapper of ```typc quote(block: true)``` with some modifications:
-
 ```typ
 #import "@local/min-book:0.1.1": blockquote
 
-#blockquote(by: "Einstein")[
-  Don't believe everything you read on the internet.
-]
+#blockquote(
+  by: none,
+  ..args
+)
 ```
+
+Simple alias to add a `#quote(block:true)` command.
+
+
+#arg("by: <- string | content")[
+  A shorter alias of `#cite(attribution)`.
+]
+
+#arg("..args <- arguments")[
+  Any argument supported by `#cite`.
+]
 
 
 == Appendices Command
-
-Creates an special ambient to write or include multiple appendices. An appendix
-is any important additional data left out of the main document for some reason,
-but directly referenced or needed by it.
 
 ```typ
 #import "@local/min-book:0.1.1": appendices
@@ -401,15 +404,19 @@ but directly referenced or needed by it.
 )
 ```
 
+Creates an special ambient to write or include multiple appendices. An appendix
+is any important additional data left out of the main document for some reason,
+but directly referenced or needed by it.
+
 #arg("title <- auto | array")[
-  Set custom singular and plural titles for appendices. An array in
-  `(SINGULAR, PLURAL)` format for "Appendices" and "Appendix" custom titles
-  respectivelly; when `auto`, set as `#book(lang-data.appendix)` value.
+  An array of strings with singular and plural titles for appendices, respectively;
+  when `auto`, try to retrieve the translations for "Appendix" and "Appendices"
+  in `#text.lang` from `#book(lang-data)`, or fallback to English.
 ]
 
 #arg("numbering-style <- auto | array | string")[
-  Set custom numbering style for appendices. Can be a numbly numbering array or
-  a standard numbering string;  when `auto`, set as:
+  Defines a custom heading numbering for appendices; can be a standard numbering
+  string, or a #univ("numbly") numbering array. When `auto`, uses:
   
   ```
   (
@@ -431,10 +438,6 @@ but directly referenced or needed by it.
 
 == Annexes Command
 
-Creates an special ambient to write or include multiple annexes, with special
-heading styling. An annex is any important third-party data directly cited or
-referenced in the main document.
-
 ```typ
 #import "@local/min-book:0.1.1": annexes
 
@@ -445,17 +448,21 @@ referenced in the main document.
 )
 ```
 
+Creates an special ambient to write or include multiple annexes. An annex is any
+important third-party data directly cited or referenced in the main document.
+
 #arg("title <- auto | array")[
-  Set custom singular and plural titles for annexes. An array in
-  `(SINGULAR, PLURAL)` format for "Annexes" and "Annex" custom titles
-  respectivelly; when `auto`, set as `#book(lang-data.annex)` value.
+  An array of strings with singular and plural titles for annexes, respectively;
+  when `auto`, try to retrieve the translations for "Annex" and "Annexes"
+  in `#text.lang` from `#book(lang-data)`, or fallback to English.
 ]
 
 #arg("numbering-style <- auto | array | string")[
-  Set custom numbering style for appendices. Can be a numbly numbering array or
-  a standard numbering string;  when `auto`, set as:
+  Defines a custom heading numbering for annexes; can be a standard numbering
+  string, or a #univ("numbly") numbering array. When `auto`, uses:
   
   ```
+  
   (
     "",
     "{2:A}.\n",
@@ -476,9 +483,8 @@ referenced in the main document.
 = Copyright
 
 Copyright #sym.copyright #datetime.today().year() Maycon F. Melo. \
-This manual is licensed under MIT terms and rights. \
-The manual source code is free software:
-you are free to change and redistribute it.  There is NO WARRANTY, to the extent
-permitted by law.
+This manual is licensed under MIT. \
+The manual source code is free software: you are free to change and redistribute
+it.  There is NO WARRANTY, to the extent permitted by law.
 
 The logo was obtained from #link("https://flaticon.com")[Flaticon] website.
