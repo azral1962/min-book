@@ -136,7 +136,6 @@
     show heading.where(level: 1, outlined: true): it => {
       // Create part page, if any:
       if part != none {
-      
         // Set page background
         let part-bg = if cover == auto {
             let m = page.margin
@@ -167,23 +166,22 @@
           
         
         // Part only if numbering != none
-        pagebreak(to: "odd")
+        if counter(page).get().at(0) != 1 {pagebreak(to: "odd")}
+        
         set page(background: part-bg)
         set par(justify: false)
         
         align(center + horizon, it)
         
         pagebreak(weak: true)
-      }
-      else {
-        it
-      }
-  
-      context if type(part) != none {
+        
         // Get the current level 2 heading count:
         let current-h2-count = book-h2-counter.get()
         // Level 2 heading numbering will not restart after level 1 headings now:
         counter(heading).update((h1, ..n) => (h1, ..current-h2-count))
+      }
+      else {
+        it
       }
     }
     show heading: set align(center)
@@ -308,7 +306,7 @@
         it
       }
     }
-
+    
     
     // Generate cover
     if cover != none {
@@ -393,17 +391,16 @@
       else if cover != none {
         panic("Invalid page argument value: \"" + cover + "\"")
       }
-      pagebreak()
+      
+      pagebreak(to: "odd")
     }
     
     // Enable automatic titlepage when generating catalog
-    let titlepage = if titlepage == none and catalog != none {auto}
+    let titlepage = if titlepage == none and catalog != none {pagebreak()}
       else {titlepage}
-  
+    
     // Generate titlepage
     if titlepage != none {
-      pagebreak(to: "odd")
-      
       if titlepage == auto {
         set text(
           fill: luma(50),
@@ -443,8 +440,6 @@
       else {
         panic("Invalid titlepage argument value: \"" + repr(titlepage) + "\"")
       }
-      
-      pagebreak(weak: true)
     }
   
     // Generate catalographic sheet (ISBN)
@@ -480,8 +475,6 @@
           m.text
         }
       })
-      
-      pagebreak(to: "even")
       
       if catalog.before != none {catalog.before}
       
@@ -556,7 +549,7 @@
         }
       }
   
-      pagebreak(to: "odd")
+      pagebreak(to: "odd", weak: true)
       outline(
         indent: lvl => if lvl > 0 {1.5em} else {0em},
         depth: if numbering-style == none {2} else {none},
@@ -568,7 +561,7 @@
     
     
     // Start page numbering at the next even page:
-    pagebreak(weak:true, to: "odd")
+    if part != none {pagebreak(weak: true, to: "odd")}
     set page(numbering: "1")
     counter(page).update(1)
   
@@ -688,20 +681,13 @@
       title
     }
   
-  // Main title (plural)
-  heading(
-    plural-title,
-    level: 1,
-    numbering: none
-  )
-  counter(heading).update(0)
   
   set heading(
     offset: 1,
     numbering: utils.numbering(
         patterns: (numbering-style,),
         scope: (
-          h1: none,
+          h1: "",
           h2: singular-title,
           n: 1
         )
@@ -709,10 +695,16 @@
     supplement: singular-title
   )
   
-  show heading.where(level: 2): it => {
-    pagebreak()
-    it
-  }
+  pagebreak(weak: true, to: "odd")
+  
+  // Main title (plural)
+  heading(
+    plural-title,
+    level: 1,
+    numbering: none
+  )
+  
+  counter(heading).update(0)
   
   body
 }

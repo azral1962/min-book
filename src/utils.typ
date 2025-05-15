@@ -22,7 +22,7 @@
   // Set #patterns final value
   let patterns = if patterns.at(0) != auto {patterns.at(0)}
     else if scope.h1 != none {patterns.at(1, default: none)}
-    else {patterns.at(0, default: none)}
+    else {patterns.at(2, default: none)}
   
   if patterns == none {return none}
   
