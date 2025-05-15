@@ -23,18 +23,7 @@
   toc: true,
   part: auto,
   chapter: auto,
-  numbering-style: auto,
-  page-cfg: "a5",
-  lang: "en",
-  lang-data: toml("assets/lang.toml"),
-  justify: true,
-  line-space: 0.5em,
-  par-margin: 0.65em,
-  first-line-indent: 1em,
-  margin: (x: 15%, y: 14%),
-  font: ("Book Antiqua", "Times New Roman"),
-  font-math: "Asana Math",
-  font-size: 11pt,
+  cfg: auto,
   body
 ) = {
   import "utils.typ"
@@ -44,9 +33,27 @@
     authors: authors,
     body: body
   )
+  
+  if cfg == auto {cfg = (:)}
+  let cfg = (
+    numbering-style: auto,
+    page-cfg: "a5",
+    lang: "en",
+    lang-data: toml("assets/lang.toml"),
+    justify: true,
+    line-space: 0.5em,
+    par-margin: 0.65em,
+    first-line-indent: 1em,
+    margin: (x: 15%, y: 14%),
+    font: ("Book Antiqua", "Times New Roman"),
+    font-math: "Asana Math",
+    font-size: 11pt,
+    ..cfg,
+  )
 
   date = utils.date(date)
-  page-cfg = if type(page-cfg) == str {(paper: page-cfg)} else {page-cfg}
+  if type(cfg.page-cfg) == str {cfg.page-cfg = (paper: cfg.page-cfg)}
+  if type(cfg.page-cfg) == str {cfg.page-cfg = (paper: cfg.page-cfg)}
 
   set document(
     title: if subtitle != none {title + " - " + subtitle} else {title},
@@ -54,19 +61,19 @@
     date: date
   )
   set page(
-    margin: margin,
-    ..page-cfg
+    margin: cfg.margin,
+    ..cfg.page-cfg
   )
   set par(
-    justify: justify,
-    leading: line-space,
-    spacing: par-margin, 
-    first-line-indent: first-line-indent
+    justify: cfg.justify,
+    leading: cfg.line-space,
+    spacing: cfg.par-margin, 
+    first-line-indent: cfg.first-line-indent
   )
   set text(
-    font: font,
-    size: font-size,
-    lang: lang
+    font: cfg.font,
+    size: cfg.font-size,
+    lang: cfg.lang
   )
   set terms(
     separator: [: ],
@@ -77,7 +84,7 @@
   // Context to make translations available
   context {
     // Set part and chapter translations based on text.lang
-    let translation = lang-data.at("lang").at(text.lang)
+    let translation = cfg.lang-data.at("lang").at(text.lang)
     let part = if part == auto {translation.part} else {part}
     let chapter = if chapter == auto {translation.chapter} else {chapter}
     
@@ -105,7 +112,7 @@
     set heading(
       numbering: utils.numbering(
           patterns: (
-            numbering-style,
+            cfg.numbering-style,
             part-pattern,
             no-part-pattern,
           ),
@@ -187,26 +194,26 @@
     show heading: set align(center)
     show heading: set par(justify: false)
     show heading: set text(hyphenate: false)
-    show heading.where(level: 1): set text(size: font-size * 2)
-    show heading.where(level: 2): set text(size: font-size * 1.6)
-    show heading.where(level: 3): set text(size: font-size * 1.4)
-    show heading.where(level: 4): set text(size: font-size * 1.3)
-    show heading.where(level: 5): set text(size: font-size * 1.2)
-    show heading.where(level: 6): set text(size: font-size * 1.1)
-    show raw: set text(font: "Inconsolata", size: font-size)
+    show heading.where(level: 1): set text(size: cfg.font-size * 2)
+    show heading.where(level: 2): set text(size: cfg.font-size * 1.6)
+    show heading.where(level: 3): set text(size: cfg.font-size * 1.4)
+    show heading.where(level: 4): set text(size: cfg.font-size * 1.3)
+    show heading.where(level: 5): set text(size: cfg.font-size * 1.2)
+    show heading.where(level: 6): set text(size: cfg.font-size * 1.1)
+    show raw: set text(font: "Inconsolata", size: cfg.font-size)
     show quote.where(block: true): set pad(x: 1em)
     show raw.where(block: true): it => pad(left: 1em, it)
-    show math.equation: set text(font: font-math)
+    show math.equation: set text(font: cfg.font-math)
     show selector.or(
         terms, enum, list, table, figure, math.equation.where(block: true),
         quote.where(block: true), raw.where(block: true)
-      ): set block(above: font-size, below: font-size)
+      ): set block(above: cfg.font-size, below: cfg.font-size)
     show ref: it => context {
       let el = it.element
       
       // When referencing headings in "normal" form
       if el != none and el.func() == heading and it.form == "normal" {
-        let patterns = if numbering-style != auto {numbering-style}
+        let patterns = if cfg.numbering-style != auto {cfg.numbering-style}
           else if part != none {part-pattern}
           else {no-part-pattern}
         // Remove \n and trim full stops
@@ -353,7 +360,7 @@
               title
             )
             #linebreak()
-            #set par(leading: line-space)
+            #set par(leading: cfg.line-space)
             #if subtitle != none {
             v(1cm)
               context text(
@@ -415,7 +422,7 @@
             title
           )
           #linebreak()
-          #set par(leading: line-space)
+          #set par(leading: cfg.line-space)
           #if subtitle != none {
           v(1cm)
             context text(
@@ -541,7 +548,7 @@
       show outline.entry.where(level: 1): it => {
         // Special formatting to parts in TOC:
         if part != none {
-          v(font-size, weak: true)
+          v(cfg.font-size, weak: true)
           strong(it)
         }
         else {
@@ -552,7 +559,7 @@
       pagebreak(to: "odd", weak: true)
       outline(
         indent: lvl => if lvl > 0 {1.5em} else {0em},
-        depth: if numbering-style == none {2} else {none},
+        depth: if cfg.numbering-style == none {2} else {none},
       )
       pagebreak(weak: true)
     }
