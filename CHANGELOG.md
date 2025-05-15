@@ -34,11 +34,12 @@
 
 - Added: Default _part, chapter, appendix_ and _annex_ titles in `#lang.text` language
 - Added: Custom TOML translation file with `#book(lang-data)`
-- Added: `#note(numbering-style)` set numbering for all future `#note`
-- Added: `#book(catalog)` for catalographic sheet (ISBN) generation
+- Added: `#note(numbering-style)` set the numbering of all the next `#note` commands also
+- Added: `#book(catalog)` generates cataloging in publication board
 - Added: `#book(page-cfg)` act as `#set page(..page-cfg)`
 - Updated: ~~`#book(paper)`~~ &rarr; `#book(page-cfg)`
 - Updated: Reorganized internal structure
 - Updated: `#outline(depth: 2)` when `#book(numbering-style: none)`
-- Updated: `#book(part: "")` set an unnunbered and unnamed part (just heading title)
+- Updated: `#book(part: "")` set an unnumbered and unnamed part (just heading title)
 - Fixed: titlepage, toc, part, and content beginning moved to odd pages
+- Fixed: `#book(cover: image())` works again
