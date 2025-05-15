@@ -378,7 +378,17 @@
         ]
       }
       else if type(cover) == content {
-        cover
+        if cover.func() == image {
+          set image(
+            fit: "stretch",
+            width: 100%,
+            height: 100%
+          )
+          set page(background: cover)
+        }
+        else {
+          cover
+        }
       }
       else if cover != none {
         panic("Invalid page argument value: \"" + cover + "\"")
