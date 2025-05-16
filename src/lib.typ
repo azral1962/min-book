@@ -48,6 +48,7 @@
     font: ("Book Antiqua", "Times New Roman"),
     font-math: "Asana Math",
     font-size: 11pt,
+    heading-weight: auto,
     ..cfg,
   )
 
@@ -136,8 +137,22 @@
     // Count every level 2 heading:
     let book-h2-counter = counter("book-h2")
     
-    show heading.where(level: 2): it => {
-      book-h2-counter.step()
+    show heading: it => {
+      let weight
+      if cfg.heading-weight == auto {
+        weight = if it.level < 6 {"regular"} else {"bold"}
+      }
+      else {
+        weight = cfg.heading-weight
+      }
+    
+      set align(center)
+      set par(justify: false)
+      set text(
+        hyphenate: false,
+        weight: weight,
+      )
+      
       it
     }
     show heading.where(level: 1, outlined: true): it => {
@@ -191,9 +206,10 @@
         it
       }
     }
-    show heading: set align(center)
-    show heading: set par(justify: false)
-    show heading: set text(hyphenate: false)
+    show heading.where(level: 2): it => {
+      book-h2-counter.step()
+      it
+    }
     show heading.where(level: 1): set text(size: cfg.font-size * 2)
     show heading.where(level: 2): set text(size: cfg.font-size * 1.6)
     show heading.where(level: 3): set text(size: cfg.font-size * 1.4)
