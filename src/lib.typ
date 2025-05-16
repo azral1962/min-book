@@ -15,11 +15,17 @@
 #let book(
   title: none,
   subtitle: none,
+  edition: 0,
+  volume: 0,
   authors: none,
   date: datetime.today(),
   cover: auto,
-  titlepage: none,
+  titlepage: auto,
   catalog: none,
+  errata: none,
+  dedication: none,
+  acknowledgements: none,
+  epigraph: none,
   toc: true,
   part: auto,
   chapter: auto,
@@ -216,8 +222,8 @@
     show heading.where(level: 4): set text(size: cfg.font-size * 1.3)
     show heading.where(level: 5): set text(size: cfg.font-size * 1.2)
     show heading.where(level: 6): set text(size: cfg.font-size * 1.1)
-    show raw: set text(font: "Inconsolata", size: cfg.font-size)
     show quote.where(block: true): set pad(x: 1em)
+    show raw: set text(font: "Inconsolata", size: cfg.font-size)
     show raw.where(block: true): it => pad(left: 1em, it)
     show math.equation: set text(font: cfg.font-math)
     show selector.or(
@@ -330,8 +336,8 @@
       }
     }
     
-    
-    // Generate cover
+    let volume = if volume > 0 [#translation.volume.at(0) #volume\ ] else []
+    let edition = if edition > 0 [#translation.edition.at(0) #edition\ ] else []
     if cover != none {
       if cover == auto {
         let cover-bg = context {
@@ -392,7 +398,9 @@
               #context text(
                 size: page.width * 0.035,
                 font: "Alice",
-                authors + "\n" + date.display("[year]")
+                volume +
+                authors + "\n" +
+                date.display("[year]")
               )
             ]
           ]
@@ -421,8 +429,7 @@
     // Enable automatic titlepage when generating catalog
     let titlepage = if titlepage == none and catalog != none {pagebreak()}
       else {titlepage}
-    
-    // Generate titlepage
+  
     if titlepage != none {
       if titlepage == auto {
         set text(
@@ -452,7 +459,10 @@
           #block(width: 52%)[
             #context text(
               size: page.width * 0.035,
-              authors + "\n" + date.display("[year]")
+              volume +
+              edition +
+              authors + "\n" + 
+              date.display("[year]")
             )
           ]
         ]
@@ -463,9 +473,11 @@
       else {
         panic("Invalid titlepage argument value: \"" + repr(titlepage) + "\"")
       }
+      
+      if catalog != none {pagebreak()}
+      else {pagebreak(to: "odd", weak: true)}
     }
   
-    // Generate catalographic sheet (ISBN)
     if catalog != none {
       set par(
         first-line-indent: 0pt,
@@ -558,8 +570,56 @@
       
       if catalog.after != none {catalog.after}
     }
-  
-    // Generate TOC
+    
+    if errata != none {
+      pagebreak(to: "odd", weak: true)
+      heading(
+        translation.errata,
+        numbering: none,
+        outlined: false,
+      )
+      errata
+      pagebreak(to: "odd")
+    }
+    
+    if dedication != none {
+      set text(size: cfg.font-size - 2pt)
+      
+      pagebreak(to: "odd", weak: true)
+      align(center + horizon, dedication)
+      pagebreak(to: "odd")
+    }
+    
+    if acknowledgements != none {
+      set par(justify: true)
+      
+      pagebreak(to: "odd", weak: true)
+      // INFO: Acknowledgements without title for now, seems cleaner
+      // heading(
+      //   translation.acknowledgements  ,
+      //   numbering: none,
+      //   outlined: false,
+      // )
+      acknowledgements
+      pagebreak(to: "odd")
+    }
+    
+    if epigraph != none {
+      set align(right + bottom)
+      set quote(block: true)
+      set text(
+        size: cfg.font-size - 2pt,
+        style: "italic",
+      )
+      
+      pagebreak(to: "odd", weak: true)
+      pad(
+        epigraph,
+        left: 1cm,
+      )
+      pagebreak(to: "odd")
+    }
+    
     if toc == true {
       show outline.entry.where(level: 1): it => {
         // Special formatting to parts in TOC:
@@ -579,9 +639,9 @@
       )
       pagebreak(weak: true)
     }
+    
     // <outline> anchor allows different numbering styles in TOC and in the actual text.
     [#metadata("Marker for situating titles after/before outline") <outline>]
-    
     
     // Start page numbering at the next even page:
     if part != none {pagebreak(weak: true, to: "odd")}
