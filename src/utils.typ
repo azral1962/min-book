@@ -86,7 +86,7 @@
   }
   
   // Get numbering using numbly
-  numbly(default: none, ..patterns)(..nums)
+  numbly(default: "I.I.1.1.1.a", ..patterns)(..nums)
 }
 
 
