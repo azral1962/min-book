@@ -238,19 +238,21 @@
         let patterns = if cfg.numbering-style != auto {cfg.numbering-style}
           else if part != none {part-pattern}
           else {no-part-pattern}
-        // Remove \n and trim full stops
-        patterns = patterns.map(
-          item => item.replace("\n", "").trim(regex("[.:]"))
-        )
-          
-        let number = numbly(..patterns)(..counter(heading).at(el.location()))
         
-        // New reference without \n
-        link(el.location())[#el.supplement #number]
+        // Remove \n and trim full stops
+        if patterns != none and part != "" {
+          patterns = patterns.map(
+            item => item.replace("\n", "").trim(regex("[.:]"))
+          )
+          
+          let number = numbly(..patterns)(..counter(heading).at(el.location()))
+          
+          // New reference without \n
+          link(el.location())[#el.supplement #number]
+        }
+        else {link(it.target, el.body)}
       }
-      else {
-        it
-      }
+      else {it}
     }
   
     // Insert notes of a section at its end, before next heading:
