@@ -35,12 +35,22 @@
 - Added: Default _part, chapter, appendix_ and _annex_ titles in `#lang.text` language
 - Added: Custom TOML translation file with `#book(lang-data)`
 - Added: `#note(numbering-style)` set the numbering of all the next `#note` commands also
-- Added: `#book(catalog)` generates cataloging in publication board
 - Added: `#book(page-cfg)` act as `#set page(..page-cfg)`
 - Added: `#book(date)` can be a `(year: YYYY, month: MM, day: DD)` dictionary
+- Added: `#book(volume)` for book series volume
+- Added: `#book(edition)` for book publication edition
+- Added: `#book(catalog)` to generate a _cataloging in publication_ page
+- Added: `#book(errata)` for correction of errors from previous editions
+- Added: `#book(dedication)` for dedication page
+- Added: `#book(acknowledgements)` for acknowledgements page
+- Added: `#book(epigraph)` for epigraph page
+- Added: `#book(cfg)` for advanced configuration
+- Updated: All advanced configuration options moved to `#book(cfg)`
 - Updated: ~~`#book(paper)`~~ &rarr; `#book(page-cfg)`
 - Updated: Reorganized internal structure
 - Updated: `#outline(depth: 2)` when `#book(numbering-style: none)`
 - Updated: `#book(part: "")` set an unnumbered and unnamed part (just heading title)
+- Updated: Headings level 1–5 with regular font weight by default
 - Fixed: titlepage, toc, part, and content beginning moved to odd pages
 - Fixed: `#book(cover: image())` works again
+- Fixed: Removed blank first page that appeared in some situations

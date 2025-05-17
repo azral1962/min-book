@@ -50,28 +50,24 @@ Those are the full list of options available and its default values:
 ```typm
 #import "@preview/min-book:0.1.1": book
 #show: book.with(
+  
   title: none,
   subtitle: none,
+  edition: 0,
+  volume: 0,
   authors: none,
   date: datetime.today(),
   cover: auto,
-  titlepage: none,
+  titlepage: auto,
   catalog: none,
+  errata: none,
+  dedication: none,
+  acknowledgements: none,
+  epigraph: none,
   toc: true,
   part: auto,
   chapter: auto,
-  numbering-style: auto,
-  page-cfg: "a5",
-  lang: "en",
-  lang-data: toml("assets/lang.toml"),
-  justify: true,
-  line-space: 0.5em,
-  par-margin: 0.75em,
-  first-line-indent: 1em,
-  margin: (x: 15%, y: 14%),
-  font: ("Book Antiqua", "Times New Roman"),
-  font-math: "Asana Math",
-  font-size: 11pt,
+  cfg: auto,
 )
 ```
 
@@ -86,13 +82,23 @@ understand it better, shall we?
   The book subtitle; generally two lines long or less.
 ]
 
+#arg("volume: <- int")[
+  The book series volume number; used when the same story is told through multiple
+  books, in order.
+]
+
+#arg("edition: <- int")[
+  The book publication number; used when the content is cjanged or updated after
+  tue book release.
+]
+
 #arg("authors: <- string | array <required>")[
   A string or array of strings containing the names of each author of the book.
 ]
 
 #arg("date: <- array | dictionary")[
-  `(year: yyyy, month: mm, day: dd)` dictionary, and defaults to current date
   The book publication date; can be a `(yyyy, mm, dd)` array or a
+  `(year: yyyy, month: mm, day: dd)` dictionary, and defaults to current date
   if not set.
 ]
 
@@ -156,6 +162,25 @@ understand it better, shall we?
   additional information that complements the board data.
 ]
 
+#arg("errata: <- content")[
+  A text that corrects important errors from previous book editions.
+]
+
+#arg("dedication: <- content")[
+  A brief text that dedicates the book in honor or in memorian of someone
+  important; can accompany a small message directed to the person.
+]
+
+#arg("acknowledgements: <- content")[
+  A brief text to recognize everyone who helped directly or indirectly in the
+  process of book creation and their importance in the project.
+]
+
+#arg("epigraph: <- quote | content")[
+  A short citation or excerpt of other works used to introduce the main theme of
+  the book; can suggest a reflection, a mood, or idea related to the text.
+]
+
 #arg("toc: <- boolean")[
   Defines if the book will have a table of contents.
 ]
@@ -172,57 +197,11 @@ understand it better, shall we?
   to English.
 ]
 
-#arg("numbering-style: <- auto | array | string | none")[
-  Defines a custom heading numbering; can be a standard numbering string, or a
-  #univ("numbly") numbering array.
-]
-
-#arg("page-cfg: <- dictionary | string")[
-  Set page configuration, acting as `#set page(..page-cfg)`; when string, act as
-  `#set page(paper: page-cfg)`.
-]
-
-#arg("lang: <- string")[
-  Defines the language of the written text (`text.lang`).
-]
-
-#arg("lang-data: <- toml")[
-  A TOML translation file; the file structure can be found in the default
-  `src/assets/lang.toml` file.
-]
-
-#arg("justify: <- boolean")[
-  Defines if the text will have justified alignment.
-]
-
-#arg("line-space: <- length")[
-  Defines the space between lines in the document.
-]
-
-#arg("par-margin: <- length")[
-  Defines the margin space after each paragraph. Set it the same as
-  `#book(line-space)` to get paragraphs without additional space between them.
-]
-
-#arg("first-line-indent: <- length")[
-  Defines the first line indentation of all paragraphs but the first one, in a
-  sequence of paragraphs.
-]
-
-#arg("margin: <- length")[
-  Defines the document margins.
-]
-
-#arg("font: <- string | array")[
-  Defines the font families used for the text.
-]
-
-#arg("font-math: <- string | array")[
-  Defines the font families used for the math and equations.
-]
-
-#arg("font-size: <- length")[
-  Defines the size of the text in the document.
+#arg("cfg: <- dictionary")[
+  Set custom advanced configurations; used to fine-tune some aspects of the
+  book, mostly aesthetic formatting. If your focus is to just write a book in
+  English without worry about code, just ignore it; otherwise, refer to @adv-config
+  to check the supported configurations.
 ]
 
 
@@ -270,42 +249,6 @@ parts are disabled, every _level 1 heading_ will be a chapter. Setting
 )
 = This is Scene 1 chapter
 ```
-
-
-= Advanced Numbering
-
-The book headings can be numbered two ways: using a standard numbering string,
-or a #univ("numbly") numbering array. While numbering strings are indicated for
-simpler cases, the numbly arrays are used in more complex book numbering.
-
-By default, when `#book(part)` is enabled, the following numbering is used:
-
-```typ
-(
-  "{1:I}:\n",
-  "{2:I}.\n",
-  "{2:I}.{3:1}.\n",
-  "{2:I}.{3:1}.{4:1}.\n",
-  "{2:I}.{3:1}.{4:1}.{5:1}.\n",
-  "{2:I}.{3:1}.{4:1}.{5:1}.{6:a}.\n"
-)
-```
-
-But when `#book(part: none)`, the following numbering is used:
-
-```typ
-(
-  "{1:I}.\n",
-  "{1:I}.{2:1}.\n",
-  "{1:I}.{2:1}.{3:1}.\n",
-  "{1:I}.{2:1}.{3:1}.{4:1}.\n",
-  "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.\n",
-  "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.{6:a}.\n"
-)
-```
-
-Additionally, a custom `#book(numbering-style)` can be set to override the default
-numbering behavior above.
 
 
 = Additional Commands
@@ -479,6 +422,133 @@ important third-party data directly cited or referenced in the main document.
   The annexes content; every _level 1 heading_ will be treated as a new
   annex.
 ]
+
+
+= Advanced Configurations <adv-config>
+
+```typ
+#import "@local/min-book:0.1.1": book
+
+#book.with(
+  cfg: (
+    numbering-style: auto,
+    page-cfg: "a5",
+    lang: "en",
+    lang-data: toml("assets/lang.toml"),
+    justify: true,
+    line-space: 0.5em,
+    par-margin: 0.65em,
+    first-line-indent: 1em,
+    margin: (x: 15%, y: 14%),
+    font: ("Book Antiqua", "Times New Roman"),
+    font-math: "Asana Math",
+    font-size: 11pt,
+    heading-weight: auto,
+  ),
+)
+```
+
+These configurations allows to modify certain aspects of the book and better
+control its appearence. They are built with rebust defaults in mind, so that
+a casual writer can safely ignore it and _just write_ , and in most cases it
+will be used for simple tasks such as change the language or fonts.
+
+#arg("cfg.numbering-style: <- auto | array | string | none")[
+  Defines a custom heading numbering; can be a standard numbering string, or a
+  #univ("numbly") numbering array.
+]
+
+#arg("cfg.page-cfg: <- dictionary | string")[
+  Set page configuration, acting as `#set page(..page-cfg)`; when string, act as
+  `#set page(paper: page-cfg)`.
+]
+
+#arg("cfg.lang: <- string")[
+  Defines the language of the written text (`text.lang`).
+]
+
+#arg("cfg.lang-data: <- toml")[
+  A TOML translation file; the file structure can be found in the default
+  `src/assets/lang.toml` file.
+]
+
+#arg("cfg.justify: <- boolean")[
+  Defines if the text will have justified alignment.
+]
+
+#arg("cfg.line-space: <- length")[
+  Defines the space between lines in the document.
+]
+
+#arg("cfg.par-margin: <- length")[
+  Defines the margin space after each paragraph. Set it the same as
+  `#book(line-space)` to get paragraphs without additional space between them.
+]
+
+#arg("cfg.first-line-indent: <- length")[
+  Defines the first line indentation of all paragraphs but the first one, in a
+  sequence of paragraphs.
+]
+
+#arg("cfg.margin: <- length")[
+  Defines the document margins.
+]
+
+#arg("cfg.font: <- string | array")[
+  Defines the font families used for the text; the default font is specified in
+  `README.md` file.
+]
+
+#arg("cfg.font-math: <- string | array")[
+  Defines the font families used for the math and equations; the default font is
+  specified in `README.md` file.
+]
+
+#arg("cfg.font-size: <- length")[
+  Defines the size of the text in the document.
+]
+
+#arg("cfg.heading-weight: <- string | auto")[
+  Defines the font weight of headings; by default, headings level 1--5 are
+  `"regular"` and levels above it are `"bold"`, but `#book(cfg.heading-weight)`
+  apply the same weight for all headings.
+]
+
+
+= Advanced Numbering
+
+The book headings can be numbered two ways: using a standard numbering string,
+or a #univ("numbly") numbering array. While numbering strings are indicated for
+simpler cases, the numbly arrays are used in more complex book numbering.
+
+By default, when `#book(part)` is enabled, the following numbering is used:
+
+```typ
+(
+  "{1:I}:\n",
+  "{2:I}.\n",
+  "{2:I}.{3:1}.\n",
+  "{2:I}.{3:1}.{4:1}.\n",
+  "{2:I}.{3:1}.{4:1}.{5:1}.\n",
+  "{2:I}.{3:1}.{4:1}.{5:1}.{6:a}.\n"
+)
+```
+
+But when `#book(part: none)`, the following numbering is used:
+
+```typ
+(
+  "{1:I}.\n",
+  "{1:I}.{2:1}.\n",
+  "{1:I}.{2:1}.{3:1}.\n",
+  "{1:I}.{2:1}.{3:1}.{4:1}.\n",
+  "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.\n",
+  "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.{6:a}.\n"
+)
+```
+
+Additionally, a custom `#book(numbering-style)` can be set to override the default
+numbering behavior above.
 
 
 = Copyright
