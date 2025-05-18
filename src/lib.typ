@@ -11,7 +11,6 @@
 
 
 // FEATURE: #book() used in #show rule to re-structure the document as book.
-// RFE: Options to generate dedication and publisher pages.
 #let book(
   title: none,
   subtitle: none,
@@ -530,17 +529,17 @@
           if catalog.id != none [#catalog.id #parbreak()]
           
           author
-          if author.last() != "." [.]
+          if not author.ends-with(".") [.]
           [ ]
           
           title
           if subtitle != none [: #subtitle]
-          [.]
-          linebreak()
-          
+          [. ]
           catalog.place
-          if catalog.publisher != none [: #catalog.publisher]
-          [, #date.year().]
+          if catalog.place != none and catalog.publisher != none [: ]
+          catalog.publisher
+          if catalog.publisher != none or catalog.publisher != none [, ]
+          [#date.year().]
           v(1em)
           
           if catalog.isbn != none [
