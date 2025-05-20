@@ -22,7 +22,7 @@ pdf:
   mkdir "dev" 2>/dev/null || true
   bash scripts/package.sh check "" "{{root}}"
   typst c "template/main.typ" "dev/example.pdf"
-  typst c "docs/manual.typ" "dev/manual.pdf"
+  typst c "manual.typ" "dev/manual.pdf"
 
 # Generate documentation as PNGs in dev/png/
 png:
@@ -30,7 +30,7 @@ png:
   mkdir -p "dev/png" 2>/dev/null || true
   bash scripts/package.sh check "" "{{root}}"
   typst c "template/main.typ" "dev/png/example-{0p}.png"
-  typst c "docs/manual.typ" "dev/png/manual-{0p}.png"
+  typst c "manual.typ" "dev/png/manual-{0p}.png"
   
 # Toggle symlink this project to "local" namespace under 0.0.0 version.
 dev-link:
