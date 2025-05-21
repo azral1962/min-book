@@ -30,10 +30,11 @@
 - Fixed: no part name was shown when `#book(toc: false)`
 - Fixed: broken `@ref` to headings with `\n` in its numbering
 
-## 0.2.0
+# 1.0.0
 
 - Added: Default _part, chapter, appendix_ and _annex_ titles in `#lang.text` language
 - Added: Custom TOML translation file with `#book(lang-data)`
+- Added: Manual embedded on the source code with doc-comments
 - Added: `#note(numbering-style)` set the numbering of all the next `#note` commands also
 - Added: `#book(page-cfg)` act as `#set page(..page-cfg)`
 - Added: `#book(date)` can be a `(year: YYYY, month: MM, day: DD)` dictionary
