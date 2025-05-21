@@ -321,18 +321,21 @@
      * `#book(chapter)` change the default chapter name, or disable chapters if set to
      * `none`.
      * 
-     * ```typ
-     * #show: book.with(
-     *   chapter: "Scene",
+     * #grid(columns: (1fr, 1fr),
+     *   ```typ
+     *   #show: book.with(
+     *     chapter: "Scene",
+     *   )
+     *   == This is Scene 1 chapter
+     *   ```,
+     *   ```typ
+     *   #show: book.with(
+     *     part: none,
+     *     chapter: "Scene",
+     *   )
+     *   = This is Scene 1 chapter
+     *   ```
      * )
-     * == This is Scene 1 chapter
-     * 
-     * #show: book.with(
-     *   part: none,
-     *   chapter: "Scene",
-     * )
-     * = This is Scene 1 chapter
-     * ```
     **/
     // #utils.numbering set #book(part) and #book(chapter)
     set heading(
@@ -707,17 +710,49 @@
       
       show rect: set align(center + bottom)
       
+      /**
+       * = Cataloging in Publication
+       * 
+       * :catalog: "(?s)\s*let <name> = \((.*?\n)\s*\.\.<name>.*?\)\s*\n"
+      **/
       let catalog = (
         id: none,
+        /** <- string | content
+          * A #url("http://www.cutternumber.com/")[Cutter-Sanborn identification code],
+          * used to identify the book author. **/
         place: none,
+        /** <- string | content
+          * The city or region where the book was published. **/
         publisher: none,
+        /** <- string | content
+          * The organization or person responsible for releasing the book. **/
         isbn: none,
+          /** <- string | content
+            * The _International Standard Book Number_, used to indentify the book. **/
         subjects: (),
+        /** <- array
+          * A list of subjects related to the book; must be an array of strings. **/
         access: (),
+        /** <- array
+          * A list of access points used to find the book in catalogues, like by
+          * `"Title"` or `"Series"`; must be an array of strings. **/
         ddc: none,
+        /** <- string | content
+          * A #url("https://www.oclc.org/content/dam/oclc/dewey/ddc23-summaries.pdf")[Dewey Decimal Classification]
+          * number, which corresponds to the specific category of the book. **/
         udc: none,
+        /** <- string | content
+          * An #url("https://udcsummary.info/php/index.php")[Universal Decimal Classification]
+          * number, which corresponds to the specific category if the book. **/
         before: none,
+        /** <- content
+          * Content showed before (above) the cataloging in public ation board;
+          * generally editorial data like publisher, editors, reviewers,
+          * copyrights, etc. **/
         after: none,
+        /** <- content
+          * Content showed after (below) the cataloging in publication board;
+          * generally additional information that complements the board data. **/
         ..catalog,
       )
       let author = if type(authors) == array {authors.at(0)} else {authors}
