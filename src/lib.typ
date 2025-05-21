@@ -23,6 +23,10 @@
  * elements, adapting them to the needs of a book structure. All of this is managed
  * behind the scenes, so that nothing changes in the Typst code itself.
  * 
+ * The commands that `min-book` provides are only included for the sake of
+ * completeness, and offers some fancy optional features like horizontal rules
+ * or end notes; but it's perfectly possible to write entire books without them.
+ * 
  * While it is possible to play with complex structures, such as parts and chapters
  * and creative numbering, this package comes with several ready to use default
  * values; so its really up to you to customize it your way or ride along the
