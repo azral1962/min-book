@@ -20,7 +20,8 @@
     udc: "UDC 000.000",
     before: [Content before catalog sheet],
     after: [Content after catalog sheet],
-  )
+  ),
+  dedication: "To someone special."
 )
 
 
