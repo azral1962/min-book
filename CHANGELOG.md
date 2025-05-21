@@ -55,3 +55,6 @@
 - Fixed: titlepage, toc, part, and content beginning moved to odd pages
 - Fixed: `#book(cover: image())` works again
 - Fixed: Removed blank first page that appeared in some situations
+
+Thanks to [@iandol](https://github.com/iandol) for the thoughfull insights and
+the help testing some features.
