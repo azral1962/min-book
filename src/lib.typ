@@ -205,7 +205,7 @@
 
   set document(
     title: if subtitle != none {title + " - " + subtitle} else {title},
-    author: if type(authors) == array {authors.join(", ")} else {authors},
+    author: authors,
     date: date
   )
   set page(
@@ -566,8 +566,10 @@
     
     let volume = if volume > 0 [#translation.volume.at(0) #volume\ ] else []
     let edition = if edition > 0 [#translation.edition.at(0) #edition\ ] else []
+    
     if cover != none {
       if cover == auto {
+        let authors = if type(authors) == array {authors.join(", ")} else {authors}
         let cover-bg = context {
             let m = page.margin
             let frame = image(
@@ -665,6 +667,8 @@
           hyphenate: false
         )
         set par(justify: false)
+        
+        let authors = if type(authors) == array {authors.join(", ")} else {authors}
       
         align(center + horizon)[
           #set par(leading: 2em)
