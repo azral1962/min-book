@@ -52,3 +52,4 @@ all:
   @just init
   @just install "pkg"
   @just pdf
+  cp dev/*.pdf docs/
