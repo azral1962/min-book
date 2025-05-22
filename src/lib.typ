@@ -236,7 +236,14 @@
   // Context to make translations available
   context {
     // Set part and chapter translations based on text.lang
-    let translation = cfg.lang-data.at("lang").at(text.lang)
+    let translation = cfg.lang-data.lang.at(text.lang, default: none)
+    
+    // Fallback system when #text.lang not in #book(cfg.lang-data) file
+    if translation == none {
+      let lang = cfg.lang-data.conf.at("default-lang", default: "en")
+      translation = cfg.lang-data.at("lang").at(lang)
+    }
+    
     let part = if part == auto {translation.part} else {part}
     let chapter = if chapter == auto {translation.chapter} else {chapter}
     
@@ -646,7 +653,7 @@
     }
     
     // Enable automatic titlepage when generating catalog
-    let titlepage = if titlepage == none and catalog != none {pagebreak()}
+    let titlepage = if titlepage == none and catalog != none []
       else {titlepage}
   
     if titlepage != none {
@@ -791,7 +798,8 @@
           if catalog.place != none and catalog.publisher != none [: ]
           catalog.publisher
           if catalog.publisher != none or catalog.publisher != none [, ]
-          [#date.year().]
+          date.year()
+          [.]
           v(1em)
           
           if catalog.isbn != none [
