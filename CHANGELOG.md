@@ -53,6 +53,7 @@
 - Updated: `#outline(depth: 2)` when `#book(numbering-style: none)`
 - Updated: `#book(part: "")` set an unnumbered and unnamed part (just heading title)
 - Updated: Headings level 1–5 with regular font weight by default
+- Updated: Content after _part_ start at next odd page
 - Fixed: titlepage, toc, part, and content beginning moved to odd pages
 - Fixed: `#book(cover: image())` works again
 - Fixed: Removed blank first page that appeared in some situations

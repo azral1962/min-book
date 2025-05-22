@@ -94,7 +94,7 @@
 #let date(..date) = {
   if type(date.pos().at(0)) == datetime {return date.pos().at(0)}
   
-  // Convert array or dictinary to arguments
+  // Convert array or dictionary to arguments
   if type(date.pos().at(0)) == array or type(date.pos().at(0)) == dictionary {
     date = arguments(..date.pos().at(0))
   }

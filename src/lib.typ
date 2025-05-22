@@ -8,7 +8,7 @@
  * = Quick Start
  *
  * ```typ
- * #import "@preview/min-book:0.1.1": book
+ * #import "@preview/min-book:1.0.0": book
  * #show: book.with(
  *   title: "Book Title",
  *   subtitle: "Complementary subtitle, not more than two lines long",
@@ -411,8 +411,6 @@
             none
           }
           
-        
-        // Part only if numbering != none
         if counter(page).get().at(0) != 1 {pagebreak(to: "odd")}
         
         set page(background: part-bg)
@@ -420,7 +418,8 @@
         
         align(center + horizon, it)
         
-        pagebreak(weak: true)
+        set page(background: none)
+        pagebreak(to: "odd", weak: true)
         
         // Get the current level 2 heading count:
         let current-h2-count = book-h2-counter.get()
@@ -798,8 +797,7 @@
           if catalog.place != none and catalog.publisher != none [: ]
           catalog.publisher
           if catalog.publisher != none or catalog.publisher != none [, ]
-          date.year()
-          [.]
+          [#date.year().]
           v(1em)
           
           if catalog.isbn != none [

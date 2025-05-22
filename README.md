@@ -8,7 +8,7 @@
 ## Quick Start
 
 ```typst
-#import "@preview/min-book:0.1.0": book
+#import "@preview/min-book:1.0.0": book
 #show: book.with(
   title: "Book Title",
   subtitle: "Complementary subtitle, not more than two lines long",
@@ -31,9 +31,9 @@ end notes; but it's perfectly possible to write entire books without them.
 
 ## More Information
 
-- [Official manual](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/0.1.1/docs/pdf/manual.pdf)
-- [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/0.1.1/docs/pdf/example.pdf)
-- [Example Typst code](https://github.com/mayconfmelo/min-book/blob/0.1.1/template/main.typ)
+- [Official manual](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.0.0/docs/manual.pdf)
+- [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.0.0/docs/example.pdf)
+- [Example Typst code](https://github.com/mayconfmelo/min-book/blob/1.0.0/template/main.typ)
 - [Changelog](https://github.com/mayconfmelo/min-book/blob/main/CHANGELOG.md)
 
 

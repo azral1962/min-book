@@ -1,4 +1,4 @@
-#import "@preview/min-book:0.2.0": (
+#import "@preview/min-book:1.0.0": (
   book, note, horizontalrule, hr, blockquote, appendices, annexes
 )
 
@@ -7,7 +7,10 @@
   subtitle: "Complementary subtitle, not more than two lines long",
   authors: "A. Author",
   date: (2025, 01, 12),
-  dedication: "To someone special.",
+  dedication: [
+    To someone special;\
+    May your days be plenty and your happiness long-lasting.
+  ],
   part: "Subject",
   chapter: "Detail",
 )
@@ -19,7 +22,7 @@
 == First Chapter
 
 This document is divided in _parts_ and _chapters_ --- headings of levels 1
-and 2, respectivelly; here, each part is called a
+and 2, respectively; here, each part is called a
 *Subject*, while each chapter is called a *Detail*. 
 
 The *Detail* chapter numbering is sequential and do not restart at every new
@@ -224,7 +227,7 @@ fn main() {
   
   == Important Explanation
   
-  #lorem(100)
+  #lorem(50)
   
   = Another Important Third-party Document
   
