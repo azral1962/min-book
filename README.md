@@ -89,3 +89,5 @@ end notes; but it's perfectly possible to write entire books without them.
 - End Notes
 - Horizontal Rule
 - Block Quote
+- Appendices ambient
+- Annexes ambient
