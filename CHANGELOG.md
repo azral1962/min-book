@@ -26,7 +26,7 @@
 - Added: `#annexes` command
 - Added: Unnumbered _part_ and _chapter_ with `#book(numbering-style: none)`
 - Updated: `#book(titlepage)` defaults to `false`
-- Updated: `#book(paper)` can be a `"type"` or `(x: LENGHT, y: LENGHT)` size
+- Updated: `#book(paper)` can be a `"type"` or `(x: LENGTH, y: LENGTH)` size
 - Fixed: no part name was shown when `#book(toc: false)`
 - Fixed: broken `@ref` to headings with `\n` in its numbering
 
@@ -43,9 +43,10 @@
 - Added: `#book(catalog)` to generate a _cataloging in publication_ page
 - Added: `#book(errata)` for correction of errors from previous editions
 - Added: `#book(dedication)` for dedication page
-- Added: `#book(acknowledgements)` for acknowledgements page
+- Added: `#book(acknowledgments)` for acknowledgments page
 - Added: `#book(epigraph)` for epigraph page
 - Added: `#book(cfg)` for advanced configuration
+- Added: `#book(cfg.font-mono)` to set monospaced text font
 - Updated: All advanced configuration options moved to `#book(cfg)`
 - Updated: ~~`#book(paper)`~~ &rarr; `#book(page-cfg)`
 - Updated: Reorganized internal structure
@@ -56,5 +57,5 @@
 - Fixed: `#book(cover: image())` works again
 - Fixed: Removed blank first page that appeared in some situations
 
-Thanks to [@iandol](https://github.com/iandol) for the thoughfull insights and
+Thanks to [@iandol](https://github.com/iandol) for the thoughtful insights and
 the help testing some features.

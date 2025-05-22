@@ -51,6 +51,12 @@ end notes; but it's perfectly possible to write entire books without them.
     </a></td>
   </tr>
   <tr>
+    <td>Mono:</td>
+    <td><a href="https://fonts.google.com/specimen/Inconsolata">
+      Inconsolata
+    </a></td>
+  </tr>
+  <tr>
     <td>Cover title:</td>
     <td><a href="https://fonts.google.com/specimen/Cinzel">Cinzel</a></td>
   </tr>
@@ -73,7 +79,7 @@ end notes; but it's perfectly possible to write entire books without them.
 - Cataloging in Publication
 - Errata
 - Dedication
-- Acknowledgements
+- Acknowledgments
 - Epigraph
 - Table of contents
 - Multi-language support

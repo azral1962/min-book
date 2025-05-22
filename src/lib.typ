@@ -85,7 +85,7 @@
     * The presentation page content, shown after the cover; when `auto`,
     * generates an automatic title page. **/
   catalog: none,
-  /** <- toml | yaml | dictionary")[
+  /** <- toml | yaml | dictionary
     * Set the data for the "cataloging in publication" board. **/
   errata: none,
   /** <- content
@@ -137,7 +137,7 @@
   /**
    * = Advanced Configurations <adv-config>
    * 
-   * :cfg: "(?s)\s*let\s<name>\s=\s\((.*?\n)\s*\)\s*\n?\n"
+   * :cfg: "(?s)\s*let\s<name>\s=\s\((.*?\n)\s*\.\.<name>,\s*\)\s*\n?\n"
    *
    * These configurations allows to modify certain aspects of the book and better
    * control its appearence. They are built with rebust defaults in mind, so that
@@ -187,6 +187,10 @@
     font-math: "Asana Math",
       /** <- string | array
         * Defines the font families used for the math and equations; the default
+        * font is specified in `README.md` file. **/
+    font-mono: "Inconsolata",
+      /** <- string | array
+        * Defines the font families used for the monospaced text; the default
         * font is specified in `README.md` file. **/
     font-size: 11pt,
       /** <- length
@@ -249,29 +253,11 @@
      * 
      * By default, when `#book(part)` is enabled, the following numbering is used:
      *
-     * ```typ
-     * (
-     *   "{1:I}:\n",
-     *   "{2:I}.\n",
-     *   "{2:I}.{3:1}.\n",
-     *   "{2:I}.{3:1}.{4:1}.\n",
-     *   "{2:I}.{3:1}.{4:1}.{5:1}.\n",
-     *   "{2:I}.{3:1}.{4:1}.{5:1}.{6:a}.\n"
-     * )
-     * ```
+     * :part-pattern: code "(?s)\s*let\s<name>\s=\s(\(.*?\))\s*\n?\n"
      *
      * But when `#book(part: none)`, the following numbering is used:
      * 
-     * ```typ
-     * (
-     *   "{1:I}.\n",
-     *   "{1:I}.{2:1}.\n",
-     *   "{1:I}.{2:1}.{3:1}.\n",
-     *   "{1:I}.{2:1}.{3:1}.{4:1}.\n",
-     *   "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.\n",
-     *   "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.{6:a}.\n"
-     * )
-     * ```
+     * :no-part-pattern: code "(?s)\s*let\s<name>\s=\s(\(.*?\))\s*\n?\n"
      * 
      * Additionally, a custom `#book(numbering-style)` can be set to override
      * the default numbering behavior above.
@@ -449,7 +435,10 @@
     show heading.where(level: 5): set text(size: cfg.font-size * 1.2)
     show heading.where(level: 6): set text(size: cfg.font-size * 1.1)
     show quote.where(block: true): set pad(x: 1em)
-    show raw: set text(font: "Inconsolata", size: cfg.font-size)
+    show raw: set text(
+      font: cfg.font-mono,
+      size: cfg.font-size,
+    )
     show raw.where(block: true): it => pad(left: 1em, it)
     show math.equation: set text(font: cfg.font-math)
     show selector.or(
