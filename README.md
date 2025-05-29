@@ -91,3 +91,9 @@ end notes; but it's perfectly possible to write entire books without them.
 - Block Quote
 - Appendices ambient
 - Annexes ambient
+
+
+> [!TIP]
+> _min-book_ does not support ePub output yet because it is not implemented in
+> Typst; but meanwhile you can use _bookmkr_ to create Pandoc books with
+> _min-book_ as template for PDF output.
