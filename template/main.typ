@@ -1,4 +1,4 @@
-#import "@preview/min-book:1.0.0": (
+#import "@preview/min-book:1.1.0": (
   book, note, horizontalrule, hr, blockquote, appendices, annexes
 )
 

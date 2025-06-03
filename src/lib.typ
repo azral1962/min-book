@@ -200,6 +200,10 @@
         * Defines the font weight of headings; by default, headings level 1--5
         * are `"regular"` and levels above it are `"bold"`, but
         * `#book(cfg.heading-weight)` apply the same weight for all headings. **/
+    toc-indent: none,
+      /** <- length | auto
+        * Defines the indentation of each table of contents entry; by default,
+        * entries of headings level 2+ are indented in 1.5em. **/
     ..cfg,
   )
 
@@ -445,7 +449,7 @@
       font: cfg.font-mono,
       size: cfg.font-size,
     )
-    show raw.where(block: true): it => pad(left: 1em, it)
+    show raw.where(block: true): it => pad(left: cfg.first-line-indent, it)
     show math.equation: set text(font: cfg.font-math)
     show selector.or(
         terms, enum, list, table, figure, math.equation.where(block: true),
@@ -890,10 +894,17 @@
           it
         }
       }
+      let indenting = if cfg.toc-indent == auto {auto}
+        else {
+          lvl => {
+            if cfg.toc-indent != none {cfg.toc-indent * lvl}
+            else { if lvl > 0 {1.5em} else {0em} }
+          }
+        }
   
       pagebreak(to: "odd", weak: true)
       outline(
-        indent: lvl => if lvl > 0 {1.5em} else {0em},
+        indent: indenting,
         depth: if cfg.numbering-style == none {2} else {none},
       )
       pagebreak(weak: true)
