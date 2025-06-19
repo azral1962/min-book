@@ -24,6 +24,7 @@
     else if scope.h1 != none {patterns.at(1, default: none)}
     else {patterns.at(2, default: none)}
   
+  // Set numbering to none
   if patterns == none {return none}
   
   // Transform patterns into positional arguments
@@ -36,7 +37,7 @@
     return numbering(..patterns, ..nums)
   }
   
-  // when numbering-style == none
+  // When numbering-style == none
   if patterns == () {
     if scope.h1 != none {
       patterns.push("\n")
@@ -73,9 +74,9 @@
     
     for pattern in patterns {
       // Remove any "\n" at the end of numbering patterns:
-      contents.push(
-        pattern.trim(regex("\n+$"))
-      )
+      if type(pattern) == str {pattern = pattern.trim(regex("\n+$"))}
+      
+      contents.push(pattern)
     }
     patterns = contents
   }
@@ -84,6 +85,8 @@
   if scope.h1 == "" {
     patterns.at(0) = ""
   }
+  
+  if patterns.at(nums.pos().len() - 1) == none {return none}
   
   // Get numbering using numbly
   numbly(default: "I.I.1.1.1.a", ..patterns)(..nums)
