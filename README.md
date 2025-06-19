@@ -94,6 +94,7 @@ end notes; but it's perfectly possible to write entire books without them.
 
 
 > [!TIP]
-> _min-book_ does not support ePub output yet because it is not implemented in
-> Typst; but meanwhile you can use _bookmkr_ to create Pandoc books with
-> _min-book_ as template for PDF output.
+> While Typst doesn't implement native ePub support, the best way to compile ePub
+> and PDF files from the same source files is using Pandoc. The
+> [**`bookmkr`**](https://www.github.com/mayconfmelo/bookmkr/) program allows to manage and
+> and generate Pandoc books with `min-book` support for PDF.
