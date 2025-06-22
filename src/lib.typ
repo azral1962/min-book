@@ -48,7 +48,7 @@
  * 
  * Those are the full list of options available and its default values:
  * 
- * :book:
+ * :book: show
  * 
  * Seems like an awful lot to start with, but let's just break down all this to
  * understand it better, shall we?
