@@ -24,7 +24,7 @@
     else if scope.h1 != none {patterns.at(1, default: none)}
     else {patterns.at(2, default: none)}
   
-  // Set numbering to none
+  // Set all numbering to none
   if patterns == none {return none}
   
   // Transform patterns into positional arguments
@@ -86,6 +86,7 @@
     patterns.at(0) = ""
   }
   
+  // Set the numbering for current level to none
   if patterns.at(nums.pos().len() - 1) == none {return none}
   
   // Get numbering using numbly
