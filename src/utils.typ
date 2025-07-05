@@ -1,4 +1,4 @@
-// NAME: Internal utilities sub-module
+// NAME: Utilities internal sub-module
 
 // UTIL: Check if given required arguments are provided
 #let required-args(..args) = {
@@ -6,6 +6,25 @@
     if args.named().at(arg) == none {
       panic("Missing required argument: " + arg)
     }
+  }
+}
+
+
+// UTIL: Check if given value is of one of the types
+#let required-types(arg, ..types, test: false) = {
+  let match = false
+  
+  if type(arg) in types.pos() {
+    match = true
+  }
+  
+  if test == false {
+    if match == false {
+      panic("Invalid value type: " + type(arg))
+    }
+  }
+  else {
+    return match
   }
 }
 
