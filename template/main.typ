@@ -4,8 +4,8 @@
 
 #show: book.with(
   title: "Book Title",
-  subtitle: "Complementary subtitle, not more than two lines long",
-  authors: "A. Author",
+  subtitle: "Book subtitle, not more than two lines long",
+  authors: "Book Author",
   date: (2025, 01, 12),
   dedication: [
     To someone special;\
