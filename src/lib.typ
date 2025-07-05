@@ -134,6 +134,8 @@
     body: body
   )
   
+  // TODO: Implement new options
+  // TODO: Rewrite doc-comments
   /**
    * = Advanced Configurations <adv-config>
    * 
@@ -149,15 +151,15 @@
   let cfg = (
     numbering-style: auto,
       /** <- array | string | none
-        * Defines a custom heading numbering; can be a standard numbering string,
-        * or a #univ("numbly") numbering array. **/
-    page-cfg: "a5",
+        * Custom heading numbering; can be a standard numbering string, or a
+        * #univ("numbly") numbering array. **/
+    page: "a5",
       /** <- dictionary | string
-        * Set page configuration, acting as `#set page(..page-cfg)`; when string,
-        * act as `#set page(paper: page-cfg)`. **/
+        * Page direct configuration, acting as `#set page(..cfg.page)`; when string,
+        * act as `#set page(paper: cfg.page)`. **/
     lang: "en",
       /** <- string
-        * Defines the language of the written text (`text.lang`). **/
+        * Language of the written text (`text.lang`). **/
     lang-data: toml("assets/lang.toml"),
       /** <- toml
         * A TOML translation file; the file structure can be found in the default
@@ -200,16 +202,30 @@
         * Defines the font weight of headings; by default, headings level 1--5
         * are `"regular"` and levels above it are `"bold"`, but
         * `#book(cfg.heading-weight)` apply the same weight for all headings. **/
+    cover-bgcolor: rgb("#3E210B"),
+      /** <- color
+        * Background color of the automatically-generated cover page. **/
+    cover-txtcolor: luma(200),
+      /** <- color
+        * Text color of the automatically-generated cover. **/
+    cover-fonts: ("Cinzel", "Alice"),
+      /** <- array
+        * Fonts used by the automatically-generated cover: a
+        * `(TITLE, TEXTS)` array which sets a main `TITLE` font and a
+        * font used for all other cover `TEXTS`, respectively. **/
     toc-indent: none,
       /** <- length | auto
-        * Defines the indentation of each table of contents entry; by default,
-        * entries of headings level 2+ are indented in 1.5em. **/
+        * Indentation of each table of contents entry; by default, entries of
+        * headings level 2+ are indented in 1.5em. **/
+    toc-bold: true,
+      /** <- boolean
+        * Allows bold fonts in table of contents entries. **/
     ..cfg,
   )
 
   date = utils.date(date)
-  if type(cfg.page-cfg) == str {cfg.page-cfg = (paper: cfg.page-cfg)}
-  if type(cfg.page-cfg) == str {cfg.page-cfg = (paper: cfg.page-cfg)}
+  
+  if type(cfg.page) == str {cfg.page = (paper: cfg.page)}
 
   set document(
     title: if subtitle != none {title + " - " + subtitle} else {title},
@@ -218,7 +234,7 @@
   )
   set page(
     margin: cfg.margin,
-    ..cfg.page-cfg
+    ..cfg.page
   )
   set par(
     justify: cfg.justify,
@@ -569,6 +585,7 @@
     if cover != none {
       if cover == auto {
         let authors = if type(authors) == array {authors.join(", ")} else {authors}
+        
         let cover-bg = context {
             let m = page.margin
             let frame = image(
@@ -593,21 +610,21 @@
           }
         
         set text(
-          fill: luma(200),
+          fill: cfg.cover-txtcolor,
           hyphenate: false
         )
         set par(justify: false)
         
         page(
           margin: (x: 12%, y: 12%),
-          fill: rgb("#3E210B"),
-          background: cover-bg
+          fill: cfg.cover-bgcolor,
+          background: cover-bg,
         )[
           #align(center + horizon)[
             #set par(leading: 2em)
             #context text(
               size: page.width * 0.09,
-              font: "Cinzel",
+              font: cfg.cover-fonts.at(0),
               title
             )
             #linebreak()
@@ -616,7 +633,7 @@
             v(1cm)
               context text(
                 size: page.width * 0.04,
-                font: "Alice",
+                font: cfg.cover-fonts.at(1),
                 subtitle
               )
               //v(4cm)
@@ -626,7 +643,7 @@
             #block(width: 52%)[
               #context text(
                 size: page.width * 0.035,
-                font: "Alice",
+                font: cfg.cover-fonts.at(1),
                 volume +
                 authors + "\n" +
                 date.display("[year]")
@@ -886,7 +903,7 @@
     if toc == true {
       show outline.entry.where(level: 1): it => {
         // Special formatting to parts in TOC:
-        if part != none {
+        if part != none and cfg.toc-bold == true {
           v(cfg.font-size, weak: true)
           strong(it)
         }
