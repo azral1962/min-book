@@ -134,16 +134,15 @@
     body: body
   )
   
-  // TODO: Implement new options
   // TODO: Rewrite doc-comments
   /**
    * = Advanced Configurations <adv-config>
    * 
-   * :cfg: "(?s)\s*let\s<name>\s=\s\((.*?\n)\s*\.\.<name>,\s*\)\s*\n?\n"
+   * :cfg: arg `typc` "(?s)\s*let\s<name>\s=\s\((.*?\n)\s*\.\.<name>,\s*\)\s*\n?\n"
    *
-   * These configurations allows to modify certain aspects of the book and better
+   * These `#book(cfg)` configurations allows to modify certain aspects of the book and better
    * control its appearence. They are built with rebust defaults in mind, so that
-   * a casual writer can safely ignore it and _just write_ , and in most cases it
+   * a casual writer can safely ignore it and _just write_, and in most cases it
    * will be used for simple tasks such as change the language or fonts.
    * 
   **/
@@ -220,6 +219,9 @@
     toc-bold: true,
       /** <- boolean
         * Allows bold fonts in table of contents entries. **/
+    chapter-numrestart: false,
+      /** <- boolean
+        * Make chapter numbering restart or continue after a book part. **/
     ..cfg,
   )
 
@@ -441,10 +443,12 @@
         set page(background: none)
         pagebreak(to: "odd", weak: true)
         
-        // Get the current level 2 heading count:
-        let current-h2-count = book-h2-counter.get()
-        // Level 2 heading numbering will not restart after level 1 headings now:
-        counter(heading).update((h1, ..n) => (h1, ..current-h2-count))
+        if cfg.chapter-numrestart == false {
+          // Get the current level 2 heading count:
+          let current-h2-count = book-h2-counter.get()
+          // Level 2 heading numbering will not restart after level 1 headings now:
+          counter(heading).update((h1, ..n) => (h1, ..current-h2-count))
+        }
       }
       else {
         it
@@ -737,7 +741,13 @@
       /**
        * = Cataloging in Publication
        * 
-       * :catalog: "(?s)\s*let <name> = \((.*?\n)\s*\.\.<name>.*?\)\s*\n"
+       * :catalog: arg `typc` "(?s)\s*let <name> = \((.*?\n)\s*\.\.<name>.*?\)\s*\n"
+       * 
+       * These `#book(catalog)` options set the data used to create the
+       * "cataloging in publication" board. Other needed informations are
+       * automatically retrieved from the book data, but at least one of these
+       * options must be explicitly set to generate the board; otherwise it will
+       * be just ignored.
       **/
       let catalog = (
         id: none,
@@ -968,7 +978,7 @@
     page(
       footer: none,
       background: cover-bg,
-      fill: rgb("#3E210B"),
+      fill: cfg.cover-bgcolor,
       []
     )
   }
