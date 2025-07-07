@@ -1,6 +1,4 @@
-#import "@preview/min-book:1.1.0": (
-  book, note, horizontalrule, hr, blockquote, appendices, annexes
-)
+#import "@preview/min-book:1.1.0": book
 
 #show: book.with(
   title: "Book Title",
@@ -164,6 +162,10 @@ fn main() {
 
 
 = Optional Commands
+
+#import "@preview/min-book:1.1.0": (
+  note, horizontalrule, hr, blockquote, appendices, annexes
+)
 
 
 == End notes
