@@ -41,6 +41,8 @@
 #let book-tr-state = state("book-tr", (:))
 #let book-notes-state = state("book-notes", (curr-numbering: "1"))
 #let book-note-counter = counter("book-note-count")
+// TODO: Unify state data
+#let book-cfg = state("book-cfg", (:))
 
 
 /** 
@@ -212,6 +214,10 @@
         * Fonts used by the automatically-generated cover: a
         * `(TITLE, TEXTS)` array which sets a main `TITLE` font and a
         * font used for all other cover `TEXTS`, respectively. **/
+    cover-back: true,
+      /** <- boolean
+        * Generate a back cover at the end of the document when
+        * `#book(cover: auto)` **/
     toc-indent: none,
       /** <- length | auto
         * Indentation of each table of contents entry; by default, entries of
@@ -222,10 +228,16 @@
     chapter-numrestart: false,
       /** <- boolean
         * Make chapter numbering restart or continue after a book part. **/
+    odd-pages: true,
+      /** <- boolean
+        * Apply tye rule of odd pages: important elements always start at the
+        * next oddly numbered (right-sided) page, inserting a blank page in
+        * between if needed.**/
     ..cfg,
   )
 
   date = utils.date(date)
+  let break-to = if cfg.odd-pages {"odd"} else {none}
   
   if type(cfg.page) == str {cfg.page = (paper: cfg.page)}
 
@@ -433,7 +445,7 @@
             none
           }
           
-        if counter(page).get().at(0) != 1 {pagebreak(to: "odd")}
+        if counter(page).get().at(0) != 1 {pagebreak(to: break-to)}
         
         set page(background: part-bg)
         set par(justify: false)
@@ -441,7 +453,7 @@
         align(center + horizon, it)
         
         set page(background: none)
-        pagebreak(to: "odd", weak: true)
+        pagebreak(to: break-to, weak: true)
         
         if cfg.chapter-numrestart == false {
           // Get the current level 2 heading count:
@@ -673,7 +685,7 @@
         panic("Invalid page argument value: \"" + cover + "\"")
       }
       
-      pagebreak(to: "odd")
+      pagebreak(to: break-to)
     }
     
     // Enable automatic titlepage when generating catalog
@@ -727,7 +739,7 @@
       }
       
       if catalog != none {pagebreak()}
-      else {pagebreak(to: "odd", weak: true)}
+      else {pagebreak(to: break-to, weak: true)}
     }
   
     if catalog != none {
@@ -862,28 +874,28 @@
     }
     
     if errata != none {
-      pagebreak(to: "odd", weak: true)
+      pagebreak(to: break-to, weak: true)
       heading(
         translation.errata,
         numbering: none,
         outlined: false,
       )
       errata
-      pagebreak(to: "odd")
+      pagebreak(to: break-to)
     }
     
     if dedication != none {
       set text(size: cfg.font-size - 2pt)
       
-      pagebreak(to: "odd", weak: true)
+      pagebreak(to: break-to, weak: true)
       align(center + horizon, dedication)
-      pagebreak(to: "odd")
+      pagebreak(to: break-to)
     }
     
     if acknowledgements != none {
       set par(justify: true)
       
-      pagebreak(to: "odd", weak: true)
+      pagebreak(to: break-to, weak: true)
       // INFO: Acknowledgements without title for now, seems cleaner
       // heading(
       //   translation.acknowledgements  ,
@@ -891,7 +903,7 @@
       //   outlined: false,
       // )
       acknowledgements
-      pagebreak(to: "odd")
+      pagebreak(to: break-to)
     }
     
     if epigraph != none {
@@ -902,12 +914,12 @@
         style: "italic",
       )
       
-      pagebreak(to: "odd", weak: true)
+      pagebreak(to: break-to, weak: true)
       pad(
         epigraph,
         left: 1cm,
       )
-      pagebreak(to: "odd")
+      pagebreak(to: break-to)
     }
     
     if toc == true {
@@ -929,7 +941,7 @@
           }
         }
   
-      pagebreak(to: "odd", weak: true)
+      pagebreak(to: break-to, weak: true)
       outline(
         indent: indenting,
         depth: if cfg.numbering-style == none {2} else {none},
@@ -941,14 +953,14 @@
     [#metadata("Marker for situating titles after/before outline") <outline>]
     
     // Start page numbering at the next even page:
-    if part != none {pagebreak(weak: true, to: "odd")}
+    if part != none {pagebreak(weak: true, to: break-to)}
     set page(numbering: "1")
     counter(page).update(1)
   
     body
   }
   
-  if cover == auto {
+  if cover == auto and cfg.cover-back {
     let cover-bg = context {
           let m = page.margin
           let frame = image(
@@ -974,7 +986,7 @@
           v(m.bottom * 0.25)
         }
     
-    pagebreak(weak: true, to: "odd")
+    pagebreak(weak: true, to: break-to)
     page(
       footer: none,
       background: cover-bg,
