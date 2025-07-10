@@ -205,6 +205,10 @@
         * Otimizes the content to be printed on both sides of the page (front
         * and back), with important elements always starting at the next front
         * side (oddly numbered) — inserts blank pages in between, if needed.**/
+    link-readable: true,
+      /** <- boolean
+        * Enable paper-readable links, which inserts the clickable link alongside
+        * a footnote to its URL. **/
     ..cfg,
   )
 
@@ -241,6 +245,7 @@
     tight: true,
     hanging-indent: 1em,
   )
+  set list(marker: ([•], [–]))
   
   // Set part and chapter translations based on text.lang
   let translation = cfg.lang-data.lang.at(cfg.lang)
@@ -484,6 +489,13 @@
         link(el.location())[#el.supplement #number]
       }
       else {link(it.target, el.body)}
+    }
+    else {it}
+  }
+  show link: it => {
+    if cfg.link-readable and type(it.dest) == str and it.dest != it.body.text {
+      it
+      footnote(it.dest)
     }
     else {it}
   }

@@ -86,6 +86,9 @@ _#lorem(40)_
 
 #raw(lorem(40))
 
+#lorem(3) https://example.com #lorem(15)
+#link("https://github.com", "GitHub") #lorem(20)#footnote[This is an actual footnote.]
+
 #pagebreak()
 
 
