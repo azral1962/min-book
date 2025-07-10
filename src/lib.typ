@@ -229,7 +229,9 @@
   )
 
   date = utils.date(date)
+  
   let break-to = if cfg.odd-pages {"odd"} else {none}
+  utils.cfg(add: "break-to", break-to)
   
   if type(cfg.page) == str {cfg.page = (paper: cfg.page)}
 
@@ -1092,6 +1094,7 @@
       title
     }
   
+  let break-to = utils.cfg(get: "break-to")
   
   set heading(
     offset: 1,
@@ -1107,11 +1110,12 @@
   )
   
   show heading.where(level: 2): it => {
-    pagebreak(to: "odd")
+    pagebreak(to: break-to)
     it
   }
   
-  pagebreak(weak: true, to: "odd")
+  
+  pagebreak(weak: true, to: break-to)
   
   // Main title (plural)
   heading(
