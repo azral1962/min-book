@@ -4,7 +4,6 @@
 
 #import "@preview/numbly:0.1.0": numbly
 
-
 /**
  * = Quick Start
  *
@@ -12,110 +11,99 @@
  * #import "@preview/min-book:1.0.0": book
  * #show: book.with(
  *   title: "Book Title",
- *   subtitle: "Complementary subtitle, not more than two lines long",
- *   authors: "Author",
+ *   subtitle: "Book subtitle, not more than two lines long",
+ *   authors: "Book Author",
  * )
  * ```
  * 
  * = Description
  * 
- * Generate complete and complex books, without any annoying new commands or syntax,
- * just good old pure Typst. This package works by manipulating the standard Typst
- * elements, adapting them to the needs of a book structure. All of this is managed
- * behind the scenes, so that nothing changes in the Typst code itself.
+ * Generate complete and complex books, without any annoying new commands or
+ * syntax, just good old pure Typst. This package manipulates the standard Typst
+ * elements as much as possible, adapting them to the needs of a book structure
+ * in a way that there's no need to learn a whole new semantic just because of
+ * _min-book_.
  * 
- * The commands that `min-book` provides are only included for the sake of
- * completeness, and offers some fancy optional features like horizontal rules
- * or end notes; but it's perfectly possible to write entire books without them.
+ * For some fancy book features there is no existing compatible Typst element to
+ * re-work and adapt; in those cases, this package do provide additional commands
+ * that are completely optional, for the sake of completeness.
  * 
- * While it is possible to play with complex structures, such as parts and chapters
- * and creative numbering, this package comes with several ready to use default
- * values; so its really up to you to customize it your way or ride along the
- * defaults and just start writing: both ways are possible and encouraged.
+ * This package comes with some thoughful ready-to-use defaults but also allows
+ * you to play with highly customizable options if you need them, so it's really
+ * up to you: customize it your way or ride along the defaults — both ways are
+ * possible and encouraged.
  * 
- * This manual will be updated only when new versions break or modify something;
- * otherwise, it will be valid to all newer versions starting by the one documented
- * here.
  * #pagebreak()
  * 
  * = Options
  * 
- * Those are the full list of options available and its default values:
+ * These are all the options and its defaults used by _min-book_:
  * 
  * :book: show
- * 
- * Seems like an awful lot to start with, but let's just break down all this to
- * understand it better, shall we?
 **/
 #let book(
   title: none,
   /** <- string | content <required>
-    * The main title of the book. **/
+    * Main title. **/
   subtitle: none,
   /** <- string | content | none
-    * The book subtitle; generally two lines long or less. **/
+    * Subtitle, generally two lines long or less. **/
   edition: 0,
   /** <- int
-    * The book publication number; used when the content is cjanged or updated
-    * after the book release. **/
+    * Publication number, used when the content is changed or updated in a new
+    * release after the original publication. **/
   volume: 0,
   /** <- int
-    * The book series volume number; used when the same story is told through
+    * Series volume number, used when one extensive story is told through
     * multiple books, in order. **/
   authors: none,
   /** <- string | array <required>
-    * A string or array of strings containing the names of each author of the
-    * book. **/
+    * Author (`string`) or authors (`array` of `strings`). **/
   date: datetime.today(),
-  /** <- array | dictionary
-    * The book publication date; can be a `(yyyy, mm, dd)` array or a
-    * `(year: yyyy, month: mm, day: dd)` dictionary, and defaults to current
-    * date if not set. **/
+  /** <- datetime | array | dictionary
+    * Publication date — an array or dictionary `(year, monty, day)` or `datetime`.**/
   cover: auto,
   /** <- auto | content | none
-    * The book cover content; when `auto`, generates an automatic cover. **/
+    * Cover — generated automatically (`auto`) or manually (`content`), or no
+    * cover (`none`). **/
   titlepage: auto,
-  /** <- auto | content
-    * The presentation page content, shown after the cover; when `auto`,
-    * generates an automatic title page. **/
+  /** <- auto | content | none
+    * Title page, shown after cover — generated automatically (`auto`) or
+    * manually (`content`). **/
   catalog: none,
-  /** <- toml | yaml | dictionary
-    * Set the data for the "cataloging in publication" board. **/
+  /** <- dictionary | toml | yaml
+    * Cataloging in publication board, with library data — see @catalog. **/
   errata: none,
-  /** <- content
-    * A text that corrects important errors from previous book editions. **/
+  /** <- content | string
+    * A text that corrects errors from previous book editions. **/
   dedication: none,
-  /** <- content
+  /** <- content | string
     * A brief text that dedicates the book in honor or in memorian of someone
-    * important; can accompany a small message directed to the person. **/
+    * important — can accompany a small message directed to the person. **/
   acknowledgements: none,
-  /** <- content
+  /** <- content | string
     * A brief text to recognize everyone who helped directly or indirectly in
     * the process of book creation and their importance in the project. **/
   epigraph: none,
   /** <- quote | content
     * A short citation or excerpt of other works used to introduce the main
     * theme of the book; can suggest a reflection, a mood, or idea related to
-    the text. **/
+    * the text. **/
   toc: true,
   /** <- boolean
-    * Defines if the book will have a table of contents. **/
+    * Generate table of contents. **/
   part: auto,
   /** <- auto | string | none
-    * The name of the main divisions of the book; when `auto`, try to retrieve
-    * the translation for "Part" in `#text.lang` from `#book(lang-data)`, or
-    fallback to English. **/
+    * Name of the main divisions of the book — set manually (`string`) or
+    * defaults to the word "Part" in book language (`auto`). **/
   chapter: auto,
   /** <- string | none
-    * The name of the sections of the book; when `auto`, try to retrieve the
-    * translation for "Chapter" in `#text.lang` from `#book(lang-data)`, or
-    fallback to English. **/
+    * The name of the sections of the book — set manually (`string`) or
+    * defaults to the word "Chapter" in book language (`auto`). **/
   cfg: auto,
   /** <- dictionary
-    * Set custom advanced configurations; used to fine-tune some aspects of the
-    * book, mostly aesthetic formatting. If your focus is to just write a book
-    * in English without worry about code, just ignore it; otherwise, refer to
-    * @adv-config to check the supported configurations. **/
+    * Custom advanced configurations, used to fine-tune some aspects of the
+    * book — see @adv-config. **/
   body
   /** <- content
     * The book content.**/
@@ -128,109 +116,102 @@
     body: body
   )
   
-  // TODO: Rewrite doc-comments
   /**
    * = Advanced Configurations <adv-config>
    * 
    * :cfg: arg `typc` "(?s)\s*let\s<name>\s=\s\((.*?\n)\s*\.\.<name>,\s*\)\s*\n?\n"
    *
-   * These `#book(cfg)` configurations allows to modify certain aspects of the book and better
-   * control its appearence. They are built with rebust defaults in mind, so that
-   * a casual writer can safely ignore it and _just write_, and in most cases it
-   * will be used for simple tasks such as change the language or fonts.
+   * These `#book(cfg)` configurations allows to modify certain aspects of the
+   * book and manage its appearence and structure. Built with some thoughful
+   * ready-to-use defaults that make its use optional, so that beginners and
+   * casual writers can safely ignore it and _just write_.
    * 
   **/
   if cfg == auto {cfg = (:)}
   let cfg = (
     numbering-style: auto,
       /** <- array | string | none
-        * Custom heading numbering; can be a standard numbering string, or a
-        * #univ("numbly") numbering array. **/
+        * Custom heading numbering — a standard numbering (`string`) or a
+        * #univ("numbly") numbering (`array`). **/
     page: "a5",
       /** <- dictionary | string
-        * Page direct configuration, acting as `#set page(..cfg.page)`; when string,
-        * act as `#set page(paper: cfg.page)`. **/
+        * Page configuration — act as `#set page(..cfg.page)` when `dictionary`
+        * or as `#set page(paper: cfg.page)` when `string`. **/
     lang: "en",
       /** <- string
-        * Language of the written text (`text.lang`). **/
+        * Book language. **/
     lang-data: toml("assets/lang.toml"),
       /** <- toml
-        * A TOML translation file; the file structure can be found in the default
-        * `src/assets/lang.toml` file. **/
+        * Translation file — see the `src/assets/lang.toml` file. **/
     justify: true,
       /** <- boolean
-        * Defines if the text will have justified alignment. **/
+        * Text justification. **/
     line-space: 0.5em,
       /** <- length
-        * Defines the space between lines in the document. **/
+        * Space between each line in a paragraph. **/
     par-margin: 0.65em,
       /** <- length
-        * Defines the margin space after each paragraph. Set it the same as
-        * `#book(line-space)` to get paragraphs without additional space between
-        * them. **/
+        * Space after each paragraph. **/
     first-line-indent: 1em,
       /** <- length
-        * Defines the first line indentation of all paragraphs but the first one,
-        * in a sequence of paragraphs. **/
+        * indentation of the first line of each paragraph in a sequence, except
+        * the first one. **/
     margin: (x: 15%, y: 14%),
       /** <- length
-        * Defines the document margins. **/
+        * Page margin. **/
     font: ("Book Antiqua", "Times New Roman"),
       /** <- string | array
-        * Defines the font families used for the text; the default font is
-        * specified in `README.md` file. **/
+        * Text font family, and fallback options (`array`). **/
     font-math: "Asana Math",
       /** <- string | array
-        * Defines the font families used for the math and equations; the default
-        * font is specified in `README.md` file. **/
+        * Math font family, and fallback options (`array`) — see the `README.md`
+        * file to download the default font, if needed. **/
     font-mono: "Inconsolata",
       /** <- string | array
-        * Defines the font families used for the monospaced text; the default
-        * font is specified in `README.md` file. **/
+        * Monospaced font family, and fallback options (`array`) — see the
+        * `README.md` file to download the default font, if needed. **/
     font-size: 11pt,
       /** <- length
-        * Defines the size of the text in the document. **/
+        * Text font size. **/
     heading-weight: auto,
-      /** <- string
-        * Defines the font weight of headings; by default, headings level 1--5
-        * are `"regular"` and levels above it are `"bold"`, but
-        * `#book(cfg.heading-weight)` apply the same weight for all headings. **/
+      /** <- string | auto
+        * Heading font weight (thickness) — set as `"regular"` or `"bold"`,
+        * defaults to regular in levels 1–5 then bold (`auto`). **/
     cover-bgcolor: rgb("#3E210B"),
       /** <- color
-        * Background color of the automatically-generated cover page. **/
+        * Cover background color when `#book(cover: auto)`. **/
     cover-txtcolor: luma(200),
       /** <- color
-        * Text color of the automatically-generated cover. **/
+        * Cover text color when `#book(cover: auto)`. **/
     cover-fonts: ("Cinzel", "Alice"),
       /** <- array
-        * Fonts used by the automatically-generated cover: a
-        * `(TITLE, TEXTS)` array which sets a main `TITLE` font and a
-        * font used for all other cover `TEXTS`, respectively. **/
+        * Cover font families when `#book(cover: auto)` — an array `(TITLE, TEXTS)`
+        * for title and text fonts, respectively. **/
     cover-back: true,
       /** <- boolean
-        * Generate a back cover at the end of the document when
-        * `#book(cover: auto)` **/
-    toc-indent: none,
+        * Generate a back cover at the end of the document when `#book(cover: auto)` **/
+    toc-indent: auto,
       /** <- length | auto
-        * Indentation of each table of contents entry; by default, entries of
-        * headings level 2+ are indented in 1.5em. **/
+        * Indentation of each table of contents entry — by default, all entries
+        * of level 2+ are equally indented in 1.5em (`auto`). **/
     toc-bold: true,
       /** <- boolean
         * Allows bold fonts in table of contents entries. **/
     chapter-numrestart: false,
       /** <- boolean
-        * Make chapter numbering restart or continue after a book part. **/
-    odd-pages: true,
+        * Make chapter numbering restart after each book part. **/
+    two-sided: true,
       /** <- boolean
-        * Apply tye rule of odd pages: important elements always start at the
-        * next oddly numbered (right-sided) page, inserting a blank page in
-        * between if needed.**/
+        * Otimizes the content to be printed on both sides of the page (front
+        * and back), with important elements always starting at the next front
+        * side (oddly numbered) — inserts blank pages in between, if needed.**/
     ..cfg,
   )
 
   date = utils.date(date)
   
-  let break-to = if cfg.odd-pages {"odd"} else {none}
+  // Translate cfg.two-sided into a #pagebreak(to) value
+  let break-to = if cfg.two-sided {"odd"} else {none}
   utils.cfg(add: "break-to", break-to)
   
   if type(cfg.page) == str {cfg.page = (paper: cfg.page)}
@@ -282,21 +263,16 @@
   /**
    * = Advanced Numbering
    * 
-   * The book headings can be numbered two ways: using a standard numbering
-   * string, or a #univ("numbly") numbering array. While numbering strings are
-   * indicated for simpler cases, the numbly arrays are used in more complex
-   * book numbering.
+   * The book headings can be numbered two ways: using a
+   * #url("https://typst.app/docs/reference/model/numbering/")[standard]
+   * numbering string or a #univ("numbly") numbering array. Strings are more
+   * simple and easy to use, while arrays are more complete and customizable.
    * 
-   * By default, when `#book(part)` is enabled, the following numbering is used:
-   *
-   * :part-pattern: code "(?s)\s*let\s<name>\s=\s(\(.*?\))\s*\n?\n"
-   *
-   * But when `#book(part: none)`, the following numbering is used:
-   * 
-   * :no-part-pattern: code "(?s)\s*let\s<name>\s=\s(\(.*?\))\s*\n?\n"
-   * 
-   * Additionally, a custom `#book(numbering-style)` can be set to override
-   * the default numbering behavior above.
+   * By default, _min-book_ uses slightly different numbering when `#book(part)`
+   * is enabled or disabled, that's why _parts_ and _chapters_ appear to have
+   * independent numbering when used. The `#book(cfg.numbering-style)` option
+   * allow to set a custom numbering used whether `#book(part)` is enabled or
+   * disabled.
   **/
   let part-pattern = (
     "{1:I}:\n",
@@ -318,53 +294,58 @@
   /**
    * = Book Parts
    *
-   * Some larger books are internally divided into multiple _parts_. This structure
-   *  allows to better organize and understand a text with multiple sequential plots,
-   * or tales, or time jumps, or anything that internally differentiate parts of the
-   * story. While the name used here is _part_, different books uses different names
-   * for it: parts, subjects, books, acts, units, modules, etc.
-   * 
-   * By default, every _level 1 heading_ is a part named as _"Part"_ in `text.lang`
-   * document language; setting `#book(part)` change this name, or disable parts if
-   * set to `none`.
-   * 
    * ```typ
    * #show: book.with(
    *   part: "Act",
    * )
-   * = This heading is the Act 1 part
+   * = This is a part!  // Act 1
    * ```
+   * 
+   * Some larger books are internally divided into multiple _parts_. This
+   * structure allows to better organize and understand a text with multiple
+   * sequential plots, or tales, or time jumps, or anything that internally
+   * differentiate parts of the story. Each book can set different names for
+   * them, like parts, subjects, books, acts, units, modules, etc;
+   * by default, _min-book_ tries to get the word for "Part" in `#book(cfg.lang)`
+   * language as its name (fallback to English).
+   * 
+   * When set a value (`string`), all level 1 headings become _parts_: they
+   * occupy the entire page and are aligned at its middle; some decorative frame
+   * also appear when `#book(cover: auto)`.
+   * 
    * 
    * = Book Chapters
    * 
-   * In most cases, books are divided into smaller sections called chapters.
-   * Generally, each chapter contains a single minor story, or event, or scene,
-   * or any type of subtle plot change.
-   * 
-   * Chapters are smart: by default, every _level 2 heading_ is a chapter named
-   * _"Chapter"_ in `text.lang` document language, when parts are enabled; but when
-   * parts are disabled, every _level 1 heading_ will be a chapter. Setting
-   * `#book(chapter)` change the default chapter name, or disable chapters if set to
-   * `none`.
    * 
    * #grid(columns: (1fr, 1fr),
    *   ```typ
    *   #show: book.with(
    *     chapter: "Scene",
    *   )
-   *   == This is Scene 1 chapter
+   *   == This is a chapter!  // Scene 1 
    *   ```,
    *   ```typ
    *   #show: book.with(
    *     part: none,
    *     chapter: "Scene",
    *   )
-   *   = This is Scene 1 chapter
+   *   = This is a chapter!  // Scene 1
    *   ```
    * )
+   * 
+   * In most cases, books are divided into smaller sections called chapters.
+   * Generally, each chapter contains a single minor story, or event, or scene,
+   * or any type of subtle plot change. Each book can set different names for
+   * them, like chapters, sections, articles, scenes, etc; by default, _min-book_
+   * tries to get the word for "Chapter" in `#book(cfg.lang)` language as its
+   * name (fallback to English).
+   * 
+   * Chapters are smart: when set a value (`string`), if `#book(parts: none)`
+   * all level 1 headings become chapters; otherwise, all level 2 headings become
+   * chapters — since the level 1 are parts.
   **/
-  // #utils.numbering set #book(part) and #book(chapter)
   set heading(
+    // #utils.numbering set #book(part) and #book(chapter)
     numbering: utils.numbering(
         patterns: (
           cfg.numbering-style,
@@ -683,8 +664,9 @@
   }
   
   // Enable automatic titlepage when generating catalog
-  let titlepage = if titlepage == none and catalog != none []
-    else {titlepage}
+  if titlepage == none and catalog != none and cfg.two-sided {
+    titlepage = []
+  }
 
   if titlepage != none {
     if titlepage == auto {
@@ -745,7 +727,7 @@
     show rect: set align(center + bottom)
     
     /**
-     * = Cataloging in Publication
+     * = Cataloging in Publication <catalog>
      * 
      * :catalog: arg `typc` "(?s)\s*let <name> = \((.*?\n)\s*\.\.<name>.*?\)\s*\n"
      * 
@@ -993,10 +975,9 @@
 /**
  * = Additional Commands
  * 
- * As said before, this package does not requires any new syntax nor commands to
- * write a complete book. But, well... it does offers some additional commands.
- * These are completely optional and exists only to facilitate the book writing
- * process; it is perfectly possible to write an entire book without them.
+ * These commands are provided as a wa6 to access some fancy book features that
+ * cannot be implemented by re-working and adapting existing Typst elements. They
+ * are completely optional and is perfectly possible to write an entire book.
 **/
 
 
@@ -1005,15 +986,15 @@
  * 
  * :note:
  * 
- * Adds end notes to the book. End notes are more common than footnotes in books,
- * and while footnotes appear at the footer of the current page, end notes appears
- * at its own page at the end of the current section, right before the next heading.
+ * Adds an end note, an alternative for footnotes but placed inside of the page
+ * instead of its margins. End notes appear at its own page at the end of the
+ * current section, right before the next heading.
 **/
 #let note(
   numbering-style: auto,
   /** <- auto | array | string
-    * Defines a custom note numbering from this note onwards; can be a standard
-    * numbering string, or a #univ("numbly") numbering array. **/
+    * Custom note numbering — a standard numbering (`string`) or a #univ("numbly")
+    * numbering (`array`). **/
   content,
   /** <- content <required>
     * The content of the end note. **/
@@ -1057,17 +1038,18 @@
  * 
  * :appendices:
  * 
- * Creates an special ambient to write or include multiple appendices. An appendix
- * is any important additional data left out of the main document for some reason,
- * but directly referenced or needed by it.
+ * Creates an special ambient to write or include multiple appendices. An
+ * appendix is any important additional data left out of the main document for
+ * some reason, but directly referenced or needed by it. Inside this ambient,
+ * all level 1 heading is a new appendix.
 **/
 #let appendices(
   type: "appendix",
   title: auto,
-  /** <- auto | array
-    * An array of strings with singular and plural titles for appendices, respectively;
-    * when `auto`, try to retrieve the translations for "Appendix" and "Appendices"
-    * in `#text.lang` from `#book(lang-data)`, or fallback to English. **/
+  /** <- array | auto
+    * The name of the appendices — an array `(SINGULAR, PLURAL)` to each
+    * "Appendix" and the part "Appendices" names, respectively, or
+    * defaults to these same words in book language (`auto`). **/
   numbering-style: (
     "",
     "{2:A}.\n",
@@ -1077,12 +1059,11 @@
     "{2:A}.{3:1}.{4:1}.{5:1}.{6:a}. ",
   ),
   /** numbering-style: <- array | string
-    * Defines a custom heading numbering for appendices; can be a standard
-    * numbering string, or a #univ("numbly") numbering array. **/
+    * Custom heading numbering for appendices — a standard numbering (`string`),
+    * or a #univ("numbly") numbering (`array`). **/
   body
   /** <- content
-    * The appendices content; every _level 1 heading_ will be treated as a new
-    * appendix. **/
+    * The appendices content. **/
 ) = context {
   import "utils.typ"
 
@@ -1135,16 +1116,17 @@
  * 
  * :annexes:
  * 
- * Creates an special ambient to write or include multiple annexes. An annex is any
- * important third-party data directly cited or referenced in the main document.
+ * Creates an special ambient to write or include multiple annexes. An annex is
+ * any important third-party data directly cited or referenced in the main
+ * document. Inside this ambient, all level 1 heading is a new annex.
 **/
 #let annexes(
   type: "annex",
   title: auto,
   /** <- auto | array
-    * An array of strings with singular and plural titles for annexes, respectively;
-    * when `auto`, try to retrieve the translations for "Annex" and "Annexes"
-    * in `#text.lang` from `#book(lang-data)`, or fallback to English. **/
+    * The name of the annexes — an array `(SINGULAR, PLURAL)` to each
+    * "Annex" and the part "Annexes" names, respectively, or
+    * defaults to these same words in book language (`auto`). **/
   numbering-style: (
     "",
     "{2:A}.\n",
@@ -1154,12 +1136,11 @@
     "{2:A}.{3:1}.{4:1}.{5:1}.{6:a}. ",
   ),
   /** numbering-style: <- array | string
-    * Defines a custom heading numbering for annexes; can be a standard
-    * numbering string, or a #univ("numbly") numbering array. **/
+    * Custom heading numbering for annexes — a standard numbering (`string`), or
+    * a #univ("numbly") numbering (`array`). **/
   body
   /** <- content
-    * The annexes content; every _level 1 heading_ will be treated as a new
-    * annex. **/
+    * The annexes content. **/
 ) = appendices(
   type: type,
   title: title,
@@ -1173,17 +1154,16 @@
  * 
  * :horizontalrule:
  * 
- * Adds a horizontal rule, visual separators used to distinguish subtle changes of
- * subject in extensive texts.
+ * Adds a horizontal rule, visual separators used to distinguish subtle changes
+ * of subject in extensive texts.
 **/
 #let horizontalrule(
   symbol: [#sym.ast.op #sym.ast.op #sym.ast.op],
   /** <- content
-    * Defines the content of a decoration in the middle of tue horizontal rule;
-    * defaults to three asterisks. **/
+    * Decoration in the middle of the horizontal rule — defaults to 3 asterisks. **/
   spacing: 1em,
   /** <- length
-    * The vertical space before and after the horizontal rule. **/
+    * Vertical space before and after the horizontal rule. **/
   line-size: 15%,
 ) = {
   v(spacing, weak: true)
@@ -1212,7 +1192,7 @@
   v(spacing, weak: true)
 }
 
-/// The same `#horizontalrule` command is also as the smaller `#hr` alias.
+/// The `#horizontalrule` command is also available as the smaller `#hr` alias.
 #let hr = horizontalrule
 
 
@@ -1221,7 +1201,7 @@
  * 
  * :blockquote:
  * 
- * Simple alias to add a `#quote(block:true)` command with smaller and semantic
- * `#quote(attribution)` option, as `#blockquote(by)`.
+ * Adds a block of quotation, a simple alias to `#quote(block: true)`, with a
+ * smaller and more semantic `#quote(attribution)` option as `#blockquote(by)`.
 **/
 #let blockquote(by: none, ..args) = quote(block: true, attribution: by, ..args)

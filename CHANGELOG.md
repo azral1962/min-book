@@ -71,6 +71,6 @@ the help testing some features.
   - `cfg.toc-indent` sets TOC indentation
   - `cfg.toc-bold` allows bold fonts in TOC entries for parts
   - `cfg.chapter-numrestart` makes chapter numbering restart or continue after a book part
-  - `cfg.odd-pages` makes important elements always start at tye next oddly numbered page
+  - `cfg.two-sided` makes important elements always start at tye next oddly numbered page
 - Updated: `#book(numbering-style)` can be `none` or contain it in array
 - Updated: ~~`#book(cfg.page-cfg)`~~ &rarr; `#book(cfg.page)`

@@ -154,7 +154,7 @@
   let this = state(state-name)
   let val = val.pos().at(0, default: none)
   
-  // USAGE: utils.cfg(add: <string>, val)
+  // USAGE: utils.cfg(add: <string>, [any])
   if add != none {
     this.update(curr => {
       if curr == none {curr = (:)}
@@ -200,7 +200,7 @@
       curr
     })
   }
-  // USAGE: context utils.cfg(get: <string>)
+  // USAGE: context utils.cfg(get: <string>, [default])
   else if get != none {
     if get.contains(".") {
       let p = get.split(".")
