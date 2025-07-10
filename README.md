@@ -83,6 +83,7 @@ end notes; but it's perfectly possible to write entire books without them.
 - Epigraph
 - Table of contents
 - Multi-language support
+- Advanced customization options
 - Accessible default fonts
 - Book parts (headings)
 - Book chapters (headings)
@@ -94,7 +95,6 @@ end notes; but it's perfectly possible to write entire books without them.
 
 
 > [!TIP]
-> Currently, Typst does not have native ePub support — and neither _min-book_,
-> therefore; but its possible to generate either an ePub file or a _min-book_
-> PDF file from the same source (Pandoc) using
-> [**`bookmkr`**](https://www.github.com/mayconfmelo/bookmkr/).
+> Currently, Typst — and therefore _min-book_ — does not have native ePub support.
+> However, it’s possible to generate both an ePub file and a _min-book_ PDF from
+> the same source (Pandoc) using [**`bookmkr`**](https://www.github.com/mayconfmelo/bookmkr/).

@@ -60,3 +60,17 @@
 
 Thanks to [@iandol](https://github.com/iandol) for the thoughtful insights and
 the help testing some features.
+
+## 1.1.0
+
+- Added: `#book(cfg)` new options
+  - `cfg.cover-bg` change automatic cover background
+  - `cfg.cover-txtcolor` change automatic cover text color
+  - `cfg.cover-fonts` change the fonts used in automatic cover
+  - `cfg.cover-back` allows generate of back cover when `#book(cover: auto)`
+  - `cfg.toc-indent` sets TOC indentation
+  - `cfg.toc-bold` allows bold fonts in TOC entries for parts
+  - `cfg.chapter-numrestart` makes chapter numbering restart or continue after a book part
+  - `cfg.odd-pages` makes important elements always start at tye next oddly numbered page
+- Updated: `#book(numbering-style)` can be `none` or contain it in array
+- Updated: ~~`#book(cfg.page-cfg)`~~ &rarr; `#book(cfg.page)`
