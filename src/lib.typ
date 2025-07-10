@@ -190,10 +190,10 @@
     cover-back: true,
       /** <- boolean
         * Generate a back cover at the end of the document when `#book(cover: auto)` **/
-    toc-indent: auto,
-      /** <- length | auto
+    toc-indent: none,
+      /** <- length | auto | none
         * Indentation of each table of contents entry — by default, all entries
-        * of level 2+ are equally indented in 1.5em (`auto`). **/
+        * of level 2+ are equally indented in 1.5em (`none`). **/
     toc-bold: true,
       /** <- boolean
         * Allows bold fonts in table of contents entries. **/
