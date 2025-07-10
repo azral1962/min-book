@@ -11,8 +11,8 @@
 #import "@preview/min-book:1.0.0": book
 #show: book.with(
   title: "Book Title",
-  subtitle: "Complementary subtitle, not more than two lines long",
-  authors: "Author",
+  subtitle: "Book subtitle, not more than two lines long",
+  authors: "Book Author",
 )
 ```
 

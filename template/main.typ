@@ -229,7 +229,7 @@ fn main() {
   
   == Important Explanation
   
-  #lorem(50)
+  #lorem(49)
   
   = Another Important Third-party Document
   
