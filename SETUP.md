@@ -94,7 +94,7 @@ just pdf
 ```
 
 
-### Compile project files as PDF
+### Compile project files as PNG
 
 Compile the Typst files — generally the template and the manual, — as image
 files:

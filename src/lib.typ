@@ -8,7 +8,7 @@
  * = Quick Start
  *
  * ```typ
- * #import "@preview/min-book:1.0.0": book
+ * #import "@preview/min-book:1.1.0": book
  * #show: book.with(
  *   title: "Book Title",
  *   subtitle: "Book subtitle, not more than two lines long",
