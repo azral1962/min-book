@@ -19,12 +19,20 @@
 
 == First Chapter
 
-This document is divided in _parts_ and _chapters_ --- headings of levels 1
-and 2, respectively; here, each part is called a
-*Subject*, while each chapter is called a *Detail*. 
+This example document is divided into *"Subject"* parts and *"Detail"* chapters,
+which are just headings of level 1 and 2, respectively. The chapter numbering is
+sequential and do not restart at every new part.
 
-The *Detail* chapter numbering is sequential and do not restart at every new
-*Subject* part.
+Almost all features demonstrated here can be customized and adapted to specific
+needs; for more information, refer to the official
+#link("https://typst.app/universe/package/min-book/")[release page], where can
+be found the manual and the source code, among other information.
+
+#v(2em)
+
+Sincerelly,
+
+#link("https://github.com/mayconfmelo", "mayconfmelo.")
 
 
 = Page Availability
