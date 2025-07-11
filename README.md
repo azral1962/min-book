@@ -8,7 +8,7 @@
 ## Quick Start
 
 ```typst
-#import "@preview/min-book:1.0.0": book
+#import "@preview/min-book:1.1.0": book
 #show: book.with(
   title: "Book Title",
   subtitle: "Book subtitle, not more than two lines long",
@@ -19,21 +19,26 @@
 
 ## Description
 
-Generate complete and complex books, without any annoying new commands or syntax,
-just good old pure Typst. This package works by manipulating the standard Typst
-elements, adapting them to the needs of a book structure. All of this is managed
-behind the scenes, so that nothing changes in the Typst code itself.
+Generate complete and complex books, without any annoying new commands or
+syntax, just good old pure Typst. This package manipulates the standard Typst
+elements as much as possible, adapting them to the needs of a book structure
+in a way that there's no need to learn a whole new semantic just because of
+_min-book_.
 
-The commands that `min-book` provides are only included for the sake of
-completeness, and offers some fancy optional features like horizontal rules or
-end notes; but it's perfectly possible to write entire books without them.
+For some fancy book features there is no existing compatible Typst element to
+re-work and adapt; in those cases, this package do provide additional commands
+that are completely optional, for the sake of completeness.
 
+This package comes with some thoughful ready-to-use defaults but also allows
+you to play with highly customizable options if you need them, so it's really
+up to you: customize it your way or ride along the defaults — both ways are
+possible and encouraged.
 
 ## More Information
 
-- [Official manual](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.0.0/docs/manual.pdf)
-- [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.0.0/docs/example.pdf)
-- [Example Typst code](https://github.com/mayconfmelo/min-book/blob/1.0.0/template/main.typ)
+- [Official manual](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.1.0/docs/manual.pdf)
+- [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.1.0/docs/example.pdf)
+- [Example Typst code](https://github.com/mayconfmelo/min-book/blob/1.1.0/template/main.typ)
 - [Changelog](https://github.com/mayconfmelo/min-book/blob/main/CHANGELOG.md)
 
 
@@ -67,12 +72,12 @@ end notes; but it's perfectly possible to write entire books without them.
 </table>
 
 
-## Full List of Features
+## Feature List
 
 - Cover
   - Automatic generation
   - Creation using Typst
-  - Using existing `#image`
+  - Existing image
 - Title page
   - Automatic generation
   - Creation using Typst
