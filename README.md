@@ -39,7 +39,8 @@ possible and encouraged.
 - [Official manual](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.1.0/docs/manual.pdf)
 - [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.1.0/docs/example.pdf)
 - [Example Typst code](https://github.com/mayconfmelo/min-book/blob/1.1.0/template/main.typ)
-- [Changelog](https://github.com/mayconfmelo/min-book/blob/main/CHANGELOG.md)
+- [Changelog](https://github.com/mayconfmelo/min-book/blob/main/docs/changelog.md)
+- [Development setup](https://github.com/mayconfmelo/min-book/blob/main/docs/setup.md)
 
 
 ## Default Fonts
@@ -97,9 +98,3 @@ possible and encouraged.
 - Block Quote
 - Appendices ambient
 - Annexes ambient
-
-
-> [!TIP]
-> Currently, Typst — and therefore _min-book_ — does not have native ePub support.
-> However, it’s possible to generate both an ePub file and a _min-book_ PDF from
-> the same source (Pandoc) using [**`bookmkr`**](https://www.github.com/mayconfmelo/bookmkr/).

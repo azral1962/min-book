@@ -11,10 +11,11 @@
 
 
 // UTIL: Check if given value is of one of the types
-#let required-types(arg, ..types, test: false) = {
+#let type-check(arg, ..types, test: false) = {
   let match = false
+  let context() = {[#context].func()}
   
-  if type(arg) in types.pos() {
+  if types.pos().contains(type(arg)) {
     match = true
   }
   

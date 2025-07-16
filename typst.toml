@@ -10,15 +10,13 @@ keywords = [ "book", "document structuring" ]
 repository = "https://github.com/mayconfmelo/min-book"
 exclude = [
   "dev/",
-  "test/",
+  "tests/",
   "docs/",
   "scripts/",
   ".git",
+  ".github",
   ".gitignore",
   "justfile",
-  "CHANGELOG.md",
-  "SETUP.md",
-  ".todo",
   "manual.typ"
 ]
 

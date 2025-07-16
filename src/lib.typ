@@ -63,9 +63,9 @@
   /** <- datetime | array | dictionary
     * Publication date — an array or dictionary `(year, monty, day)` or `datetime`.**/
   cover: auto,
-  /** <- auto | content | none
-    * Cover — generated automatically (`auto`) or manually (`content`), or no
-    * cover (`none`). **/
+  /** <- auto | content | image | none
+    * Cover — generated automatically (`auto`) or manually (`content`), from an
+    * `image`, or not generated (`none`). **/
   titlepage: auto,
   /** <- auto | content | none
     * Title page, shown after cover — generated automatically (`auto`) or
@@ -985,6 +985,14 @@
 
 
 /**
+ * = Book cover
+ * 
+ * By default, _min-book_ automatically generates a book cover if `#book(cover)`
+ * is not set, it's also possible to set a custom cover image or create one
+ * using Typst code. The default automatic cover
+ * #url("https://typst.app/project/r2QBJy0CmrAmvMWT1NmUEW", "code") can be a good start
+ * as a base to create your own version.
+ * 
  * = Additional Commands
  * 
  * These commands are provided as a wa6 to access some fancy book features that
