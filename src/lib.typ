@@ -1,6 +1,7 @@
 // NAME: Minimal Books
 // REQ: numbly
 // TODO: Implement ePub output when available
+// TODO: Compartimentalize code — is over 1.000 lones already!
 
 #import "@preview/numbly:0.1.0": numbly
 
@@ -122,7 +123,7 @@
    * :cfg: arg `typc` "(?s)\s*let\s<name>\s=\s\((.*?\n)\s*\.\.<name>,\s*\)\s*\n?\n"
    *
    * These `#book(cfg)` configurations allows to modify certain aspects of the
-   * book and manage its appearence and structure. Built with some thoughful
+   * book and manage its appearance and structure. Built with some thoughful
    * ready-to-use defaults that make its use optional, so that beginners and
    * casual writers can safely ignore it and _just write_.
    * 
@@ -202,7 +203,7 @@
         * Make chapter numbering restart after each book part. **/
     two-sided: true,
       /** <- boolean
-        * Otimizes the content to be printed on both sides of the page (front
+        * Optimizes the content to be printed on both sides of the page (front
         * and back), with important elements always starting at the next front
         * side (oddly numbered) — inserts blank pages in between, if needed.**/
     link-readable: true,
@@ -744,7 +745,7 @@
      * :catalog: arg `typc` "(?s)\s*let <name> = \((.*?\n)\s*\.\.<name>.*?\)\s*\n"
      * 
      * These `#book(catalog)` options set the data used to create the
-     * "cataloging in publication" board. Other needed informations are
+     * "cataloging in publication" board. Other needed information are
      * automatically retrieved from the book data, but at least one of these
      * options must be explicitly set to generate the board; otherwise it will
      * be just ignored.
@@ -762,7 +763,7 @@
         * The organization or person responsible for releasing the book. **/
       isbn: none,
         /** <- string | content
-          * The _International Standard Book Number_, used to indentify the book. **/
+          * The _International Standard Book Number_, used to identify the book. **/
       subjects: (),
       /** <- array
         * A list of subjects related to the book; must be an array of strings. **/

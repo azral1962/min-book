@@ -13,9 +13,8 @@
 // UTIL: Check if given value is of one of the types
 #let type-check(arg, ..types, test: false) = {
   let match = false
-  let context() = {[#context].func()}
   
-  if types.pos().contains(type(arg)) {
+  if types.pos().contains(type(arg) ) {
     match = true
   }
   
