@@ -1,7 +1,7 @@
 // NAME: Minimal Books
 // REQ: numbly
 // TODO: Implement ePub output when available
-// TODO: Compartimentalize code — is over 1.000 lones already!
+// TODO: Compartimentalize code — is over 1.000 lines already!
 
 #import "@preview/numbly:0.1.0": numbly
 

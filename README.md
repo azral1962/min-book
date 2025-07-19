@@ -1,7 +1,12 @@
 # Minimal Books
 
 <center>
-  Simple and complete books without introducing new syntax
+
+Simple and complete books without introducing new syntax  
+
+[![Tests](https://github.com/mayconfmelo/min-book/actions/workflows/tests.yml/badge.svg)](https://github.com/mayconfmelo/min-book/actions/workflows/tests.yml)
+[![Build](https://github.com/mayconfmelo/min-book/actions/workflows/build.yml/badge.svg)](https://github.com/mayconfmelo/min-book/actions/workflows/build.yml)
+
 </center>
 
 
