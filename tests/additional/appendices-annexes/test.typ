@@ -1,0 +1,40 @@
+#import "/src/lib.typ": annexes, appendices, book
+#set page(height: auto)
+
+#show: book.with(
+  title: "",
+  authors: "",
+  cover: none,
+  titlepage: none,
+  toc: none,
+  cfg: (
+    two-sided: false,
+    cover-back: false,
+  )
+)
+
+
+#appendices[
+  = One Appendix
+  #lorem(50)
+  == An Appendix Section
+  #lorem(50)
+  
+  = Another Appendix
+  #lorem(50)
+  == An Appendix Section
+  #lorem(50)
+]
+
+
+#annexes[
+  = One Annex
+  #lorem(50)
+  == An Annex Section
+  #lorem(50)
+  
+  = Another Annex
+  #lorem(50)
+  == An Annex Section
+  #lorem(50)
+]
