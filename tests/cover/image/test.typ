@@ -8,6 +8,7 @@
   titlepage: none,
   toc: none,
   cfg: (
+    font: "Libertinus Serif",
     two-sided: false,
     cover-back: false,
   )

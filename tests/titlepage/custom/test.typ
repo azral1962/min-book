@@ -12,6 +12,7 @@
   cfg: (
     two-sided: false,
     cover-back: false,
+    font: "Libertinus Serif",
   ),
   []
 )

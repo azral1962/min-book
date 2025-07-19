@@ -5,6 +5,8 @@
 #let volume = "Volume 1"
 #let date = 2025
 #let volume = "Volume 1"
+#let title-font = "Libertinus Serif" // "Cinzel"
+#let text-font = "Libertinus Serif"  // "Alice"
 
 
 #let cover-bg = context {
@@ -44,7 +46,7 @@
     #set par(leading: 2em)
     #context text(
       size: page.width * 0.09,
-      font: "Cinzel",
+      font: title-font,
       title
     )
     #linebreak()
@@ -53,7 +55,7 @@
     v(1cm)
       context text(
         size: page.width * 0.04,
-        font: "Alice",
+        font: text-font,
         subtitle
       )
       //v(4cm)
@@ -63,7 +65,7 @@
     #block(width: 52%)[
       #context text(
         size: page.width * 0.035,
-        font: "Alice",
+        font: text-font,
         volume + "\n" +
         authors + "\n" +
         str(date)

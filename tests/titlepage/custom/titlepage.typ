@@ -35,7 +35,7 @@
   #block(width: 52%)[
     #context text(
       size: page.width * 0.035,
-      volume + ", " +
+      volume + "\n" +
       edition + "\n" +
       authors + "\n" + 
       date.display("[year]")

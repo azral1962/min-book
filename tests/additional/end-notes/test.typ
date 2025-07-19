@@ -10,11 +10,12 @@
   cfg: (
     two-sided: false,
     cover-back: false,
+    font: "Libertinus Serif",
   )
 )
 
 #lorem(25)#note[Foo]
-#lorem(25)#note[bar]
+#lorem(25)#note[Bar]
 
 #lorem(50)#note[Baz]
 
