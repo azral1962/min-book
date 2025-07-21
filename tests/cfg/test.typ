@@ -2,6 +2,7 @@
 #set page(height: auto)
 
 #show: book.with(
+  // cfg data
   cfg: (
     numbering-style: auto,
     page: "a5",
@@ -27,6 +28,7 @@
     two-sided: true,
     link-readable: true,
   ),
+  // Additional book data
   title: "Book Author",
   authors: "Book Author",
   cover: none,

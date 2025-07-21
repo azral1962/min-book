@@ -2,12 +2,14 @@
 #set page(height: auto)
 
 #book(
+  // Part and chapter data
   part: "Part",
   chapter: "Chapter",
   [
     = Section A
     == Section A.1
   ],
+  // Additional book data
   title: "",
   authors: "",
   cover: none,
@@ -21,12 +23,14 @@
 
 
 #book(
+  // Part and chapter data
   part: none,
   chapter: "Chapter",
   [
     = Section B
     == Section B.1
   ],
+  // Additional book data
   title: "",
   authors: "",
   cover: none,
@@ -40,12 +44,14 @@
 
 
 #book(
+  // Part and chapter data
   part: none,
   chapter: none,
   [
     = Section C
     == Section C.1
   ],
+  // Additional book data
   title: "",
   authors: "",
   cover: none,

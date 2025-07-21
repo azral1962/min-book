@@ -1,6 +1,7 @@
 #import "/src/lib.typ": note, book
 #set page(height: auto)
 
+// Additional book data
 #show: book.with(
   title: "",
   authors: "",
@@ -13,6 +14,7 @@
     font: "Libertinus Serif",
   )
 )
+
 
 #lorem(25)#note[Foo]
 #lorem(25)#note[Bar]

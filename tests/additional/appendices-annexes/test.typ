@@ -1,6 +1,7 @@
 #import "/src/lib.typ": annexes, appendices, book
 #set page(height: auto)
 
+// Additional book data
 #show: book.with(
   title: "",
   authors: "",
