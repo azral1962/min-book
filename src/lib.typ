@@ -1,9 +1,12 @@
 // NAME: Minimal Books
 // REQ: numbly
 // TODO: Implement ePub output when available
-// TODO: Compartimentalize code — is over 1.000 lines already!
+// IDEA: Use transl fluent l10n
 
-#import "@preview/numbly:0.1.0": numbly
+#import "additional/notes.typ": note
+#import "additional/ambient.typ": appendices, annexes
+#import "additional/horizontalrule.typ": horizontalrule, hr
+#import "additional/blockquote.typ": blockquote
 
 /**
  * = Quick Start
@@ -109,13 +112,12 @@
   /** <- content
     * The book content.**/
 ) = {
+  import "@preview/numbly:0.1.0": numbly
   import "utils.typ"
   
-  utils.required-args(
-    title: title,
-    authors: authors,
-    body: body
-  )
+  // Required arguments
+  assert.ne(title, none)
+  assert.ne(authors, none)
   
   /**
    * = Advanced Configurations <adv-config>
@@ -262,10 +264,9 @@
   }
   utils.cfg(add: "translation", translation)
   
-  let part = if part == auto {translation.part} else {part}
-  let chapter = if chapter == auto {translation.chapter} else {chapter}
+  if part == auto {part = translation.part}
+  if chapter == auto {chapter = translation.chapter}
   
-
   /**
    * = Advanced Numbering
    * 
@@ -500,245 +501,47 @@
     }
     else {it}
   }
-
+  
   // Insert notes of a section at its end, before next heading:
-  // NOFIX: This really clumsy code is the only way found to implement #note.
+  import "additional/notes.typ"
+  body = notes.insert(body)
   
-  let new-body = body.children
-  let h-index = ()
-  
-  // #note: Get index of all headings in body.children
-  for n in range(new-body.len()) {
-    let item = new-body.at(n)
-    
-    if item.func() == heading {
-      h-index.push(n)
-    }
-  }
-
-  // #note: Insert anchor <note> before each heading obtained
-  for n in range(h-index.len()) {
-    new-body.insert(h-index.at(n) + n, [#metadata("Note anchor") <note>])
-  }
-
-  // #note:Insert a final anchor <note> at the end of the document
-  new-body.push([#metadata("Note anchor") <note>])
-
-  // #note: Make the edited new-body into the document body
-  let body = new-body.join()
-
-  // #note: Make the first note be note 1, instead of note 0.
-  counter("min-book-note-count").step()
-
-  // #note: Swap the <note> for the actual notes in the current section, if any.
-  show <note>: it => {
-    context if utils.cfg().final().at("note", default: (:)) != (:) {
-      // Find the level (numbering) of current section heading:
-      let selector = selector(heading).before(here())
-      let level = counter(selector).display().replace(".", "-")
-
-      // Show notes only if there are any in this section
-      let notes = utils.cfg(get: "note." + level)
-      if notes != none {
-        pagebreak(weak: true)
-
-        // Insert the notes:
-        for note in notes {
-          par(
-            first-line-indent: 0pt,
-            spacing: 0.75em,
-            hanging-indent: 1em
-          )[
-            // Link to the note marker in the text:
-            #link(
-              label(level + "_" + str(note.at(0))),
-              strong(numbering(note.at(2), note.at(0)) + ":")
-            )
-            // Insert <LEVEl_NUMBER_content> for cross-reference
-            #label(level + "_" + str(note.at(0)) + "_content")
-            #note.at(1)
-          ]
-        }
-
-        pagebreak(weak: true)
-      }
-
-      // Make every section notes start at note 1
-      counter("min-book-note-count").update(1)
-    }
-  }
-
-  show super: it => {
-    let note-regex = regex("::[0-9-_]+::")
-    
-    // #note: Parses #super("NUMBER ::LABEL::") -> #link(<LABEL>)[#super("NUMBER")]
-    if it.body.text.ends-with(note-regex) {
-      let note-label = it.body.text.find(note-regex).trim(":") + "_content"
-      let note-number = it.body.text.replace(note-regex, "").trim()
-
-      // Link to the actual note content:
-      link(label(note-label))[#super(note-number)]
-    } else {
-      it
-    }
-  }
-  
-  let volume = if volume > 0 [#translation.volume.at(0) #volume\ ] else []
-  let edition = if edition > 0 [#translation.edition.at(0) #edition\ ] else []
-  
-  if cover != none {
-    if cover == auto {
-      let authors = if type(authors) == array {authors.join(", ")} else {authors}
-      
-      let cover-bg = context {
-          let m = page.margin
-          let frame = image(
-              width: 93%,
-              "assets/frame.svg"
-            )
-            
-          if type(m) != dictionary {
-            m = (
-              top: m,
-              bottom: m,
-              left: m,
-              right: m
-            )
-          }
-          
-          v(m.top * 0.25)
-          align(center + top, frame)
-          
-          align(center + bottom, rotate(180deg, frame))
-          v(m.bottom * 0.25)
-        }
-      
-      set text(
-        fill: cfg.cover-txtcolor,
-        hyphenate: false
-      )
-      set par(justify: false)
-      
-      page(
-        margin: (x: 12%, y: 12%),
-        fill: cfg.cover-bgcolor,
-        background: cover-bg,
-      )[
-        #align(center + horizon)[
-          #set par(leading: 2em)
-          #context text(
-            size: page.width * 0.09,
-            font: cfg.cover-fonts.at(0),
-            title
-          )
-          #linebreak()
-          #set par(leading: cfg.line-space)
-          #if subtitle != none {
-          v(1cm)
-            context text(
-              size: page.width * 0.04,
-              font: cfg.cover-fonts.at(1),
-              subtitle
-            )
-            //v(4cm)
-          }
-        ]
-        #align(center + bottom)[
-          #block(width: 52%)[
-            #context text(
-              size: page.width * 0.035,
-              font: cfg.cover-fonts.at(1),
-              volume +
-              authors + "\n" +
-              date.display("[year]")
-            )
-          ]
-        ]
-      ]
-    }
-    else if type(cover) == content {
-      if cover.func() == image {
-        set image(
-          fit: "stretch",
-          width: 100%,
-          height: 100%
-        )
-        set page(background: cover)
-      }
-      else {
-        cover
-      }
-    }
-    else if cover != none {
-      panic("Invalid page argument value: \"" + cover + "\"")
-    }
-    
-    pagebreak(to: break-to)
-  }
-  
-  // Enable automatic titlepage when generating catalog
+  if volume == 0 {volume = ""}
+  if edition == 0 {edition = ""}
   if titlepage == none and catalog != none and cfg.two-sided {
+    // Automatic blank titlepage when generating catalog
     titlepage = []
   }
 
+  if cover != none {
+    import "components/cover.typ": init as add-cover
+    
+    /**
+     * = Book cover
+     * 
+     * By default, _min-book_ automatically generates a book cover if `#book(cover)`
+     * is not set, it's also possible to set a custom cover image or create one
+     * using Typst code. The default automatic cover
+     * #url("https://typst.app/project/r2QBJy0CmrAmvMWT1NmUEW", "code") can be a good start
+     * as a base to create your own version.
+     *
+    **/
+    
+    add-cover(cover, title, subtitle, date, authors, volume, cfg, translation)
+    pagebreak(to: break-to)
+  }
+
   if titlepage != none {
-    if titlepage == auto {
-      set text(
-        fill: luma(50),
-        hyphenate: false
-      )
-      set par(justify: false)
-      
-      let authors = if type(authors) == array {authors.join(", ")} else {authors}
+    import "components/titlepage.typ": init as add-titlepage
     
-      align(center + horizon)[
-        #set par(leading: 2em)
-        #context text(
-          size: page.width * 0.09,
-          title
-        )
-        #linebreak()
-        #set par(leading: cfg.line-space)
-        #if subtitle != none {
-        v(1cm)
-          context text(
-            size: page.width * 0.04,
-            subtitle
-          )
-          //v(4cm)
-        }
-      ]
-      align(center + bottom)[
-        #block(width: 52%)[
-          #context text(
-            size: page.width * 0.035,
-            volume +
-            edition +
-            authors + "\n" + 
-            date.display("[year]")
-          )
-        ]
-      ]
-    }
-    else if type(titlepage) == content {
-      titlepage
-    }
-    else {
-      panic("Invalid titlepage argument value: \"" + repr(titlepage) + "\"")
-    }
-    
+    add-titlepage(
+      titlepage, title, subtitle, authors, date, volume, edition, translation
+    )
     if catalog != none {pagebreak()}
     else {pagebreak(to: break-to, weak: true)}
   }
 
   if catalog != none {
-    set par(
-      first-line-indent: 0pt,
-      spacing: 1em
-    )
-    
-    show rect: set align(center + bottom)
-    
     /**
      * = Cataloging in Publication <catalog>
      * 
@@ -790,76 +593,10 @@
         * generally additional information that complements the board data. **/
       ..catalog,
     )
-    let author = if type(authors) == array {authors.at(0)} else {authors}
-    author = author.replace(regex("^(.+)\s([^\s]+)$"), m => {
-      if m.captures.len() >= 2 {
-        m.captures.last()
-        ", "
-        m.captures.first()
-      }
-      else {
-        m.text
-      }
-    })
     
-    if catalog.before != none {catalog.before}
+    import "components/catalog.typ": new
     
-    rect(
-      width: 12cm,
-      inset: 1cm,
-      align(
-        left + top, {
-        
-        set box(width: 1fr)
-        set par(
-          first-line-indent: 0pt,
-          hanging-indent: 1.5em
-        )
-        
-        if catalog.id != none [#catalog.id #parbreak()]
-        
-        author
-        if not author.ends-with(".") [.]
-        [ ]
-        
-        title
-        if subtitle != none [: #subtitle]
-        [. ]
-        catalog.place
-        if catalog.place != none and catalog.publisher != none [: ]
-        catalog.publisher
-        if catalog.publisher != none or catalog.publisher != none [, ]
-        [#date.year().]
-        v(1em)
-        
-        if catalog.isbn != none [
-          ISBN #catalog.isbn
-          #v(1em)
-        ]
-        if catalog.subjects != () {
-          for item in catalog.subjects.enumerate() {
-            str(item.at(0) + 1) + ". " + item.at(1)
-            h(10pt)
-          }
-        }
-        if catalog.access != () {
-          let access = if type(catalog.access) == str {(author, catalog.access)}
-            else {(author, ..catalog.access)}
-          
-          for item in access.enumerate() {
-            numbering("I.", item.at(0) + 1) + " " + item.at(1)
-            h(10pt)
-          }
-        }
-        v(1em)
-        
-        if catalog.ddc != none {box[]}
-        if catalog.udc != none {box(align(center, catalog.udc))}
-        if catalog.ddc != none {box(align(right, catalog.ddc))}
-      })
-    )
-    
-    if catalog.after != none {catalog.after}
+    new(catalog, title, subtitle, authors, date, volume, edition)
   }
   
   if errata != none {
@@ -986,243 +723,9 @@
 
 
 /**
- * = Book cover
- * 
- * By default, _min-book_ automatically generates a book cover if `#book(cover)`
- * is not set, it's also possible to set a custom cover image or create one
- * using Typst code. The default automatic cover
- * #url("https://typst.app/project/r2QBJy0CmrAmvMWT1NmUEW", "code") can be a good start
- * as a base to create your own version.
- * 
  * = Additional Commands
  * 
  * These commands are provided as a wa6 to access some fancy book features that
  * cannot be implemented by re-working and adapting existing Typst elements. They
  * are completely optional and is perfectly possible to write an entire book.
 **/
-
-
-/**
- * == Note Command
- * 
- * :note:
- * 
- * Adds an end note, an alternative for footnotes but placed inside of the page
- * instead of its margins. End notes appear at its own page at the end of the
- * current section, right before the next heading.
-**/
-#let note(
-  numbering-style: auto,
-  /** <- auto | array | string
-    * Custom note numbering — a standard numbering (`string`) or a #univ("numbly")
-    * numbering (`array`). **/
-  content,
-  /** <- content <required>
-    * The content of the end note. **/
-) = context {
-  import "utils.typ"
-  
-  // Find the level (numbering) of current section heading:
-  let selector = selector(heading).before(here())
-  let level = counter(selector).display().replace(".","-")
-  
-  let numbering-style = numbering-style
-  if numbering-style == auto {
-    numbering-style = utils.cfg(get: "note.numbering", "1")
-  }
-  else {
-    utils.cfg(add: "note.numbering", numbering-style)
-  }
-  
-  let count = counter("min-book-note-count")
-  counter("min-book-note-count").step()
-  
-  let this-note = (
-    count.get().at(0),
-    content,
-    numbering-style
-  )
-  
-  // Push a new value to note.level array
-  utils.cfg(add: "note." + level + "+", this-note)
-
-  let note-number = numbering(numbering-style, ..count.get())
-  let note-label = level + "_" + numbering("1", ..count.get())
-
-  // Set note as #super[NUMBER ::LABEL::] to be managed later
-  [#super(note-number + " ::" + note-label + "::")#label(note-label)]
-}
-
-
-/**
- * == Appendices and Annexes Command
- * 
- * :appendices:
- * 
- * Creates an special ambient to write or include multiple appendices. An
- * appendix is any important additional data left out of the main document for
- * some reason, but directly referenced or needed by it. Inside this ambient,
- * all level 1 heading is a new appendix.
-**/
-#let appendices(
-  type: "appendix",
-  title: auto,
-  /** <- array | auto
-    * The name of the appendices — an array `(SINGULAR, PLURAL)` to each
-    * "Appendix" and the part "Appendices" names, respectively, or
-    * defaults to these same words in book language (`auto`). **/
-  numbering-style: (
-    "",
-    "{2:A}.\n",
-    "{2:A}.{3:1}. ",
-    "{2:A}.{3:1}.{4:1}. ",
-    "{2:A}.{3:1}.{4:1}.{5:1}. ",
-    "{2:A}.{3:1}.{4:1}.{5:1}.{6:a}. ",
-  ),
-  /** numbering-style: <- array | string
-    * Custom heading numbering for appendices — a standard numbering (`string`),
-    * or a #univ("numbly") numbering (`array`). **/
-  body
-  /** <- content
-    * The appendices content. **/
-) = context {
-  import "utils.typ"
-
-  // Set name for "appendix" and "appendices" titles
-  let (singular-title, plural-title) = if title == auto {
-      //book-tr-state.get().at(type)
-      utils.cfg(get: "translation").at(type)
-    } else {
-      title
-    }
-  
-  let break-to = utils.cfg(get: "break-to")
-  
-  set heading(
-    offset: 1,
-    numbering: utils.numbering(
-        patterns: (numbering-style,),
-        scope: (
-          h1: "",
-          h2: singular-title,
-          n: 1
-        )
-      ),
-    supplement: singular-title
-  )
-  
-  show heading.where(level: 2): it => {
-    pagebreak(to: break-to)
-    it
-  }
-  
-  
-  pagebreak(weak: true, to: break-to)
-  
-  // Main title (plural)
-  heading(
-    plural-title,
-    level: 1,
-    numbering: none
-  )
-  
-  counter(heading).update(0)
-  
-  body
-}
-
-
-/** 
- * == Annexes Command
- * 
- * :annexes:
- * 
- * Creates an special ambient to write or include multiple annexes. An annex is
- * any important third-party data directly cited or referenced in the main
- * document. Inside this ambient, all level 1 heading is a new annex.
-**/
-#let annexes(
-  type: "annex",
-  title: auto,
-  /** <- auto | array
-    * The name of the annexes — an array `(SINGULAR, PLURAL)` to each
-    * "Annex" and the part "Annexes" names, respectively, or
-    * defaults to these same words in book language (`auto`). **/
-  numbering-style: (
-    "",
-    "{2:A}.\n",
-    "{2:A}.{3:1}. ",
-    "{2:A}.{3:1}.{4:1}. ",
-    "{2:A}.{3:1}.{4:1}.{5:1}. ",
-    "{2:A}.{3:1}.{4:1}.{5:1}.{6:a}. ",
-  ),
-  /** numbering-style: <- array | string
-    * Custom heading numbering for annexes — a standard numbering (`string`), or
-    * a #univ("numbly") numbering (`array`). **/
-  body
-  /** <- content
-    * The annexes content. **/
-) = appendices(
-  type: type,
-  title: title,
-  numbering-style: numbering-style,
-  body
-)
-
-
-/**
- * == Horizontal Rule Command
- * 
- * :horizontalrule:
- * 
- * Adds a horizontal rule, visual separators used to distinguish subtle changes
- * of subject in extensive texts.
-**/
-#let horizontalrule(
-  symbol: [#sym.ast.op #sym.ast.op #sym.ast.op],
-  /** <- content
-    * Decoration in the middle of the horizontal rule — defaults to 3 asterisks. **/
-  spacing: 1em,
-  /** <- length
-    * Vertical space before and after the horizontal rule. **/
-  line-size: 15%,
-) = {
-  v(spacing, weak: true)
-  
-  align(
-    center,
-    block(width: 100%)[
-      #box(
-        height: 1em,
-        align(
-          center + horizon,
-          line(length: line-size)
-        )
-      )
-      #box(height: 1em, symbol)
-      #box(
-        height: 1em,
-        align(
-          center + horizon,
-          line(length: line-size)
-        )
-      )
-    ]
-  )
-  
-  v(spacing, weak: true)
-}
-
-/// The `#horizontalrule` command is also available as the smaller `#hr` alias.
-#let hr = horizontalrule
-
-
-/**
- * == Block Quote Command
- * 
- * :blockquote:
- * 
- * Adds a block of quotation, a simple alias to `#quote(block: true)`, with a
- * smaller and more semantic `#quote(attribution)` option as `#blockquote(by)`.
-**/
-#let blockquote(by: none, ..args) = quote(block: true, attribution: by, ..args)

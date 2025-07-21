@@ -38,10 +38,8 @@ clean:
   rm -r dev/example/ 2>/dev/null || true
   rm -r dev/pkg/ 2>/dev/null || true
   rm -r dev/{{name}} 2>/dev/null || true
-  rm -r dev/{{name}}/ 2>/dev/null || true
-  find tests -iname diff -exec rm -r {} + 2>/dev/null || true
-  find tests -iname out -exec rm -r {} + 2>/dev/null || true
-
+  tt util clean
+  
 # enables @local/0.0.0.
 symlink:
   bash scripts/dev-link.sh "{{root}}"

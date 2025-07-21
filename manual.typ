@@ -9,7 +9,12 @@
   package: "min-book:1.1.0",
   license: "MIT",
   logo: image("docs/assets/manual-logo.png"),
-  from-comments: read("src/lib.typ")
+  from-comments:
+    read("src/lib.typ") +
+    read("src/additional/notes.typ") +
+    read("src/additional/ambient.typ") +
+    read("src/additional/horizontalrule.typ") +
+    read("src/additional/blockquote.typ")
 )
 
 = Copyright
