@@ -28,7 +28,6 @@
   #lorem(50)
 ]
 
-
 #annexes[
   = One Annex
   #lorem(50)

@@ -1,4 +1,4 @@
-#import "/src/lib.typ": book
+#import "/src/lib.typ": book, fluent
 #set page(height: auto)
 
 #show: book.with(
@@ -7,7 +7,7 @@
     numbering-style: auto,
     page: "a5",
     lang: "en",
-    lang-data: toml("/src/assets/lang.toml"),
+    lang-data: eval( fluent("/src/l10n/", lang: "en") ),
     justify: true,
     line-space: 0.5em,
     par-margin: 0.65em,

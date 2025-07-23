@@ -3,8 +3,8 @@
 
 #book(
   // Part and chapter data
-  part: "Part",
-  chapter: "Chapter",
+  // part: "Part",
+  // chapter: "Chapter",
   [
     = Section A
     == Section A.1
@@ -25,7 +25,6 @@
 #book(
   // Part and chapter data
   part: none,
-  chapter: "Chapter",
   [
     = Section B
     == Section B.1
