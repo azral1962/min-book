@@ -1,5 +1,6 @@
-#let init(cover, title, subtitle, date, authors, volume, cfg, translation) = {
+#let new(cover, title, subtitle, date, authors, volume, cfg) = {
   if cover == auto {
+    
     let authors = if type(authors) == array {authors.join(", ")} else {authors}
     
     let cover-bg = context {
@@ -25,7 +26,10 @@
         v(m.bottom * 0.25)
       }
     
-    if volume != "" {volume = [#translation.volume.at(0) #volume\ ]}
+    volume = if volume > 0 {
+        import "@preview/transl:0.1.0": transl
+        transl("volume", args: (n: volume)) + "\n"
+      } else {""}
     
     set text(
       fill: cfg.cover-txtcolor,

@@ -213,3 +213,17 @@
     return this
   }
 }
+
+
+// DEBUG: Get the configuration database at this point
+#let show-cfg(..mode) = {
+
+  set page(width: auto, height: auto, margin: 1cm)
+  
+  let data = if mode.pos() != () {cfg().final()} else {cfg().get()}
+  
+  raw(
+    lang: "yaml",
+    yaml.encode(data)
+  )
+}

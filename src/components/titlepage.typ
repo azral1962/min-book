@@ -1,6 +1,4 @@
-#let init(
-  titlepage, title, subtitle, authors, date, volume, edition, translation
-) = {
+#let new(titlepage, title, subtitle, authors, date, volume, edition) = {
   if titlepage == auto {
     set text(
       fill: luma(50),
@@ -8,11 +6,17 @@
     )
     set par(justify: false)
     
-    let authors = if type(authors) == array {authors.join(", ")} else {authors}
+    if type(authors) == array {authors = authors.join(", ")}
   
-    if volume != "" {volume = [#translation.volume.at(0) #volume\ ]}
-    if edition != "" {edition = [#translation.edition.at(0) #edition\ ]}
-
+    volume = if volume > 0 {
+        import "@preview/transl:0.1.0": transl
+        transl("volume", args: (n: volume)) + "\n"
+      } else {""}
+      
+    edition = if edition > 0 {
+        import "@preview/transl:0.1.0": transl
+        transl("edition", args: (n: edition)) + "\n"
+      } else {""}
   
     align(center + horizon)[
       #set par(leading: 2em)

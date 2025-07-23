@@ -31,15 +31,10 @@
     * The appendices content. **/
 ) = context {
   import "../utils.typ"
-
-  // Set name for "appendix" and "appendices" titles
-  let (singular-title, plural-title) = if title == auto {
-      //book-tr-state.get().at(type)
-      utils.cfg(get: "translation").at(type)
-    } else {
-      title
-    }
+  import "@preview/transl:0.1.0": transl
   
+  let singular-title = transl(type, args: (number: "sing"), mode: str)
+  let plural-title = transl(type, args: (number: "plur"), mode: str)
   let break-to = utils.cfg(get: "break-to")
   
   set heading(

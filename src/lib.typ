@@ -112,7 +112,7 @@
   /** <- content
     * The book content.**/
 ) = {
-  import "@preview/numbly:0.1.0": numbly
+  import "@preview/transl:0.1.0": transl, fluent
   import "utils.typ"
   
   // Required arguments
@@ -131,6 +131,7 @@
    * 
   **/
   if cfg == auto {cfg = (:)}
+  cfg.insert("lang", "en")
   let cfg = (
     numbering-style: auto,
       /** <- array | string | none
@@ -143,7 +144,7 @@
     lang: "en",
       /** <- string
         * Book language. **/
-    lang-data: toml("assets/lang.toml"),
+    lang-data: eval( fluent("l10n/", lang: cfg.lang) ),
       /** <- toml
         * Translation file — see the `src/assets/lang.toml` file. **/
     justify: true,
@@ -215,57 +216,18 @@
     ..cfg,
   )
 
-  date = utils.date(date)
-  
-  // Translate cfg.two-sided into a #pagebreak(to) value
+  // Convert cfg.two-sided into a #pagebreak(to) value
   let break-to = if cfg.two-sided {"odd"} else {none}
   utils.cfg(add: "break-to", break-to)
   
+  transl(data: cfg.lang-data)
+  
+  if part == auto {part = transl("part", to: cfg.lang, data: cfg.lang-data)}
+  if chapter == auto {chapter = transl("chapter", to: cfg.lang, data: cfg.lang-data)}
+  
   if type(cfg.page) == str {cfg.page = (paper: cfg.page)}
-
-  set document(
-    title: if subtitle != none {title + " - " + subtitle} else {title},
-    author: authors,
-    date: date
-  )
-  set page(
-    margin: cfg.margin,
-    ..cfg.page
-  )
-  set par(
-    justify: cfg.justify,
-    leading: cfg.line-space,
-    spacing: cfg.par-margin, 
-    first-line-indent: cfg.first-line-indent
-  )
-  set text(
-    font: cfg.font,
-    size: cfg.font-size,
-    lang: cfg.lang
-  )
-  set terms(
-    separator: [: ],
-    tight: true,
-    hanging-indent: 1em,
-  )
-  set list(marker: ([•], [–]))
   
-  // Set part and chapter translations based on text.lang
-  let translation = cfg.lang-data.lang.at(cfg.lang)
-  
-  // Fallback system when #text.lang not in #book(cfg.lang-data) file
-  if translation == none {
-    let lang = cfg.lang-data.conf.at("default-lang", default: none)
-    translation = cfg.lang-data.at("lang").at(lang)
-    
-    if translation == none {
-      panic("Translation not found for " + cfg.lang + " (fallback failed)")
-    }
-  }
-  utils.cfg(add: "translation", translation)
-  
-  if part == auto {part = translation.part}
-  if chapter == auto {chapter = translation.chapter}
+  date = utils.date(date)
   
   /**
    * = Advanced Numbering
@@ -297,7 +259,33 @@
     "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.\n",
     "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.{6:a}. ",
   )
-
+  
+  set document(
+    title: if subtitle != none {title + " - " + subtitle} else {title},
+    author: authors,
+    date: date
+  )
+  set page(
+    margin: cfg.margin,
+    ..cfg.page
+  )
+  set par(
+    justify: cfg.justify,
+    leading: cfg.line-space,
+    spacing: cfg.par-margin, 
+    first-line-indent: cfg.first-line-indent
+  )
+  set text(
+    font: cfg.font,
+    size: cfg.font-size,
+    lang: cfg.lang
+  )
+  set terms(
+    separator: [: ],
+    tight: true,
+    hanging-indent: 1em,
+  )
+  set list(marker: ([•], [–]))
   /**
    * = Book Parts
    *
@@ -506,15 +494,13 @@
   import "additional/notes.typ"
   body = notes.insert(body)
   
-  if volume == 0 {volume = ""}
-  if edition == 0 {edition = ""}
   if titlepage == none and catalog != none and cfg.two-sided {
     // Automatic blank titlepage when generating catalog
     titlepage = []
   }
 
   if cover != none {
-    import "components/cover.typ": init as add-cover
+    import "components/cover.typ": new
     
     /**
      * = Book cover
@@ -526,17 +512,14 @@
      * as a base to create your own version.
      *
     **/
-    
-    add-cover(cover, title, subtitle, date, authors, volume, cfg, translation)
+    new(cover, title, subtitle, date, authors, volume, cfg)
     pagebreak(to: break-to)
   }
 
   if titlepage != none {
-    import "components/titlepage.typ": init as add-titlepage
+    import "components/titlepage.typ": new
     
-    add-titlepage(
-      titlepage, title, subtitle, authors, date, volume, edition, translation
-    )
+    new(titlepage, title, subtitle, authors, date, volume, edition)
     if catalog != none {pagebreak()}
     else {pagebreak(to: break-to, weak: true)}
   }
@@ -602,7 +585,7 @@
   if errata != none {
     pagebreak(to: break-to, weak: true)
     heading(
-      translation.errata,
+      transl("errata"),
       numbering: none,
       outlined: false,
     )
@@ -624,7 +607,7 @@
     pagebreak(to: break-to, weak: true)
     // INFO: Acknowledgements without title for now, seems cleaner
     // heading(
-    //   translation.acknowledgements  ,
+    //   transl("thanks"),
     //   numbering: none,
     //   outlined: false,
     // )
@@ -721,7 +704,6 @@
   }
 }
 
-
 /**
  * = Additional Commands
  * 
@@ -729,3 +711,26 @@
  * cannot be implemented by re-working and adapting existing Typst elements. They
  * are completely optional and is perfectly possible to write an entire book.
 **/
+
+
+/**
+ * == Fluent Data
+ *
+ * :fluent:
+ * 
+ * This helper command is a wrapper around `#transl.fluent`, used by
+ * #univ("transl") to get Fluent localization and translation data.
+**/
+#let fluent(
+  data,
+  /** <- string
+   * Folder of the _ftl_ files, or `"file!DATA"` where `DATA` is the Fluent
+   * data itself. **/
+  lang: ()
+  /** <- array | string
+   * The language of the Fluent data. **/
+) = {
+  import "@preview/transl:0.1.0": fluent
+  
+  fluent(data, lang: lang)
+}

@@ -13,35 +13,35 @@
   if title == none {title = ""}
   if subtitle != none {title = title + " – " + subtitle}
   if authors == none {authors = ""}
-  if volume == 0 {edition = ""}
-  if edition == 0 {edition = "1"}
+  if volume == 0 {volume = ""}
+  if edition == 0 {edition = 1}
   if catalog.publisher == none {catalog.publisher = ""}
   if catalog.place == none {catalog.place = ""}
-  if type(authors) == array {authors = authors.at(0) + " et al."}
-  
-  // Book Author -> Author, Book
-  authors = authors.replace(regex("^(.+)\s([^\s]+)$"), m => {
-    if m.captures.len() == 2 {
-      m.captures.last()
-      ", "
-      m.captures.first()
-    }
+
+  authors = if type(authors) == array {authors = authors.at(0) + " et al."}
     else {
-      m.text
+      // Book Author -> Author, Book
+      authors.replace(regex("^(.+)\s([^\s]+)$"), m => {
+        if m.captures.len() == 2 {
+          m.captures.last()
+          ", "
+          m.captures.first()
+        }
+        else {m.text}
+      })
     }
-  })
   
   // Bibliographic citation data
   let bib = "
     this-book:
       type: book
-      title: " + title + "
-      author: " + authors + "
+      title: " + str(title) + "
+      author: " + str(authors) + "
       date: " + str(date.year()) + "
       publisher: 
-        name: " + catalog.publisher + "
-        location: " + catalog.place + "
-      location: " + catalog.place + "
+        name: " + str(catalog.publisher) + "
+        location: " + str(catalog.place) + "
+      location: " + str(catalog.place) + "
       volume: " + str(volume) + "
       edition: " + str(edition)
   
