@@ -150,7 +150,7 @@
     justify: true,
       /** <- boolean
         * Text justification. **/
-    line-space: 0.5em,
+    line-space: 0.54em,
       /** <- length
         * Space between each line in a paragraph. **/
     par-margin: 0.65em,
@@ -163,7 +163,7 @@
     margin: (x: 15%, y: 14%),
       /** <- length
         * Page margin. **/
-    font: ("Book Antiqua", "Times New Roman"),
+    font: ("TeX Gyre Pagella", "Book Antiqua"),
       /** <- string | array
         * Text font family, and fallback options (`array`). **/
     font-math: "Asana Math",

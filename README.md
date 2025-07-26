@@ -53,7 +53,11 @@ possible and encouraged.
 <table>
   <tr>
     <td>Text:</td>
-    <td>Book Antiqua, or<br/>Times New Roman</td>
+    <td>
+    <a href="https://www.gust.org.pl/projects/e-foundry/tex-gyre/pagella/qpl2_501otf.zip">
+    TeX Gyre Pagella
+    </a> or Book Antiqua
+    </td>
   </tr>
   <tr>
     <td>Math:</td>
