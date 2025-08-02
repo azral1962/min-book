@@ -3,10 +3,15 @@
 #set page(width: auto, height: auto)
 #set par(spacing: 0pt)
 #show table: it => box(it)
-#set text(font: ("Libertinus Serif", "SimSun"))
+#set text(font: ("Noto Serif", "Noto Serif Bengali"))
+//Noto Serif Bengali: https://fonts.google.com/noto/specimen/Noto+Serif+Bengali
+//Noto Serif:         https://fonts.google.com/noto/specimen/Noto+Serif 
 
-#let langs = ("en", "pt", "la", "zh", "hi", "es", "ar", "fr")
 #let data = ()
+#let langs = (
+  "en", "pt", "la", "zh", "hi", "es", "ar", "fr", 
+  "bn", "ru", "ur", "id", "de", "ja", "it"
+)
 
 #transl(data: eval( fluent("/src/l10n/", lang: langs) ))
 
