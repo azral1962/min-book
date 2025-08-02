@@ -11,10 +11,9 @@
 #let appendices(
   type: "appendix",
   title: auto,
-  /** <- array | auto
-    * The name of the appendices — an array `(SINGULAR, PLURAL)` to each
-    * "Appendix" and the part "Appendices" names, respectively, or
-    * defaults to these same words in book language (`auto`). **/
+  /** <- array of strings | auto
+    * Appendix singular and plural names — an array `(singular, plural)`, or
+    * defaults to `("Appendix", "Appendices")` in book language. **/
   numbering-style: (
     "",
     "{2:A}.\n",
@@ -23,9 +22,9 @@
     "{2:A}.{3:1}.{4:1}.{5:1}. ",
     "{2:A}.{3:1}.{4:1}.{5:1}.{6:a}. ",
   ),
-  /** numbering-style: <- array | string
-    * Custom heading numbering for appendices — a standard numbering (`string`),
-    * or a #univ("numbly") numbering (`array`). **/
+  /** numbering-style: <- array of strings | string
+    * Custom appendices numbering — a standard numbering or a #univ("numbly")
+    * numbering. **/
   body
   /** <- content
     * The appendices content. **/
@@ -84,9 +83,8 @@
   type: "annex",
   title: auto,
   /** <- auto | array
-    * The name of the annexes — an array `(SINGULAR, PLURAL)` to each
-    * "Annex" and the part "Annexes" names, respectively, or
-    * defaults to these same words in book language (`auto`). **/
+    * Annex singular and plural names — an array `(singular, plural)`, or
+    * defaults `("Annex", "Annexes")` in book language. **/
   numbering-style: (
     "",
     "{2:A}.\n",
@@ -95,9 +93,9 @@
     "{2:A}.{3:1}.{4:1}.{5:1}. ",
     "{2:A}.{3:1}.{4:1}.{5:1}.{6:a}. ",
   ),
-  /** numbering-style: <- array | string
-    * Custom heading numbering for annexes — a standard numbering (`string`), or
-    * a #univ("numbly") numbering (`array`). **/
+  /** numbering-style: <- array of strings | string
+    * Custom annexes numbering — a standard numbering, or a #univ("numbly")
+    * numbering. **/
   body
   /** <- content
     * The annexes content. **/

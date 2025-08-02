@@ -60,22 +60,20 @@
     * Series volume number, used when one extensive story is told through
     * multiple books, in order. **/
   authors: none,
-  /** <- string | array <required>
-    * Author (`string`) or authors (`array` of `strings`). **/
+  /** <- string | array of strings <required>
+    * Author or authors. **/
   date: datetime.today(),
   /** <- datetime | array | dictionary
-    * Publication date — an array or dictionary `(year, monty, day)` or `datetime`.**/
+    * Publication date — can be a `(year, month, day)` dictionary/array. **/
   cover: auto,
   /** <- auto | content | image | none
-    * Cover — generated automatically (`auto`) or manually (`content`), from an
-    * `image`, or not generated (`none`). **/
+    * Cover — generated automatically, using Typst, or using an image. **/
   titlepage: auto,
   /** <- auto | content | none
-    * Title page, shown after cover — generated automatically (`auto`) or
-    * manually (`content`). **/
+    * Title page, shown after cover — generated automatically or using Typst. **/
   catalog: none,
   /** <- dictionary | toml | yaml
-    * Cataloging in publication board, with library data — see @catalog. **/
+    * Cataloging in publication board, used for library data — see @catalog. **/
   errata: none,
   /** <- content | string
     * A text that corrects errors from previous book editions. **/
@@ -89,7 +87,7 @@
     * the process of book creation and their importance in the project. **/
   epigraph: none,
   /** <- quote | content
-    * A short citation or excerpt of other works used to introduce the main
+    * A short citation or excerpt from other works used to introduce the main
     * theme of the book; can suggest a reflection, a mood, or idea related to
     * the text. **/
   toc: true,
@@ -97,12 +95,12 @@
     * Generate table of contents. **/
   part: auto,
   /** <- auto | string | none
-    * Name of the main divisions of the book — set manually (`string`) or
-    * defaults to the word "Part" in book language (`auto`). **/
+    * Name of the main divisions of the book — defaults to the name "Part" in
+    * book language if not set manually. **/
   chapter: auto,
   /** <- string | none
-    * The name of the sections of the book — set manually (`string`) or
-    * defaults to the word "Chapter" in book language (`auto`). **/
+    * The name of the sections of the book — defaults to the name "Chapter" in
+    book language if not set. **/
   cfg: auto,
   /** <- dictionary
     * Custom advanced configurations, used to fine-tune some aspects of the
@@ -133,19 +131,21 @@
   cfg.insert("lang", "en")
   let cfg = (
     numbering-style: auto,
-      /** <- array | string | none
-        * Custom heading numbering — a standard numbering (`string`) or a
-        * #univ("numbly") numbering (`array`). **/
+      /** <- array of strings | string | none
+        * Custom heading numbering — a standard numbering or a #univ("numbly")
+        * numbering. **/
     page: "a5",
       /** <- dictionary | string
-        * Page configuration — act as `#set page(..cfg.page)` when `dictionary`
-        * or as `#set page(paper: cfg.page)` when `string`. **/
+        * Page configuration — directly set `#page(..cfg.page)` arguments or
+        * only `#page(paper: cfg.page)` when string. **/
     lang: "en",
       /** <- string
         * Book language. **/
-    lang-data: eval( fluent("l10n/", lang: cfg.lang) ),
-      /** <- toml
-        * Translation file — see the `src/assets/lang.toml` file. **/
+    transl: read("l10n/" + cfg.lang + ".ftl"),
+      /** <- string | read
+        * Fluent translation file — defaults to the standard translation file
+        * for book language, if supported (see files inside `/src/l10n/`
+        * directory), or `#panic`. **/
     justify: true,
       /** <- boolean
         * Text justification. **/
@@ -163,23 +163,24 @@
       /** <- length
         * Page margin. **/
     font: ("TeX Gyre Pagella", "Book Antiqua"),
-      /** <- string | array
-        * Text font family, and fallback options (`array`). **/
+      /** <- string | array of strings
+        * Text font family, and fallback options — see the `README.md` file to
+        * download the default font. **/
     font-math: "Asana Math",
-      /** <- string | array
-        * Math font family, and fallback options (`array`) — see the `README.md`
-        * file to download the default font, if needed. **/
+      /** <- string | array of strings
+        * Math font family, and fallback options — see the `README.md` file to
+        * download the default font. **/
     font-mono: "Inconsolata",
-      /** <- string | array
-        * Monospaced font family, and fallback options (`array`) — see the
-        * `README.md` file to download the default font, if needed. **/
+      /** <- string | array of strings
+        * Monospaced font family, and fallback options — see the `README.md` file
+        * to download the default font. **/
     font-size: 11pt,
       /** <- length
         * Text font size. **/
     heading-weight: auto,
-      /** <- string | auto
-        * Heading font weight (thickness) — set as `"regular"` or `"bold"`,
-        * defaults to regular in levels 1–5 then bold (`auto`). **/
+      /** <- "regular" | "bold" | auto
+        * Heading font weight (thickness) — defaults to regular only in levels
+        * 1–5, and then bold headings. **/
     cover-bgcolor: rgb("#3E210B"),
       /** <- color
         * Cover background color when `#book(cover: auto)`. **/
@@ -187,7 +188,7 @@
       /** <- color
         * Cover text color when `#book(cover: auto)`. **/
     cover-fonts: ("Cinzel", "Alice"),
-      /** <- array
+      /** <- array of strings
         * Cover font families when `#book(cover: auto)` — an array `(TITLE, TEXTS)`
         * for title and text fonts, respectively. **/
     cover-back: true,
@@ -195,8 +196,8 @@
         * Generate a back cover at the end of the document when `#book(cover: auto)` **/
     toc-indent: none,
       /** <- length | auto | none
-        * Indentation of each table of contents entry — by default, all entries
-        * of level 2+ are equally indented in 1.5em (`none`). **/
+        * Indentation of each table of contents entry — when `none`, all entries
+        * of level 2+ are equally indented by 1.5em. **/
     toc-bold: true,
       /** <- boolean
         * Allows bold fonts in table of contents entries. **/
@@ -207,7 +208,7 @@
       /** <- boolean
         * Optimizes the content to be printed on both sides of the page (front
         * and back), with important elements always starting at the next front
-        * side (oddly numbered) — inserts blank pages in between, if needed.**/
+        * side (oddly numbered) — inserts blank pages in between, if needed. **/
     link-readable: true,
       /** <- boolean
         * Enable paper-readable links, which inserts the clickable link alongside
@@ -219,10 +220,11 @@
   let break-to = if cfg.two-sided {"odd"} else {none}
   utils.storage(add: "break-to", break-to)
   
-  transl(data: cfg.lang-data)
+  cfg.transl = fluent( "file!" + cfg.transl, lang: cfg.lang )
+  transl(data: cfg.transl)
   
-  if part == auto {part = transl("part", to: cfg.lang, data: cfg.lang-data)}
-  if chapter == auto {chapter = transl("chapter", to: cfg.lang, data: cfg.lang-data)}
+  if part == auto {part = transl("part", to: cfg.lang, data: cfg.transl)}
+  if chapter == auto {chapter = transl("chapter", to: cfg.lang, data: cfg.transl)}
   
   if type(cfg.page) == str {cfg.page = (paper: cfg.page)}
   
@@ -710,26 +712,3 @@
  * cannot be implemented by re-working and adapting existing Typst elements. They
  * are completely optional and is perfectly possible to write an entire book.
 **/
-
-
-/**
- * == Fluent Data
- *
- * :fluent:
- * 
- * This helper command is a wrapper around `#transl.fluent`, used by
- * #univ("transl") to get Fluent localization and translation data.
-**/
-#let fluent(
-  data,
-  /** <- string
-   * Folder of the _ftl_ files, or `"file!DATA"` where `DATA` is the Fluent
-   * data itself. **/
-  lang: ()
-  /** <- array | string
-   * The language of the Fluent data. **/
-) = {
-  import "@preview/transl:0.1.0": fluent
-  
-  fluent(data, lang: lang)
-}

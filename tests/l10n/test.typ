@@ -5,7 +5,7 @@
 #show table: it => box(it)
 #set text(font: ("Noto Serif", "Noto Serif Bengali"))
 //Noto Serif Bengali: https://fonts.google.com/noto/specimen/Noto+Serif+Bengali
-//Noto Serif:         https://fonts.google.com/noto/specimen/Noto+Serif 
+// Noto Serif: https://fonts.google.com/noto/specimen/Noto+Serif 
 
 #let data = ()
 #let langs = (

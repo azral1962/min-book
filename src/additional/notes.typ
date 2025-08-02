@@ -10,8 +10,7 @@
 #let note(
   numbering-style: auto,
   /** <- auto | string
-    * Custom note numbering — a standard numbering string.
-    * numbering (`array`). **/
+    * Custom note numbering — a standard numbering string. **/
   content,
   /** <- content <required>
     * The content of the end note. **/
@@ -50,7 +49,7 @@
 }
 
 
-// Inserts <note> before all headings and substitutes them with notes, if any
+// INTERNAL: notes.insert() inserts notes in the document at tye right place.
 #let insert(body) = {
   import "../utils.typ"
   

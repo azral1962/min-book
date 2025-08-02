@@ -1,6 +1,6 @@
-// NAME: Utilities internal sub-module
+// NAME: Utilities sub-module (internal)
 
-// UTIL: Handles special numbering in #book and #appendices
+// UTIL: utils.numbering() handles book numbering strings/arrays
 #let numbering(
   patterns: (),
   scope: (:),
@@ -71,7 +71,7 @@
     patterns = contents
   }
 
-  // HACK: #book(part: "") set clean parts, without name nor numbering.
+  // HACK: #book(part: "") defines title-only parts, without name nor numbering.
   if scope.h1 == "" {
     patterns.at(0) = ""
   }
@@ -84,7 +84,7 @@
 }
 
 
-// UTIL: Create a date using named and positional arguments
+// UTIL: utils.date() creates a date using named and/or positional arguments
 #let date(..date) = {
   if type(date.pos().at(0)) == datetime {return date.pos().at(0)}
   
@@ -113,7 +113,7 @@
 }
 
 
-// UTIL: Manage and store configurations and other data (see USAGE)
+// UTIL: utils.storage() manages and store configurations and other data (see USAGE)
 #let storage(
   add: none,
   get: none,
@@ -214,7 +214,7 @@
 }
 
 
-// DEBUG: Show storage database representation in YAML
+// DEBUG: utils.storage-repr() shows an utils.storage() representation in YAML
 #let storage-repr(mode: "get", path: none, ..body) = {
   if body.pos() == () or type(body.pos().last()) != content []
   else {body.pos().last()}
