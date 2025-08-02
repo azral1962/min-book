@@ -3,8 +3,6 @@
 
 #context show-cfg("final")
 
-#let pagebreak() = []
-
 // Book init
 #show: book.with(
   title: "Book Title",
@@ -21,6 +19,10 @@
   ),
 )
 
-#note[A]
-#note[B]
-#note[C]
+
+#lorem(25)#note[Foo]
+#lorem(25)#note[Bar]
+
+#lorem(50)#note[Baz]
+
+#lorem(50)#note[Qux]
