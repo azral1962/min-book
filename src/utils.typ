@@ -1,25 +1,5 @@
 // NAME: Utilities internal sub-module
 
-
-// UTIL: Check if given value is of one of the types
-#let check(arg, ..types, test: false) = {
-  let match = false
-  
-  if types.pos().contains(type(arg) ) {
-    match = true
-  }
-  
-  if test == false {
-    if match == false {
-      panic("Invalid value type: " + type(arg))
-    }
-  }
-  else {
-    return match
-  }
-}
-
-
 // UTIL: Handles special numbering in #book and #appendices
 #let numbering(
   patterns: (),
@@ -133,8 +113,8 @@
 }
 
 
-// UTIL: Manage and store package configurations (see USAGE)
-#let cfg(
+// UTIL: Manage and store configurations and other data (see USAGE)
+#let storage(
   add: none,
   get: none,
   del: none,
@@ -145,7 +125,7 @@
   let this = state(state-name)
   let val = val.pos().at(0, default: none)
   
-  // USAGE: utils.cfg(add: <string>, [any])
+  // USAGE: utils.storage(add: <string>, [any])
   if add != none {
     this.update(curr => {
       if curr == none {curr = (:)}
@@ -177,13 +157,29 @@
       curr
     })
   }
-  // USAGE:  utils.cfg(del: <string>)
+ // USAGE:  utils.storage(del: <string>)
   else if del != none {
     this.update(curr => {
       if curr == none {curr = (:)}
       if del.contains(".") {
-        let path = del.split(".")
-        let _ = curr.at(path.at(0)).remove(str(path.at(1)), default: val)
+        let path = del.trim(".").split(".")
+        let last = path.last()
+        let res = curr
+        
+        for part in path {
+          if type(res) != dictionary {res = (:)}
+          if not res.keys().contains(part) {panic("Invalid path: " + del)}
+          
+          res = res.at(part)
+        }
+        
+        let _ = path.remove(path.len() - 1)
+        path = path.join(".")
+        
+        curr = eval(
+          "let _ = curr." + path + ".remove(\"" + last + "\"); curr",
+          scope: (curr: curr)
+        )
       }
       else {
         let _ = curr.remove(str(del), default: val)
@@ -191,39 +187,52 @@
       curr
     })
   }
-  // USAGE: context utils.cfg(get: <string>, [default])
+  // USAGE: utils.storage(get: <string>, [any])
   else if get != none {
     if get.contains(".") {
-      let p = get.split(".")
-      return this.get().at(p.at(0), default: (:)).at(str(p.at(1)), default: val)
+      get = get.trim(".")
+      
+      let parts = get.split(".")
+      let res = this.get()
+      
+      for part in parts {
+        if res.at(part, default: none) == none {res = val}
+        if type(res) != dictionary {
+          if part == parts.last() {res = val}
+          break
+        }
+        res = res.at(part)
+      }
+      return res
     }
-    else {
-      return this.get().at(str(get), default: val)
-    }
+    else  {return this.get().at(str(get), default: val)}
   }
-  // USAGE: utils.cfg(upd: <any>)
-  else if upd != none {
-    if type(val) != dictionary {
-      panic("utils.config(upd) requires a dictionary: found " + type(upd))
-    }
-    this.update(val)
-  }
-  // USAGE: context utils.cfg()
-  else {
-    return this
-  }
+  // USAGE: utils.storage(upd: <any>)
+  else if upd != none {this.update(val)}
+  // USAGE: context utils.storage()
+  else {return this}
 }
 
 
-// DEBUG: Get the configuration database at this point
-#let show-cfg(..mode) = {
-
-  set page(width: auto, height: auto, margin: 1cm)
+// DEBUG: Show storage database representation in YAML
+#let storage-repr(mode: "get", path: none, ..body) = {
+  if body.pos() == () or type(body.pos().last()) != content []
+  else {body.pos().last()}
   
-  let data = if mode.pos() != () {cfg().final()} else {cfg().get()}
+  context {
+    set page(width: auto, height: auto, margin: 1cm)
+    
+    let data = if mode == "get" {storage().get()}
+      else if mode == "final" {storage().final()}
+      else {panic("Invalid mode: " + repr(mode))}
   
-  raw(
-    lang: "yaml",
-    yaml.encode(data)
-  )
+    if path != none {
+      data = eval("data." + path, scope: (data: data))
+    }
+    
+    raw(
+      lang: "yaml",
+      yaml.encode(data)
+    )
+  }
 }

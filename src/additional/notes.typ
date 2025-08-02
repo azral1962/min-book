@@ -24,24 +24,24 @@
   
   let numbering-style = numbering-style
   if numbering-style == auto {
-    numbering-style = utils.cfg(get: "note.numbering", "1")
+    numbering-style = utils.storage(get: "note.numbering", "1")
   }
   else {
-    utils.cfg(add: "note.numbering", numbering-style)
+    utils.storage(add: "note", (numbering: numbering-style))
   }
   
   let count = counter("min-book-note-count")
   counter("min-book-note-count").step()
   
   let this-note = (
-    count.get().at(0),
-    content,
-    numbering-style
+    number: count.get().at(0),
+    data: content,
+    numbering: numbering-style
   )
   
   // Push a new value to note.level array
-  utils.cfg(add: "note." + level + "+", this-note)
-
+  utils.storage(add: "note." + level + "+", this-note)
+  
   let note-number = numbering(numbering-style, ..count.get())
   let note-label = level + "_" + numbering("1", ..count.get())
 
@@ -82,13 +82,13 @@
 
   // Swap the <note> for the actual notes in the current section, if any.
   show <note>: it => {
-    context if utils.cfg().final().at("note", default: (:)) != (:) {
+    context if utils.storage().final().at("note", default: (:)) != (:) {
       // Find the level (numbering) of current section heading:
       let selector = selector(heading).before(here())
       let level = counter(selector).display().replace(".", "-")
 
       // Show notes only if there are any in this section
-      let notes = utils.cfg(get: "note." + level)
+      let notes = utils.storage(get: "note." + level)
       if notes != none {
         pagebreak(weak: true)
 
@@ -101,12 +101,12 @@
           )[
             // Link to the note marker in the text:
             #link(
-              label(level + "_" + str(note.at(0))),
-              strong(numbering(note.at(2), note.at(0)) + ":")
+              label(level + "_" + str(note.number)),
+              strong(numbering(note.numbering, note.number) + ":")
             )
             // Insert <LEVEl_NUMBER_content> for cross-reference
-            #label(level + "_" + str(note.at(0)) + "_content")
-            #note.at(1)
+            #label(level + "_" + str(note.number) + "_content")
+            #note.data
           ]
         }
 
@@ -126,7 +126,7 @@
     if it.body.text.ends-with(note-regex) {
       let note-label = it.body.text.find(note-regex).trim(":") + "_content"
       let note-number = it.body.text.replace(note-regex, "").trim()
-
+      
       // Link to the actual note content:
       link(label(note-label))[#super(note-number)]
     } else {

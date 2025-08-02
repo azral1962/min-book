@@ -1,7 +1,6 @@
 // NAME: Minimal Books
-// REQ: numbly
+// REQ: numbly, transl
 // TODO: Implement ePub output when available
-// IDEA: Use transl fluent l10n
 
 #import "additional/notes.typ": note
 #import "additional/ambient.typ": appendices, annexes
@@ -150,7 +149,7 @@
     justify: true,
       /** <- boolean
         * Text justification. **/
-    line-space: 0.54em,
+    line-space: 0.5em,
       /** <- length
         * Space between each line in a paragraph. **/
     par-margin: 0.65em,
@@ -218,7 +217,7 @@
 
   // Convert cfg.two-sided into a #pagebreak(to) value
   let break-to = if cfg.two-sided {"odd"} else {none}
-  utils.cfg(add: "break-to", break-to)
+  utils.storage(add: "break-to", break-to)
   
   transl(data: cfg.lang-data)
   

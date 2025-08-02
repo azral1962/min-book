@@ -35,7 +35,7 @@
   
   let singular-title = transl(type, args: (number: "sing"), mode: str)
   let plural-title = transl(type, args: (number: "plur"), mode: str)
-  let break-to = utils.cfg(get: "break-to")
+  let break-to = utils.storage(get: "break-to")
   
   set heading(
     offset: 1,
