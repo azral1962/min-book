@@ -1,7 +1,7 @@
 #import "/src/lib.typ": book, note
-#import "/src/utils.typ": show-cfg
+#import "/src/utils.typ": storage-repr
 
-#context show-cfg("final")
+#show: storage-repr
 
 // Book init
 #show: book.with(
@@ -18,11 +18,3 @@
     cover-back: false,
   ),
 )
-
-
-#lorem(25)#note[Foo]
-#lorem(25)#note[Bar]
-
-#lorem(50)#note[Baz]
-
-#lorem(50)#note[Qux]
