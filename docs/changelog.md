@@ -48,7 +48,7 @@
 - Added: `#book(cfg)` for advanced configuration
 - Added: `#book(cfg.font-mono)` to set monospaced text font
 - Updated: All advanced configuration options moved to `#book(cfg)`
-- Updated: ~~`#book(paper)`~~ &rarr; `#book(page-cfg)`
+- Updated: `#book(paper)` &rarr; `#book(page-cfg)`
 - Updated: Reorganized internal structure
 - Updated: `#outline(depth: 2)` when `#book(numbering-style: none)`
 - Updated: `#book(part: "")` set an unnumbered and unnamed part (just heading title)
@@ -74,4 +74,19 @@ the help testing some features.
   - `cfg.two-sided` makes important elements always start at the next oddly numbered page
   - `cfg.link-readableL` allows paper-readable links (clickable links + footnote)
 - Updated: `#book(numbering-style)` can be `none` or contain it in array
-- Updated: ~~`#book(cfg.page-cfg)`~~ &rarr; `#book(cfg.page)`
+- Updated: `#book(cfg.page-cfg)` &rarr; `#book(cfg.page)`
+
+
+### 1.1.1
+
+- Added: Translation with [transl](https://typst.app/universe/package/transl) package (Fluent)
+- Added: IA translations
+- Updated: `#book(cfg.lang-data)` &rarr; `#book(cfg.transl)`
+- Updated: `#book(cfg.transl: read("path/file.ftl"))` set translation file
+- Updated: `#panic` if no translation file is found for book language (removed fallback to English)
+- Updated: `#book(numbering-style)` &rarr; `#book(numbering)`
+- Updated: `#note(numbering-style)` &rarr; `#note(numbering)`
+- Updated: `#appendices(numbering-style)` &rarr; `#appendices(numbering)`
+- Updated: `#annexes(numbering-style)` &rarr; `#annexes(numbering)`
+- Updated: Changed entire project structure (compartimentalization)
+- Updated: Added project tests

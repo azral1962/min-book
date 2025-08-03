@@ -49,7 +49,7 @@
 }
 
 
-// INTERNAL: notes.insert() inserts notes in the document at tye right place.
+// INTERNAL: notes.insert() inserts notes in the document at the right place.
 #let insert(body) = {
   import "../utils.typ"
   

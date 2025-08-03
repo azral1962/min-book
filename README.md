@@ -1,6 +1,6 @@
 # Minimal Books
 
-<center>
+<center align="center">
 
 Simple and complete books without introducing new syntax  
 
@@ -45,41 +45,7 @@ possible and encouraged.
 - [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.1.0/docs/example.pdf)
 - [Example Typst code](https://github.com/mayconfmelo/min-book/blob/1.1.0/template/main.typ)
 - [Changelog](https://github.com/mayconfmelo/min-book/blob/main/docs/changelog.md)
-- [Development setup](https://github.com/mayconfmelo/min-book/blob/main/docs/setup.md)
-
-
-## Default Fonts
-
-<table>
-  <tr>
-    <td>Text:</td>
-    <td>
-    <a href="https://www.gust.org.pl/projects/e-foundry/tex-gyre/pagella/qpl2_501otf.zip">
-    TeX Gyre Pagella
-    </a> or Book Antiqua
-    </td>
-  </tr>
-  <tr>
-    <td>Math:</td>
-    <td><a href="https://mirrors.ctan.org/fonts/Asana-Math/Asana-Math.otf">
-      Asana Math
-    </a></td>
-  </tr>
-  <tr>
-    <td>Mono:</td>
-    <td><a href="https://fonts.google.com/specimen/Inconsolata">
-      Inconsolata
-    </a></td>
-  </tr>
-  <tr>
-    <td>Cover title:</td>
-    <td><a href="https://fonts.google.com/specimen/Cinzel">Cinzel</a></td>
-  </tr>
-  <tr>
-    <td>Cover text:</td>
-    <td><a href="https://fonts.google.com/specimen/Alice">Alice</a></td>
-  </tr>
-</table>
+- [Development info](https://github.com/mayconfmelo/min-book/blob/main/docs/dev.md)
 
 
 ## Feature List
@@ -97,13 +63,41 @@ possible and encouraged.
 - Acknowledgments
 - Epigraph
 - Table of contents
-- Multi-language support
-- Advanced customization options
-- Accessible default fonts
 - Book parts (headings)
 - Book chapters (headings)
+- Multi-language structure
+  - Default translations for several languages
+  - Custom translation files
+  - Localization using Fluent
+- Advanced customization options
+- Free default fonts
 - End Notes
 - Horizontal Rule
 - Block Quote
 - Appendices ambient
 - Annexes ambient
+
+
+## Default Fonts
+
+**Text:**
+[TeX Gyre Pagella](https://www.gust.org.pl/projects/e-foundry/tex-gyre/pagella/qpl2_501otf.zip) or
+Book Antiqua
+  
+**Math:**
+[Asana Math](https://mirrors.ctan.org/fonts/Asana-Math/Asana-Math.otf)
+  
+**Mono:**
+[Inconsolata](https://fonts.google.com/specimen/Inconsolata)
+
+**Cover title:**
+[Cinzel](https://fonts.google.com/specimen/Cinzel")
+    
+**Cover text:**
+[Alice](https://fonts.google.com/specimen/Alice)
+
+
+## Translation Notice
+
+As of _min-book:1.1.1+_ there will be no automatic fallback to English anymore.
+Refer to the section _TRANSLATION_ at the end of the manual for more information.

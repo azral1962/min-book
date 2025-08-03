@@ -17,6 +17,20 @@
     read("src/additional/blockquote.typ")
 )
 
+
+= Translation
+
+Currently, _min-book_ supports automatic translation for all languages
+represented by a file in `/src/l10n/` directory. When using other languages,
+just create a custom Fluent translation file and set it as `#book(cfg.transl)`.
+If no translation file is found or set for the language used, _min-book_ will
+`#panic`.
+
+Also consider contributing to the _min-book_ project by submitting a translation
+pull request or even opening an issue — since most of the
+supported languages were originally translated by IA and may contain errors.
+
+
 = Copyright
 
 Copyright #sym.copyright #datetime.today().year() Maycon F. Melo. \
