@@ -1,5 +1,4 @@
-#import "/src/lib.typ": annexes, appendices, book
-#set page(height: auto)
+#import "/src/lib.typ": book, annexes, appendices
 
 // Additional book data
 #show: book.with(
@@ -7,7 +6,7 @@
   authors: "",
   cover: none,
   titlepage: none,
-  toc: none,
+  toc: false,
   cfg: (
     two-sided: false,
     cover-back: false,

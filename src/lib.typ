@@ -128,7 +128,7 @@
    * 
   **/
   if cfg == auto {cfg = (:)}
-  cfg.insert("lang", "en")
+  cfg.insert("lang", cfg.at("lang", default: "en"))
   let cfg = (
     numbering-style: auto,
       /** <- array of strings | string | none
@@ -215,7 +215,7 @@
         * a footnote to its URL. **/
     ..cfg,
   )
-
+  
   // Convert cfg.two-sided into a #pagebreak(to) value
   let break-to = if cfg.two-sided {"odd"} else {none}
   utils.storage(add: "break-to", break-to)
