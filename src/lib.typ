@@ -155,7 +155,7 @@
     par-margin: 0.65em,
       /** <- length
         * Space after each paragraph. **/
-    first-line-indent: 1em,
+    indent-firstline: 1em,
       /** <- length
         * indentation of the first line of each paragraph in a sequence, except
         * the first one. **/
@@ -209,7 +209,7 @@
         * Optimizes the content to be printed on both sides of the page (front
         * and back), with important elements always starting at the next front
         * side (oddly numbered) — inserts blank pages in between, if needed. **/
-    link-readable: true,
+    paper-links: true,
       /** <- boolean
         * Enable paper-readable links, which inserts the clickable link alongside
         * a footnote to its URL. **/
@@ -274,7 +274,7 @@
     justify: cfg.justify,
     leading: cfg.line-space,
     spacing: cfg.par-margin, 
-    first-line-indent: cfg.first-line-indent
+    first-line-indent: cfg.indent-firstline
   )
   set text(
     font: cfg.font,
@@ -453,7 +453,7 @@
     font: cfg.font-mono,
     size: cfg.font-size,
   )
-  show raw.where(block: true): it => pad(left: cfg.first-line-indent, it)
+  show raw.where(block: true): it => pad(left: cfg.indent-firstline, it)
   show math.equation: set text(font: cfg.font-math)
   show selector.or(
       terms, enum, list, table, figure, math.equation.where(block: true),
@@ -484,7 +484,7 @@
     else {it}
   }
   show link: it => {
-    if cfg.link-readable and type(it.dest) == str and it.dest != it.body.text {
+    if cfg.paper-links and type(it.dest) == str and it.dest != it.body.text {
       it
       footnote(it.dest)
     }
