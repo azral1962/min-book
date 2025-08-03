@@ -8,7 +8,7 @@
  * current section, right before the next heading.
 **/
 #let note(
-  numbering-style: auto,
+  numbering: auto,
   /** <- auto | string
     * Custom note numbering — a standard numbering string. **/
   content,
@@ -21,12 +21,12 @@
   let selector = selector(heading).before(here())
   let level = counter(selector).display().replace(".","-")
   
-  let numbering-style = numbering-style
-  if numbering-style == auto {
-    numbering-style = utils.storage(get: "note.numbering", "1")
+  let numbering = numbering
+  if numbering == auto {
+    numbering = utils.storage(get: "note.numbering", "1")
   }
   else {
-    utils.storage(add: "note", (numbering: numbering-style))
+    utils.storage(add: "note", (numbering: numbering))
   }
   
   let count = counter("min-book-note-count")
@@ -35,14 +35,14 @@
   let this-note = (
     number: count.get().at(0),
     data: content,
-    numbering: numbering-style
+    numbering: numbering
   )
   
   // Push a new value to note.level array
   utils.storage(add: "note." + level + "+", this-note)
   
-  let note-number = numbering(numbering-style, ..count.get())
-  let note-label = level + "_" + numbering("1", ..count.get())
+  let note-number = utils.numbering-std(numbering, ..count.get())
+  let note-label = level + "_" + utils.numbering-std("1", ..count.get())
 
   // Set note as #super[NUMBER ::LABEL::] to be managed later
   [#super(note-number + " ::" + note-label + "::")#label(note-label)]
@@ -101,7 +101,7 @@
             // Link to the note marker in the text:
             #link(
               label(level + "_" + str(note.number)),
-              strong(numbering(note.numbering, note.number) + ":")
+              strong(utils.numbering-std(note.numbering, note.number) + ":")
             )
             // Insert <LEVEl_NUMBER_content> for cross-reference
             #label(level + "_" + str(note.number) + "_content")

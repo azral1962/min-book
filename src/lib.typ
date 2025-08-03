@@ -130,7 +130,7 @@
   if cfg == auto {cfg = (:)}
   cfg.insert("lang", cfg.at("lang", default: "en"))
   let cfg = (
-    numbering-style: auto,
+    numbering: auto,
       /** <- array of strings | string | none
         * Custom heading numbering — a standard numbering or a #univ("numbly")
         * numbering. **/
@@ -240,7 +240,7 @@
    * 
    * By default, _min-book_ uses slightly different numbering when `#book(part)`
    * is enabled or disabled, that's why _parts_ and _chapters_ appear to have
-   * independent numbering when used. The `#book(cfg.numbering-style)` option
+   * independent numbering when used. The `#book(cfg.numbering)` option
    * allow to set a custom numbering used whether `#book(part)` is enabled or
    * disabled.
   **/
@@ -344,7 +344,7 @@
     // #utils.numbering set #book(part) and #book(chapter)
     numbering: utils.numbering(
         patterns: (
-          cfg.numbering-style,
+          cfg.numbering,
           part-pattern,
           no-part-pattern,
         ),
@@ -464,7 +464,7 @@
     
     // When referencing headings in "normal" form
     if el != none and el.func() == heading and it.form == "normal" {
-      let patterns = if cfg.numbering-style != auto {cfg.numbering-style}
+      let patterns = if cfg.numbering != auto {cfg.numbering}
         else if part != none {part-pattern}
         else {no-part-pattern}
       
@@ -508,10 +508,9 @@
      * 
      * By default, _min-book_ automatically generates a book cover if `#book(cover)`
      * is not set, it's also possible to set a custom cover image or create one
-     * using Typst code. The default automatic cover
-     * #url("https://typst.app/project/r2QBJy0CmrAmvMWT1NmUEW", "code") can be a good start
-     * as a base to create your own version.
-     *
+     * using Typst code — the default automatic cover (see
+     * `/src/components/cover.typ`) can be a good start as a base to create a
+     * custom version.
     **/
     new(cover, title, subtitle, date, authors, volume, cfg)
     pagebreak(to: break-to)
@@ -654,7 +653,7 @@
     pagebreak(to: break-to, weak: true)
     outline(
       indent: indenting,
-      depth: if cfg.numbering-style == none {2} else {none},
+      depth: if cfg.numbering == none {2} else {none},
     )
     pagebreak(weak: true)
   }

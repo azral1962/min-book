@@ -1,5 +1,8 @@
 // NAME: Utilities sub-module (internal)
 
+// UTIL: utils.numbering-std() access standard numbering() after being shadowed
+#let numbering-std = numbering
+
 // UTIL: utils.numbering() handles book numbering strings/arrays
 #let numbering(
   patterns: (),
@@ -17,6 +20,9 @@
   // Set all numbering to none
   if patterns == none {return none}
   
+  // Convert string patterns into array
+  if type(patterns) == str {patterns = (patterns,)}
+  
   // Transform patterns into positional arguments
   patterns = arguments(..patterns).pos()
   
@@ -24,7 +30,7 @@
   
   // When using a default numbering string:
   if patterns.len() == 1 and not patterns.at(0).contains(regex("\{.*\}")) {
-    return numbering(..patterns, ..nums)
+    return numbering-std(..patterns, ..nums)
   }
   
   // When numbering-style == none
