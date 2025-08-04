@@ -76,7 +76,7 @@
   #lorem(200)
 ]
 
-// 7.png
+// 6.png
 #book(
   cfg: (..def,
     page: (flipped: true, paper: "a4"),
@@ -93,7 +93,7 @@
 
 #let body = []
 
-// 9.png
+// 7.png
 #book(
   cfg: (..def, 
     cover-bgcolor: rgb("#000000"),
@@ -109,6 +109,7 @@
 #let body = [
   = Fonts
   #lorem(50)
+  #link("https://typst.app")[Typst website.]
   
   $ sum^a_b x y $
   
@@ -122,6 +123,7 @@
     font-math: "New Computer Modern Math",
     font-mono: "DejaVu Sans Mono",
     font-size: 12pt,
+    paper-links: false,
   ),
   title: "", authors: "", cover: none, toc: false, titlepage: none, part: none,
   chapter: none, body
