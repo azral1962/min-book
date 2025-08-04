@@ -53,7 +53,7 @@
 #let insert(body) = {
   import "../utils.typ"
   
-  let new-body = body.children
+  let new-body = body.at("children", default: ())
   let h-index = ()
   
   // Get index of all headings in body.children
