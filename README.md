@@ -63,12 +63,14 @@ possible and encouraged.
 - Acknowledgments
 - Epigraph
 - Table of contents
+  - Automatic generation
+  - Insert manually
 - Book parts (headings)
 - Book chapters (headings)
 - Multi-language structure
   - Default translations for several languages
   - Custom translation files
-  - Localization using Fluent
+  - Localization using [Fluent](https://projectfluent.org/)
 - Advanced customization options
 - Free default fonts
 - End Notes
@@ -99,5 +101,5 @@ Book Antiqua
 
 ## Translation Notice
 
-As of _min-book:1.1.1+_ there will be no automatic fallback to English anymore.
+From _min-book:1.2.0+_ there will be no automatic fallback to English anymore.
 Refer to the section _TRANSLATION_ at the end of the manual for more information.

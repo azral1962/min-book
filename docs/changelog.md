@@ -1,3 +1,5 @@
+# 0.0.0
+
 ## 0.1.0
 
 - Optional _cover_
@@ -77,16 +79,22 @@ the help testing some features.
 - Updated: `#book(cfg.page-cfg)` &rarr; `#book(cfg.page)`
 
 
-### 1.1.1
+## 1.2.0
 
+- Removed: `#annexes(cfg.toc-indent)` was the same as `#set outline(indent)`
+- Added: `#annexes(cfg.toc-stdindent)` enables standard TOC
 - Added: Translation with [transl](https://typst.app/universe/package/transl) package (Fluent)
 - Added: IA translations
+- Added: Custom TOC creation
 - Updated: `#book(cfg.lang-data)` &rarr; `#book(cfg.transl)`
 - Updated: `#book(cfg.transl: read("path/file.ftl"))` set translation file
 - Updated: `#panic` if no translation file is found for book language (removed fallback to English)
-- Updated: `#book(numbering-style)` &rarr; `#book(numbering)`
-- Updated: `#note(numbering-style)` &rarr; `#note(numbering)`
-- Updated: `#appendices(numbering-style)` &rarr; `#appendices(numbering)`
-- Updated: `#annexes(numbering-style)` &rarr; `#annexes(numbering)`
+- Updated: `#book(cfg.numbering-style)` &rarr; `#book(cfg.numbering)`
+- Updated: `#note(cfg.numbering-style)` &rarr; `#note(cfg.numbering)`
+- Updated: `#appendices(cfg.numbering-style)` &rarr; `#appendices(cfg.numbering)`
+- Updated: `#annexes(cfg.numbering-style)` &rarr; `#annexes(cfg.numbering)`
+- Updated: `#annexes(cfg.numbering-style)` &rarr; `#annexes(cfg.numbering)`
+- Updated: `#annexes(cfg.first-line-indent)` &rarr; `#annexes(cfg.line-indentfirst)`
+- Updated: `#annexes(cfg.link-readable)` &rarr; `#annexes(cfg.paper-links)`
 - Updated: Changed entire project structure (compartimentalization)
 - Updated: Added project tests
