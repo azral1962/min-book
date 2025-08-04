@@ -108,7 +108,7 @@
   body
   /** <- content
     * The book content.**/
-) = {
+) = context {
   import "@preview/transl:0.1.0": transl, fluent
   import "utils.typ"
   
@@ -116,9 +116,10 @@
   assert.ne(title, none)
   assert.ne(authors, none)
   
-  if cfg == auto {cfg = (:)}
-  cfg.insert("lang", cfg.at("lang", default: "en"))
+  let cfg = if cfg == auto {(:)} else {cfg}
   let new-cfg = cfg
+
+  cfg.insert("lang", cfg.at("lang", default: text.lang))
   /**
    * = Advanced Configurations <adv-config>
    * 
@@ -139,7 +140,7 @@
       /** <- dictionary | string
         * Page configuration — directly set `#page(..cfg.page)` arguments or
         * only `#page(paper: cfg.page)` when string. **/
-    lang: "en",
+    lang: text.lang,
       /** <- string
         * Book language. **/
     transl: read("l10n/" + cfg.lang + ".ftl"),
@@ -230,12 +231,14 @@
   cfg.transl = fluent( "file!" + cfg.transl, lang: cfg.lang )
   transl(data: cfg.transl)
   
+  let part = part
+  let chapter = chapter
   if part == auto {part = transl("part", to: cfg.lang, data: cfg.transl)}
   if chapter == auto {chapter = transl("chapter", to: cfg.lang, data: cfg.transl)}
   
   if type(cfg.page) == str {cfg.page = (paper: cfg.page)}
   
-  date = utils.date(date)
+  let date = utils.date(date)
   
   /**
    * = Advanced Numbering
@@ -494,7 +497,7 @@
   
   // Insert notes of a section at its end, before next heading:
   import "additional/notes.typ"
-  body = notes.insert(body)
+  let body = notes.insert(body)
   
   if titlepage == none and catalog != none and cfg.two-sided {
     // Automatic blank titlepage when generating catalog
