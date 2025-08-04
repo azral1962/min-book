@@ -481,6 +481,8 @@
       
       // Remove \n and trim full stops
       if patterns != none and part != "" {
+        import "@preview/numbly:0.1.0": numbly
+
         patterns = patterns.map(
           item => item.replace("\n", "").trim(regex("[.:]"))
         )
