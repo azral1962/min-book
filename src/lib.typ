@@ -118,8 +118,15 @@
   
   let cfg = if cfg == auto {(:)} else {cfg}
   let new-cfg = cfg
-
+  
   cfg.insert("lang", cfg.at("lang", default: text.lang))
+  if not utils.std-langs.contains(cfg.lang) {
+    if cfg.at("transl", default: "") == "" {
+      panic("No translation found for '" + cfg.lang + "', set #book(cfg.transl)")
+    }
+    else {cfg.lang = "en"}
+  }
+  
   /**
    * = Advanced Configurations <adv-config>
    * 

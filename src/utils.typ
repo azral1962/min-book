@@ -249,3 +249,10 @@
     )
   }
 }
+
+
+// UTIL: Languages with support for automatic translation
+#let std-langs = (
+  "en", "pt", "la", "zh", "hi", "es", "ar", "fr", 
+  "bn", "ru", "ur", "id", "de", "ja", "it",
+)
