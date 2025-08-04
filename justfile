@@ -94,3 +94,13 @@ deploy:
   git push origin {{name}}
   git checkout main
   git branch -D {{name}}
+  
+# Update log files fir just recipes in dev/
+[private]
+log recipe:
+  #!/usr/bin/env bash
+  mkdir -p dev/
+  date +"time: %Y-%m-%d (%H:%M)" >> dev/{{recipe}}.log
+  just {{recipe}} 2> >(tee -a dev/{{recipe}}.log)
+  echo "" >> dev/{{recipe}}.log
+  echo "" >> dev/{{recipe}}.log
