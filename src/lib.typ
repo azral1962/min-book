@@ -91,8 +91,8 @@
     * theme of the book; can suggest a reflection, a mood, or idea related to
     * the text. **/
   toc: true,
-  /** <- boolean
-    * Generate table of contents. **/
+  /** <- boolean | content
+    * Generate table of contents — automatic or manually created. **/
   part: auto,
   /** <- auto | string | none
     * Name of the main divisions of the book — defaults to the name "Part" in
@@ -116,10 +116,13 @@
   assert.ne(title, none)
   assert.ne(authors, none)
   
+  if cfg == auto {cfg = (:)}
+  cfg.insert("lang", cfg.at("lang", default: "en"))
+  let new-cfg = cfg
   /**
    * = Advanced Configurations <adv-config>
    * 
-   * :cfg: arg `typc` "(?s)\s*let\s<name>\s=\s\((.*?\n)\s*\.\.<name>,\s*\)\s*\n?\n"
+   * :cfg: arg `typc` "(?s)\s*let\s<name>\s=\s\((.*?\n)\s*\)\s*\n?\n"
    *
    * These `#book(cfg)` configurations allows to modify certain aspects of the
    * book and manage its appearance and structure. Built with some thoughful
@@ -127,8 +130,6 @@
    * casual writers can safely ignore it and _just write_.
    * 
   **/
-  if cfg == auto {cfg = (:)}
-  cfg.insert("lang", cfg.at("lang", default: "en"))
   let cfg = (
     numbering: auto,
       /** <- array of strings | string | none
@@ -152,13 +153,13 @@
     line-space: 0.5em,
       /** <- length
         * Space between each line in a paragraph. **/
-    par-margin: 0.65em,
-      /** <- length
-        * Space after each paragraph. **/
-    indent-firstline: 1em,
+    line-indentfirst: 1em,
       /** <- length
         * indentation of the first line of each paragraph in a sequence, except
         * the first one. **/
+    par-margin: 0.65em,
+      /** <- length
+        * Space after each paragraph. **/
     margin: (x: 15%, y: 14%),
       /** <- length
         * Page margin. **/
@@ -194,10 +195,10 @@
     cover-back: true,
       /** <- boolean
         * Generate a back cover at the end of the document when `#book(cover: auto)` **/
-    toc-indent: none,
-      /** <- length | auto | none
-        * Indentation of each table of contents entry — when `none`, all entries
-        * of level 2+ are equally indented by 1.5em. **/
+    toc-stdindent: true,
+      /** <- boolean
+        * Use min-book standard indentation: 1.5em for level 1 and 0em for
+        * levels 2+. **/
     toc-bold: true,
       /** <- boolean
         * Allows bold fonts in table of contents entries. **/
@@ -213,8 +214,14 @@
       /** <- boolean
         * Enable paper-readable links, which inserts the clickable link alongside
         * a footnote to its URL. **/
-    ..cfg,
   )
+  // Check if the cfg options received are valid
+  for key in new-cfg.keys() {
+    if not cfg.keys().contains(key) {
+      panic("Invalid cfg." + key + ", can be: " + cfg.keys().join(", "))
+    }
+  }
+  cfg = arguments(..cfg, ..new-cfg).named()
   
   // Convert cfg.two-sided into a #pagebreak(to) value
   let break-to = if cfg.two-sided {"odd"} else {none}
@@ -274,7 +281,7 @@
     justify: cfg.justify,
     leading: cfg.line-space,
     spacing: cfg.par-margin, 
-    first-line-indent: cfg.indent-firstline
+    first-line-indent: cfg.line-indentfirst
   )
   set text(
     font: cfg.font,
@@ -303,11 +310,11 @@
    * differentiate parts of the story. Each book can set different names for
    * them, like parts, subjects, books, acts, units, modules, etc;
    * by default, _min-book_ tries to get the word for "Part" in `#book(cfg.lang)`
-   * language as its name (fallback to English).
+   * language as its name.
    * 
-   * When set a value (`string`), all level 1 headings become _parts_: they
-   * occupy the entire page and are aligned at its middle; some decorative frame
-   * also appear when `#book(cover: auto)`.
+   * When a value is set, all level 1 headings become _parts_: they occupy the
+   * entire page and are aligned at its middle; some decorative frame also
+   * appear when `#book(cover: auto)`.
    * 
    * 
    * = Book Chapters
@@ -334,11 +341,11 @@
    * or any type of subtle plot change. Each book can set different names for
    * them, like chapters, sections, articles, scenes, etc; by default, _min-book_
    * tries to get the word for "Chapter" in `#book(cfg.lang)` language as its
-   * name (fallback to English).
+   * name.
    * 
-   * Chapters are smart: when set a value (`string`), if `#book(parts: none)`
-   * all level 1 headings become chapters; otherwise, all level 2 headings become
-   * chapters — since the level 1 are parts.
+   * Chapters are smart: when a value is set, if `#book(parts: none)` all level
+   * 1 headings become chapters; otherwise, all level 2 headings become chapters
+   * — since the level 1 ones are parts.
   **/
   set heading(
     // #utils.numbering set #book(part) and #book(chapter)
@@ -354,12 +361,8 @@
         )
       ),
     hanging-indent: 0pt,
-    supplement: it => {
-        if part != none {
-          context if it.depth == 1 {part}
-          else if chapter != none {chapter}
-          else {auto}
-        }
+    supplement: it => context {
+        if part != none and it.depth == 1 {part}
         else if chapter != none {chapter}
         else {auto}
       }
@@ -434,9 +437,7 @@
         counter(heading).update((h1, ..n) => (h1, ..current-h2-count))
       }
     }
-    else {
-      it
-    }
+    else {it}
   }
   show heading.where(level: 2): it => {
     book-h2-counter.step()
@@ -453,7 +454,7 @@
     font: cfg.font-mono,
     size: cfg.font-size,
   )
-  show raw.where(block: true): it => pad(left: cfg.indent-firstline, it)
+  show raw.where(block: true): it => pad(left: cfg.line-indentfirst, it)
   show math.equation: set text(font: cfg.font-math)
   show selector.or(
       terms, enum, list, table, figure, math.equation.where(block: true),
@@ -539,7 +540,7 @@
     let catalog = (
       id: none,
       /** <- string | content
-        * A #url("http://www.cutternumber.com/")[Cutter-Sanborn identification code],
+        * A #url("http://www.cutternumber.com/")[Cutter-Sanborn identification code,]
         * used to identify the book author. **/
       place: none,
       /** <- string | content
@@ -551,12 +552,12 @@
         /** <- string | content
           * The _International Standard Book Number_, used to identify the book. **/
       subjects: (),
-      /** <- array
-        * A list of subjects related to the book; must be an array of strings. **/
+      /** <- array of strings
+        * A list of subjects related to the book. **/
       access: (),
-      /** <- array
+      /** <- array of strings
         * A list of access points used to find the book in catalogues, like by
-        * `"Title"` or `"Series"`; must be an array of strings. **/
+        * `"Title"` or `"Series"`. **/
       ddc: none,
       /** <- string | content
         * A #url("https://www.oclc.org/content/dam/oclc/dewey/ddc23-summaries.pdf")[Dewey Decimal Classification]
@@ -567,13 +568,13 @@
         * number, which corresponds to the specific category if the book. **/
       before: none,
       /** <- content
-        * Content showed before (above) the cataloging in public ation board;
-        * generally editorial data like publisher, editors, reviewers,
+        * Content showed before (above) the cataloging in publication board;
+        * generally shows editorial data like publisher, editors, reviewers,
         * copyrights, etc. **/
       after: none,
       /** <- content
         * Content showed after (below) the cataloging in publication board;
-        * generally additional information that complements the board data. **/
+        * generally shows additional information that complements the board data. **/
       ..catalog,
     )
     
@@ -632,31 +633,29 @@
   }
   
   if toc == true {
-    show outline.entry.where(level: 1): it => {
-      // Special formatting to parts in TOC:
-      if part != none and cfg.toc-bold == true {
+    show outline.entry: it => {
+      let entry = it.indented(it.prefix(), it.inner(), gap: 0em)
+      
+      // Emphasize parts in TOC:
+      if it.level == 1 and part != none and cfg.toc-bold == true {
         v(cfg.font-size, weak: true)
-        strong(it)
+        strong(entry)
       }
-      else {
-        it
-      }
+      else {entry}
     }
-    let indenting = if cfg.toc-indent == auto {auto}
-      else {
-        lvl => {
-          if cfg.toc-indent != none {cfg.toc-indent * lvl}
-          else { if lvl > 0 {1.5em} else {0em} }
-        }
-      }
-
+    
+    let args = (:)
+    
+    if cfg.numbering == none {args.insert("depth", 2)}
+    if cfg.toc-stdindent == true {
+      args.insert("indent", lvl => { if lvl > 0 {1.5em} else {0em} })
+    }
+    
     pagebreak(to: break-to, weak: true)
-    outline(
-      indent: indenting,
-      depth: if cfg.numbering == none {2} else {none},
-    )
+    outline(..args)
     pagebreak(weak: true)
   }
+  else if type(toc) == content {toc}
   
   // <outline> anchor allows different numbering styles in TOC and in the actual text.
   [#metadata("Marker for situating titles after/before outline") <outline>]

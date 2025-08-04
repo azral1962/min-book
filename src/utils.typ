@@ -16,6 +16,7 @@
   let patterns = if patterns.at(0) != auto {patterns.at(0)}
     else if scope.h1 != none {patterns.at(1, default: none)}
     else {patterns.at(2, default: none)}
+  let scope = scope
   
   // Set all numbering to none
   if patterns == none {return none}
@@ -26,11 +27,15 @@
   // Transform patterns into positional arguments
   patterns = arguments(..patterns).pos()
   
-  let scope = scope
-  
+  // Defines whether the heading being numbered is before or after TOC
+  let after-toc = query(selector(label("outline")).before(here())) != ()
+
   // When using a default numbering string:
   if patterns.len() == 1 and not patterns.at(0).contains(regex("\{.*\}")) {
-    return numbering-std(..patterns, ..nums)
+    return {
+      numbering-std(..patterns, ..nums)
+      if not after-toc {h(0.5em)}
+    }
   }
   
   // When numbering-style == none
@@ -45,8 +50,8 @@
     }
   }
   
-  // Numbering showed after TOC.
-  if query(selector(label("outline")).before(here())).len() != 0 {
+  
+  if after-toc {
     if scope.h1 != none and patterns.len() >= 1 {
       // Heading level 1 become part
       patterns.at(0) = scope.h1 + " " + patterns.at(0)
@@ -64,7 +69,6 @@
       }
     }
   }
-  // Numbering showed in TOC:
   else {
     let contents = ()
     
@@ -83,10 +87,13 @@
   }
   
   // Set the numbering for current level to none
-  if patterns.at(nums.pos().len() - 1) == none {return none}
+  if patterns.at(nums.pos().len() - 1, default: "") == none {return none}
   
   // Get numbering using numbly
   numbly(default: "I.I.1.1.1.a", ..patterns)(..nums)
+  
+  // Numbering-title gap in TOC
+  if not after-toc {h(0.5em)}
 }
 
 
