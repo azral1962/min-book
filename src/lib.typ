@@ -11,7 +11,7 @@
  * = Quick Start
  *
  * ```typ
- * #import "@preview/min-book:1.1.0": book
+ * #import "@preview/min-book:1.2.0": book
  * #show: book.with(
  *   title: "Book Title",
  *   subtitle: "Book subtitle, not more than two lines long",
@@ -311,8 +311,8 @@
    * sequential plots, or tales, or time jumps, or anything that internally
    * differentiate parts of the story. Each book can set different names for
    * them, like parts, subjects, books, acts, units, modules, etc;
-   * by default, _min-book_ tries to get the word for "Part" in `#book(cfg.lang)`
-   * language as its name.
+   * by default, _min-book_ tries to get the word for "Part" in book language as
+   * its name.
    * 
    * When a value is set, all level 1 headings become _parts_: they occupy the
    * entire page and are aligned at its middle; some decorative frame also
@@ -342,8 +342,7 @@
    * Generally, each chapter contains a single minor story, or event, or scene,
    * or any type of subtle plot change. Each book can set different names for
    * them, like chapters, sections, articles, scenes, etc; by default, _min-book_
-   * tries to get the word for "Chapter" in `#book(cfg.lang)` language as its
-   * name.
+   * tries to get the word for "Chapter" in book language as its name.
    * 
    * Chapters are smart: when a value is set, if `#book(parts: none)` all level
    * 1 headings become chapters; otherwise, all level 2 headings become chapters

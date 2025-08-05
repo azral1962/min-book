@@ -54,10 +54,10 @@ perl -i -pe 's/^(\s*version\s*=\s*).*/$1"'${VERSION}'"/' "typst.toml"
 
 echo "Trying to commit and push unstaged changes, if any..."
 git add .
-git commit -m "Package version ${VERSION} released"
-git push origin main
+git commit -m "VERSION: ${VERSION} released"
+git push origin main --force
 echo "Creating new git tag..."
-git tag -a "${VERSION}" -m "Package version updated to ${VERSION}"
+git tag "${VERSION}"
 git push origin "${VERSION}"
 
 echo "New version ${VERSION} successfully released."

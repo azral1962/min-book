@@ -66,11 +66,10 @@ dev:
 new version:
   @just example
   @just doc
-  cp dev/example/all.pdf docs/example.pdf
-  cp dev/manual/all.pdf docs/manual.pdf
+  cp dev/example/doc.pdf docs/example.pdf
+  cp dev/manual/doc.pdf docs/manual.pdf
   git tag
   bash scripts/version.sh "{{version}}" "{{root}}"
-  @just packages
   
 # install and build it (used in CI).
 [private]
