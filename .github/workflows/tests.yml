@@ -20,28 +20,22 @@ jobs:
             # the docs don't need to build with all versions supported by the package;
             # the latest one is enough
             doc: true
-
     name: Test for ${{ matrix.typst-version.typst }} (Tytanic ${{ matrix.typst-version.tytanic }}${{ matrix.typst-version.doc && ', with docs' }})
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Install just and tytanic
         uses: taiki-e/install-action@v2
         with:
           tool: just,tytanic@${{ matrix.typst-version.tytanic }}
-
       - name: Setup typst
         id: setup-typst
         uses: typst-community/setup-typst@v3
         with:
           typst-version: ${{ matrix.typst-version.typst }}
-
       - name: Run test suite
         run: just test
-
       - name: Archive test results
         uses: actions/upload-artifact@v4
         if: always()
@@ -52,7 +46,6 @@ jobs:
             tests/**/out/*.png
             tests/**/ref/*.png
           retention-days: 5
-
       # - name: Build example
       #   if: ${{ matrix.typst-version.doc }}
       #   run: just doc
@@ -74,6 +67,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install codespell
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Install just
+        uses: taiki-e/install-action@v2
+        with:
+          tool: just
       - name: Check spelling with codespell
-        run: codespell --skip "*.pdf,dev/*,.git/*"  -L te,meu,ser,blessure || exit 1
-        # run: codespell --ignore-words=codespell.txt || exit 1
+        run: just spell
+      #   run: codespell --skip "*.pdf,dev/*,.git/*"  -L te,meu,ser,blessure || exit 1
+      #   # run: codespell --ignore-words=codespell.txt || exit 1
