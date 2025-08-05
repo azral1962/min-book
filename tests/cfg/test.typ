@@ -69,11 +69,12 @@
 
 #let body = []
 
-// 7.png
+// 6.png
 #book(
   cfg: (..def, 
     cover-bgcolor: rgb("#000000"),
     cover-txtcolor: rgb("#9B681B"),
+    cover-fonts: ("Libertinus Serif", "Libertinus Serif"),
     two-sided: false,
   ),
   title: "Title", subtitle: "Subtitle", authors: "Author", cover: auto,
@@ -89,7 +90,7 @@
   #link("https://typst.app")[Typst website.]
 ]
 
-// 6.png
+// 7.png
 #book(
   cfg: (..def,
     page: (flipped: true, paper: "a4"),
