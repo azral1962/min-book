@@ -51,7 +51,7 @@
   toc: none,
   volume: 1,
   cfg: (
-    font: "Libertinus Serif",
+    font-usedefaults: true,
     two-sided: false,
     cover-back: false,
   ),

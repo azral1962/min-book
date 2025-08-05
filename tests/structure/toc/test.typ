@@ -13,11 +13,9 @@
   volume: 1,
   part: none,
   cfg: (
-    font: "Libertinus Serif",
+    font-usedefaults: true,
     two-sided: false,
     cover-back: false,
-    // Comment to remove indentation
-    //toc-indent: auto,
   ),
 )
 

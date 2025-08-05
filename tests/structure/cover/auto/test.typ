@@ -11,7 +11,7 @@
   titlepage: none,
   toc: none,
   cfg: (
-    font: "Libertinus Serif",
+    font-usedefaults: true,
     two-sided: false,
     cover-back: false,
     cover-fonts: ("Libertinus Serif", "Libertinus Serif"),

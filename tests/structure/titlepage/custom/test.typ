@@ -10,9 +10,9 @@
   cover: none,
   toc: none,
   cfg: (
+    font-usedefaults: true,
     two-sided: false,
     cover-back: false,
-    font: "Libertinus Serif",
   ),
   []
 )

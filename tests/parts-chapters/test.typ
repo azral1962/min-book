@@ -17,7 +17,7 @@
   toc: none,
   cfg: (
     two-sided: false,
-    font: "Libertinus Serif",
+    font-usedefaults: true,
   ),
 )
 
@@ -36,8 +36,8 @@
   titlepage: none,
   toc: none,
   cfg: (
-    font: "Libertinus Serif",
-    two-sided: false
+    two-sided: false,
+    font-usedefaults: true,
   ),
 )
 
@@ -57,7 +57,7 @@
   titlepage: none,
   toc: none,
   cfg: (
-    font: "Libertinus Serif",
-    two-sided: false
+    two-sided: false,
+    font-usedefaults: true,
   ),
 )

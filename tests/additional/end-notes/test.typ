@@ -15,7 +15,7 @@
   cfg: (
     two-sided: false,
     cover-back: false,
-    font: "Libertinus Serif",
+    font-usedefaults: true,
   )
 )
 

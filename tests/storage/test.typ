@@ -13,7 +13,7 @@
   toc: false,
   part: none,
   cfg: (
-    font: "Libertinus Serif",
+    font-usedefaults: true,
     two-sided: false,
     cover-back: false,
   ),
