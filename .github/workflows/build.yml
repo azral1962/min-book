@@ -11,25 +11,20 @@ jobs:
   building:
     name: Build package and example locally
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
       - name: Install just
         uses: taiki-e/install-action@v2
         with:
           tool: just
-
       - name: Setup typst
         id: setup-typst
         uses: typst-community/setup-typst@v3
         with:
           typst-version: 0.13
-
       - name: Running build script
         run: just build
-
       - name: Archive test results
         uses: actions/upload-artifact@v4
         if: always()
@@ -37,7 +32,7 @@ jobs:
           name: typst-build-results
           path: dev/example/*
           retention-days: 5
-          
+      
   codespell:
     name: Check spelling with codespell
     runs-on: ubuntu-latest
@@ -55,10 +50,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install codespell
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+       - name: Install just
+        uses: taiki-e/install-action@v2
+        with:
+          tool: just
       - name: Check spelling with codespell
-        run: codespell --skip "*.pdf,dev/*,.git/*"  -L te,meu,ser,blessure || exit 1
-        # run: codespell --ignore-words=codespell.txt || exit 1
-
+        run: just spell
+      
   misspell:
     name: Check spelling with misspell
     runs-on: ubuntu-latest
