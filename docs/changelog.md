@@ -81,7 +81,12 @@ the help testing some features.
 
 ## 1.2.0
 
-- Removed: `#annexes(cfg.toc-indent)` was the same as `#set outline(indent)`
+- Removed: `#book(cfg)` redundant options
+  - `cfg.toc-indent` was the same as `#set outline(indent)`
+  - `cfg.font` was the same as `#set text(font)`
+  - `cfg.font-math` was the same as `#show math.equation: set text(font)`
+  - `cfg.font-mono` was the same as `#show raw: set text(font)`
+  - `cfg.font-size` was the same as `set text(size)`
 - Added: `#annexes(cfg.toc-stdindent)` enables standard TOC
 - Added: Translation with [transl](https://typst.app/universe/package/transl) package (Fluent)
 - Added: IA translations

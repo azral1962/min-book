@@ -171,21 +171,9 @@
     margin: (x: 15%, y: 14%),
       /** <- length
         * Page margin. **/
-    font: ("TeX Gyre Pagella", "Book Antiqua"),
-      /** <- string | array of strings
-        * Text font family, and fallback options — see the `README.md` file to
-        * download the default font. **/
-    font-math: "Asana Math",
-      /** <- string | array of strings
-        * Math font family, and fallback options — see the `README.md` file to
-        * download the default font. **/
-    font-mono: "Inconsolata",
-      /** <- string | array of strings
-        * Monospaced font family, and fallback options — see the `README.md` file
-        * to download the default font. **/
-    font-size: 11pt,
-      /** <- length
-        * Text font size. **/
+    font-usedefaults: false,
+      /** <- boolean
+        * Use default Typst fonts when no custom font is set. **/
     heading-weight: auto,
       /** <- "regular" | "bold" | auto
         * Heading font weight (thickness) — defaults to regular only in levels
@@ -238,14 +226,14 @@
   cfg.transl = fluent( "file!" + cfg.transl, lang: cfg.lang )
   transl(data: cfg.transl)
   
+  let font-size = text.size
+  let date = utils.date(date)
   let part = part
   let chapter = chapter
+  
   if part == auto {part = transl("part", to: cfg.lang, data: cfg.transl)}
   if chapter == auto {chapter = transl("chapter", to: cfg.lang, data: cfg.transl)}
-  
   if type(cfg.page) == str {cfg.page = (paper: cfg.page)}
-  
-  let date = utils.date(date)
   
   /**
    * = Advanced Numbering
@@ -278,6 +266,11 @@
     "{1:I}.{2:1}.{3:1}.{4:1}.{5:1}.{6:a}. ",
   )
   
+  let font = (:)
+  if text.font == "libertinus serif" and not cfg.font-usedefaults {
+    font = ( font: ("TeX Gyre Pagella", "Book Antiqua") )
+  }
+  
   set document(
     title: if subtitle != none {title + " - " + subtitle} else {title},
     author: authors,
@@ -294,9 +287,8 @@
     first-line-indent: cfg.line-indentfirst
   )
   set text(
-    font: cfg.font,
-    size: cfg.font-size,
-    lang: cfg.lang
+    lang: cfg.lang,
+    ..font
   )
   set terms(
     separator: [: ],
@@ -453,23 +445,39 @@
     book-h2-counter.step()
     it
   }
-  show heading.where(level: 1): set text(size: cfg.font-size * 2)
-  show heading.where(level: 2): set text(size: cfg.font-size * 1.6)
-  show heading.where(level: 3): set text(size: cfg.font-size * 1.4)
-  show heading.where(level: 4): set text(size: cfg.font-size * 1.3)
-  show heading.where(level: 5): set text(size: cfg.font-size * 1.2)
-  show heading.where(level: 6): set text(size: cfg.font-size * 1.1)
+  show heading.where(level: 1): set text(size: font-size * 2)
+  show heading.where(level: 2): set text(size: font-size * 1.6)
+  show heading.where(level: 3): set text(size: font-size * 1.4)
+  show heading.where(level: 4): set text(size: font-size * 1.3)
+  show heading.where(level: 5): set text(size: font-size * 1.2)
+  show heading.where(level: 6): set text(size: font-size * 1.1)
   show quote.where(block: true): set pad(x: 1em)
-  show raw: set text(
-    font: cfg.font-mono,
-    size: cfg.font-size,
-  )
+  show raw: it => {
+    let font = (:)
+    if text.font == "dejavu sans mono" and not cfg.font-usedefaults {
+      font = (font: "Inconsolata")
+    }
+  
+    set text(
+      size: font-size,
+      ..font
+    )
+    it
+  }
   show raw.where(block: true): it => pad(left: cfg.line-indentfirst, it)
-  show math.equation: set text(font: cfg.font-math)
+  show math.equation: it => {
+    let font = (:)
+    if text.font == "new computer modern math" and not cfg.font-usedefaults {
+      font = (font: "Asana Math")
+    }
+  
+    set text(..font)
+    it
+  }
   show selector.or(
       terms, enum, list, table, figure, math.equation.where(block: true),
       quote.where(block: true), raw.where(block: true)
-    ): set block(above: cfg.font-size, below: cfg.font-size)
+    ): set block(above: font-size, below: font-size)
   show ref: it => context {
     let el = it.element
     
@@ -607,7 +615,7 @@
   }
   
   if dedication != none {
-    set text(size: cfg.font-size - 2pt)
+    set text(size: font-size - 2pt)
     
     pagebreak(to: break-to, weak: true)
     align(center + horizon, dedication)
@@ -632,7 +640,7 @@
     set align(right + bottom)
     set quote(block: true)
     set text(
-      size: cfg.font-size - 2pt,
+      size: font-size - 2pt,
       style: "italic",
     )
     
@@ -650,7 +658,7 @@
       
       // Emphasize parts in TOC:
       if it.level == 1 and part != none and cfg.toc-bold == true {
-        v(cfg.font-size, weak: true)
+        v(font-size, weak: true)
         strong(entry)
       }
       else {entry}
