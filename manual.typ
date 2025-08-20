@@ -1,11 +1,11 @@
 // NAME: Manual for min-book
 
-#import "@preview/min-manual:0.1.1": manual, arg, univ, url
+#import "@preview/min-manual:0.2.0": manual, arg, univ, url
 
 #show: manual.with(
   title: "Minimal Books",
   description: "Simple and complete books without introducing new syntax.",
-  authors: "Maycon F. Melo <https://github.com/mayconfmelo>",
+  authors: "Maycon F. Melo <@mayconfmelo>",
   package: "min-book:1.2.0",
   license: "MIT",
   logo: image("docs/assets/manual-logo.png"),

@@ -1,19 +1,17 @@
 /**
- * == Note Command
- * 
- * :note:
- * 
- * Adds an end note, an alternative for footnotes but placed inside of the page
- * instead of its margins. End notes appear at its own page at the end of the
- * current section, right before the next heading.
+== Note Command
+
+:note:
+
+Adds an end note, an alternative for footnotes but placed inside of the page
+instead of its margins. End notes appear at its own page at the end of the
+current section, right before the next heading.
 **/
 #let note(
-  numbering: auto,
-  /** <- auto | string
-    * Custom note numbering — a standard numbering string. **/
-  content,
-  /** <- content <required>
-    * The content of the end note. **/
+  numbering: auto, /// <- auto | string
+    /// Custom note numbering — a standard numbering string. |
+  content, /// <- content <required>
+    /// The content of the end note. |
 ) = context {
   import "../utils.typ"
   
