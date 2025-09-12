@@ -14,7 +14,7 @@ Simple and complete books without introducing new syntax
 ## Quick Start
 
 ```typst
-#import "@preview/min-book:1.2.0": book
+#import "@preview/min-book:1.2.1": book
 #show: book.with(
   title: "Book Title",
   subtitle: "Book subtitle, not more than two lines long",
@@ -42,9 +42,9 @@ possible and encouraged.
 
 ## More Information
 
-- [Official manual](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.2.0/docs/manual.pdf)
-- [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.2.0/docs/example.pdf)
-- [Example Typst code](https://github.com/mayconfmelo/min-book/blob/1.2.0/template/main.typ)
+- [Official manual](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.2.1/docs/manual.pdf)
+- [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.2.1/docs/example.pdf)
+- [Example Typst code](https://github.com/mayconfmelo/min-book/blob/1.2.1/template/main.typ)
 - [Changelog](https://github.com/mayconfmelo/min-book/blob/main/docs/changelog.md)
 - [Development info](https://github.com/mayconfmelo/min-book/blob/main/docs/dev.md)
 
@@ -102,5 +102,5 @@ Book Antiqua
 
 ## Translation Notice
 
-From _min-book:1.2.0+_ there will be no automatic fallback to English anymore.
+From _min-book:1.2.1+_ there will be no automatic fallback to English anymore.
 Refer to the section _TRANSLATION_ at the end of the manual for more information.
