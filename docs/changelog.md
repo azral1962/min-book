@@ -103,3 +103,8 @@ the help testing some features.
 - Updated: `#annexes(cfg.link-readable)` &rarr; `#annexes(cfg.paper-links)`
 - Updated: Changed entire project structure (compartimentalization)
 - Updated: Added project tests
+
+
+### 1.2.1
+
+- Fixed: Removed red background from `src/assets/frame.svg`
