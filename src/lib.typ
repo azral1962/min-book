@@ -429,7 +429,7 @@ These are all the options and its defaults used by _min-book_:
   show math.equation: it => {
     let font = (:)
     if text.font == "new computer modern math" and not cfg.font-usedefaults {
-      font = (font: "Asana Math")
+      font = (font: ("Asana Math", "New Computer Modern Math"))
     }
   
     set text(..font)
