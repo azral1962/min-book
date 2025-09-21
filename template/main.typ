@@ -86,16 +86,19 @@ Sincerelly,
 
 == Inline Markup
 
-_#lorem(40)_
-
-*#lorem(40)*
-
-#quote[#lorem(40)]
-
-#raw(lorem(40))
-
-#lorem(3) https://example.com #lorem(15)
-#link("https://github.com", "GitHub") #lorem(20)#footnote[This is an actual footnote.]
+#table(
+  [ *Italic*                                        ],
+  [ _Bold_                                          ],
+  [ `Raw`                                           ],
+  [ ```typ #raw```                                  ],
+  [ #quote[Quotation]                               ],
+  [ #link("https://github.com")[URL]                ],
+  [ Footnote #footnote[This is an actual footnote.] ],
+  [ $E = m c^2$                                     ],
+  
+  columns: (1fr, 1fr, 1fr, 1fr),
+  align: center,
+)
 
 #pagebreak()
 
