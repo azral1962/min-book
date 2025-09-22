@@ -403,7 +403,7 @@ These are all the options and its defaults used by _min-book_:
     else {it}
   }
   show heading.where(level: 2): it => {
-    book-h2-counter.step()
+    if it.numbering != none {book-h2-counter.step()}
     it
   }
   show heading.where(level: 1): set text(size: font-size * 2)
@@ -466,6 +466,7 @@ These are all the options and its defaults used by _min-book_:
     else {it}
   }
   show link: it => {
+    // FIXME: Accept content it.body
     if cfg.paper-links and type(it.dest) == str and it.dest != it.body.text {
       it
       footnote(it.dest)
@@ -518,6 +519,7 @@ These are all the options and its defaults used by _min-book_:
     options must be explicitly set to generate the board; otherwise it will
     be just ignored.
     **/
+    // FIXME: accept content #catalog(title)
     let catalog = (
       id: none, /// <- string | content
         /** A #url("http://www.cutternumber.com/")[Cutter-Sanborn identification code,]
