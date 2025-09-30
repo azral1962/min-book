@@ -112,8 +112,7 @@ These are all the options and its defaults used by _min-book_:
   
   /**
   = Advanced Configurations <adv-config>
-  
-  :let cfg:
+  :arg cfg: "let"
   
   These `#book(cfg)` configurations allows to modify certain aspects of the
   book and manage its appearance and structure. Built with some thoughful
@@ -179,7 +178,7 @@ These are all the options and its defaults used by _min-book_:
       panic("Invalid cfg." + key + ", can be: " + cfg.keys().join(", "))
     }
   }
-  cfg = arguments(..cfg, ..new-cfg).named()
+  cfg += new-cfg
   
   // Convert cfg.two-sided into a #pagebreak(to) value
   let break-to = if cfg.two-sided {"odd"} else {none}
@@ -511,7 +510,7 @@ These are all the options and its defaults used by _min-book_:
     /**
     = Cataloging in Publication <catalog>
     
-    :let catalog:
+    :arg catalog: "let"
     
     These `#book(catalog)` options set the data used to create the
     "cataloging in publication" board. Other needed information are
@@ -548,8 +547,7 @@ These are all the options and its defaults used by _min-book_:
       after: none, /// <- content
         /** Content showed after (below) the cataloging in publication board;
         generally shows additional information that complements the board data. |**/
-      ..catalog,
-    )
+    ) + catalog
     
     import "components/catalog.typ": new
     

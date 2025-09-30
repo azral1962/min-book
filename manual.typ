@@ -1,6 +1,6 @@
 // NAME: Manual for min-book
 
-#import "@preview/min-manual:0.2.0": manual, arg, univ, url
+#import "@preview/min-manual:0.2.2": manual, arg, univ, url
 
 #show: manual.with(
   title: "Minimal Books",
