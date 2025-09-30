@@ -1,6 +1,8 @@
 root := justfile_directory()
 name := `grep '^name' typst.toml | cut -d'"' -f2`
 version := `grep '^version' typst.toml | cut -d'"' -f2`
+example := "template/main.typ"
+doc := "manual.typ"
 
 [private]
 default:
@@ -22,21 +24,21 @@ test which="":
 example:
   rm -r dev/example/ 2>/dev/null || true
   mkdir -p dev/example/
-  typst compile template/main.typ dev/example/doc.pdf
-  typst compile template/main.typ dev/example/page-{0p}.png
+  typst compile {{example}} dev/example/doc.pdf
+  typst compile {{example}} dev/example/page-{0p}.png
 
 # compile the manual.
 doc:
   rm -r dev/manual/ 2>/dev/null || true
   mkdir -p dev/manual/
-  typst compile manual.typ dev/manual/doc.pdf
-  typst compile manual.typ dev/manual/page-{0p}.png
+  typst compile {{doc}} dev/manual/doc.pdf
+  typst compile {{doc}} dev/manual/page-{0p}.png
 
 # remove all dev files.
 clean:
-  rm -r dev/manual/ 2>/dev/null || true
+  rm -r dev/manual/  2>/dev/null || true
   rm -r dev/example/ 2>/dev/null || true
-  rm -r dev/pkg/ 2>/dev/null || true
+  rm -r dev/pkg/     2>/dev/null || true
   rm -r dev/{{name}} 2>/dev/null || true
   tt util clean
   
@@ -45,8 +47,15 @@ symlink:
   bash scripts/dev-link.sh "{{root}}"
 
 # run spell check.
-spell:
-  codespell --skip "*.pdf,dev/*,.git/*" -L nd
+spell correct="no":
+  #!/usr/bin/env bash
+  arg=""
+  if [[ {{correct}} != "no" ]]; then
+    arg="--interactive 3 --write-changes"
+  fi
+  codespell $arg \
+    --skip "*.pdf,dev/*,.git/*,./docs/assets/manual-pt.typ" \
+    --ignore-words-list "ser,nomes,comando"
 
 # init template in dev/
 init:
@@ -55,19 +64,15 @@ init:
 # frequent dev commands.
 [private]
 dev:
-  @just install preview
-  @just example
-  @just doc
   @just test
-  
+  bash scripts/dev-link.sh "{{root}}" false
+  typst watch {{example}} dev/example/page-{0p}.png
   
 # release a new package version.
 [private]
 new version:
-  @just example
-  @just doc
-  cp dev/example/doc.pdf docs/example.pdf
-  cp dev/manual/doc.pdf docs/manual.pdf
+  typst compile {{example}} docs/example.pdf
+  typst compile {{doc}} docs/manual.pdf
   git tag
   bash scripts/version.sh "{{version}}" "{{root}}"
   
