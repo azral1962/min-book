@@ -45,7 +45,7 @@
       #align(center + horizon)[
         #set par(leading: 2em)
         #context text(
-          size: page.width * 0.08,
+          size: page.width * 0.06,
           font: cfg.cover-fonts.at(0),
           title
         )
