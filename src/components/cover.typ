@@ -74,6 +74,10 @@
       ]
     ]
   }
+  else if type(cover) == function {
+      cover(title, subtitle, date, authors, volume, cfg)
+  }
+
   else if type(cover) == content {
     if cover.func() == image {
       set image(
