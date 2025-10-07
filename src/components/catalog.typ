@@ -1,22 +1,24 @@
 #let new(catalog, title, subtitle, authors, date, volume, edition) = {
+  // TODO: re-write new()
+  set box(width: 1fr)
   set par(
     first-line-indent: 0pt,
     spacing: 1em
   )
-  set box(width: 1fr)
   set rect(
-    width: 100% + 1em,
-    inset: 0.5em
+    width: 100%,
+    inset: (x: 0pt, y: 0.5em),
+    outset: (x: 0.5em, y: 0pt),
   )
-  show rect: set align(center)
+  show rect: set align(center + bottom)
   
-  if title == none {title = ""}
   if subtitle != none {title = title + " – " + subtitle}
-  if authors == none {authors = ""}
   if volume == 0 {volume = ""}
   if edition == 0 {edition = 1}
   if catalog.publisher == none {catalog.publisher = ""}
   if catalog.place == none {catalog.place = ""}
+  if type(catalog.before) == str {catalog.before = eval(catalog.before, mode: "markup")}
+  if type(catalog.after) == str {catalog.after = eval(catalog.after, mode: "markup")}
 
   authors = if type(authors) == array {authors = authors.at(0) + " et al."}
     else {
@@ -30,11 +32,12 @@
         else {m.text}
       })
     }
+  title = title.replace("\n", " ")
   
   // Bibliographic citation data
   let bib = "
     this-book:
-      type: book
+      type: Book
       title: " + str(title) + "
       author: " + str(authors) + "
       date: " + str(date.year()) + "
