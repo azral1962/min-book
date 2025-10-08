@@ -75,7 +75,15 @@
     ]
   }
   else if type(cover) == function {
-      cover(title, subtitle, date, authors, volume, cfg)
+      cover((
+        title: title,
+        subtitle: subtitle,
+        date: date,
+        authors: authors,
+        volume: volume,
+        ),
+        cfg
+      )
   }
 
   else if type(cover) == content {
