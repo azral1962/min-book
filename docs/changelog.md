@@ -108,3 +108,12 @@ the help testing some features.
 ### 1.2.1
 
 - Fixed: Removed red background from `src/assets/frame.svg`
+
+### 1.2.2
+
+- Updated: Template features a excerpt from a real book (public domain)
+- Updated: Reduced font size of main title in default cover and title page
+- Fixed: Compilation failed if custom math font was not found
+  - Fallback to default Typst math font
+- Fixed: Unnumbered headings were also counted in special continuous chapter numbering
+  - Unnumbered headings ignored

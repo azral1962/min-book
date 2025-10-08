@@ -6,7 +6,7 @@
   title: "Minimal Books",
   description: "Simple and complete books without introducing new syntax.",
   authors: "Maycon F. Melo <@mayconfmelo>",
-  package: "min-book:1.2.1",
+  package: "min-book:1.2.2",
   license: "MIT",
   logo: image("docs/assets/manual-logo.png"),
   from-comments:
