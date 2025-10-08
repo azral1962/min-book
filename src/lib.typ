@@ -492,7 +492,8 @@ These are all the options and its defaults used by _min-book_:
     is not set, it's also possible to set a custom cover image or create one
     using Typst code — the default automatic cover (see
     `/src/components/cover.typ`) can be a good start as a base to create a
-    custom version.
+    custom version. Cover can be a function, in which case it will be invoked with
+    the `title`, `subtitle`, `date`, `authors`, `volume` and `cfg` of the book.
     **/
     new(cover, title, subtitle, date, authors, volume, cfg)
     pagebreak(to: break-to)
