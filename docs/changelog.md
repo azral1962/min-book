@@ -109,8 +109,9 @@ the help testing some features.
 
 - Fixed: Removed red background from `src/assets/frame.svg`
 
-### 1.2.2
+## 1.3.0
 
+- Added: `#book(cover)` can be a function
 - Updated: Template features a excerpt from a real book (public domain)
 - Updated: Reduced font size of main title in default cover and title page
 - Fixed: Compilation failed if custom math font was not found

@@ -1,4 +1,4 @@
-#import "@preview/min-book:1.2.2": book, annexes
+#import "@preview/min-book:1.3.0": book, annexes
 
 #set text(lang: "pt", region: "BR")
 

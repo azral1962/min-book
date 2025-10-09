@@ -13,7 +13,7 @@
 = Quick Start
 
 ```typ
-#import "@preview/min-book:1.2.1": book
+#import "@preview/min-book:1.3.0": book
 #show: book.with(
   title: "Book Title",
   subtitle: "Book subtitle, not more than two lines long",
@@ -51,17 +51,18 @@ These are all the options and its defaults used by _min-book_:
     /// Subtitle, generally two lines long or less. |
   edition: 0, /// <- int
     /** Publication number, used when the content is changed or updated in a new
-    release after the original publication. |**/
+        release after the original publication. |**/
   volume: 0, /// <- int
     /** Series volume number, used when one extensive story is told through
-    multiple books, in order. |**/
+        multiple books, in order. |**/
   authors: none, /// <- string | array of strings <required>
     /// Author or authors. |
   date: datetime.today(), /// <- datetime | array | dictionary
     /** `(year, month, day)`\
-    Publication date — if a index/key is omitted, fallback to the current one. |**/
-  cover: auto, /// <- auto | content | image | none
-    /// Cover — generated automatically when `auto`. |
+        Publication date — if a index/key is omitted, fallback to the current one. |**/
+  cover: auto, /// <- auto | function | content | image | none
+    /** Cover — generated automatically when `auto`. If function, receives two 
+        dictionary arguments. |**/
   titlepage: auto, /// <- auto | content | none
     /// Title page, shown after cover — generated automatically when `auto`. |
   catalog: none, /// <- dictionary | yaml | toml
@@ -70,25 +71,25 @@ These are all the options and its defaults used by _min-book_:
     /// A text that corrects errors from previous book editions. |
   dedication: none, /// <- content | string
     /** A brief text that dedicates the book in honor or in memorian of someone
-    important; can accompany a small message directed to the person. |**/
+        important; can accompany a small message directed to the person. |**/
   acknowledgements: none, /// <- content | string
     /** A brief text to recognize everyone who helped directly or indirectly in
-    the process of book creation and their importance in the project. |**/
+        the process of book creation and their importance in the project. |**/
   epigraph: none, /// <- quote | content
     /** A short citation or excerpt from other works used to introduce the main
-    theme of the book; can suggest a reflection, a mood, or idea related to
-    the text. |**/
+        theme of the book; can suggest a reflection, a mood, or idea related to
+        the text. |**/
   toc: true, /// <- boolean | content
     /// Generate a table of contents on the right place. |
   part: auto, /// <- string | none | auto
     /** Name of the main divisions of the book — if not set, fallback to the word
-    "Part" in book language. |**/
+        "Part" in book language. |**/
   chapter: auto, /// <- string | none
     /** The name of the sections of the book — if not set, fallback to the word
-    "Chapter" in book language. |**/
+        "Chapter" in book language. |**/
   cfg: auto, /// <- dictionary
     /** Custom advanced configurations, used to fine-tune some aspects of the
-    book (see "@adv-config"). |**/
+        book (see "@adv-config"). |**/
   body /// <- content
     /// The book content. |
 ) = context {

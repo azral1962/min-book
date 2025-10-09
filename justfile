@@ -71,10 +71,16 @@ dev:
 # release a new package version.
 [private]
 new version:
-  typst compile {{example}} docs/example.pdf
-  typst compile {{doc}} docs/manual.pdf
   git tag
   bash scripts/version.sh "{{version}}" "{{root}}"
+  @just install
+  typst compile {{example}} docs/example.pdf
+  typst compile {{doc}} docs/manual.pdf
+  git add .
+  git commit -m "VERSION: {{version}} released"
+  git push origin main --force
+  git tag "{{version}}"
+  git push origin "{{version}}"
   
 # install and build it (used in CI).
 [private]
