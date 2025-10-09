@@ -1,16 +1,32 @@
 # Minimal Books
 
-<center align="center">
+<div align="center">
 
 <p class="hidden">
 Simple and complete books without introducing new syntax  
 </p>
 
+<p class="hidden">
+  <a href="https://typst.app/universe/package/min-book">
+    <img src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Ftypst.app%2Funiverse%2Fpackage%2Fmin-book&query=%2Fhtml%2Fbody%2Fdiv%2Fmain%2Fdiv%5B2%5D%2Faside%2Fsection%5B2%5D%2Fdl%2Fdd%5B3%5D&logo=typst&label=Universe&color=%23239DAE&labelColor=%23353c44" /></a>
+  <a href="https://github.com/mayconfmelo/min-book/tree/dev/">
+    <img src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmayconfmelo%2Fmin-book%2Frefs%2Fheads%2Fdev%2Ftypst.toml&query=%24.package.version&logo=github&label=Development&logoColor=%2397978e&color=%23239DAE&labelColor=%23353c44" /></a>
+</p>
+
+[![Manual](https://img.shields.io/badge/Manual-%23353c44)](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.3.0/docs/manual.pdf)
+[![Example PDF](https://img.shields.io/badge/Example-PDF-%23777?labelColor=%23353c44)](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.3.0/docs/example.pdf)
+[![Example SRC](https://img.shields.io/badge/Example-SRC-%23777?labelColor=%23353c44)](https://github.com/mayconfmelo/min-book/blob/1.3.0/template/main.typ)
+[![Changelog](https://img.shields.io/badge/Changelog-%23353c44)](https://github.com/mayconfmelo/min-book/blob/main/docs/changelog.md)
+[![Example PDF](https://img.shields.io/badge/Contribute-%23353c44)](https://github.com/mayconfmelo/min-book/blob/main/docs/dev.md)
+
+<p class="hidden">
+
 [![Tests](https://github.com/mayconfmelo/min-book/actions/workflows/tests.yml/badge.svg)](https://github.com/mayconfmelo/min-book/actions/workflows/tests.yml)
 [![Build](https://github.com/mayconfmelo/min-book/actions/workflows/build.yml/badge.svg)](https://github.com/mayconfmelo/min-book/actions/workflows/build.yml)
 [![Spellcheck](https://github.com/mayconfmelo/min-book/actions/workflows/spellcheck.yml/badge.svg)](https://github.com/mayconfmelo/min-book/actions/workflows/spellcheck.yml)
 
-</center>
+</p>
+</div>
 
 
 ## Quick Start
@@ -41,14 +57,6 @@ This package comes with some thoughful ready-to-use defaults but also allows
 you to play with highly customizable options if you need them, so it's really
 up to you: customize it your way or ride along the defaults — both ways are
 possible and encouraged.
-
-## More Information
-
-- [Official manual](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.3.0/docs/manual.pdf)
-- [Example PDF result](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.3.0/docs/example.pdf)
-- [Example Typst code](https://github.com/mayconfmelo/min-book/blob/1.3.0/template/main.typ)
-- [Changelog](https://github.com/mayconfmelo/min-book/blob/main/docs/changelog.md)
-- [Development info](https://github.com/mayconfmelo/min-book/blob/main/docs/dev.md)
 
 
 ## Feature List
@@ -100,9 +108,3 @@ Book Antiqua
     
 **Cover text:**
 [Alice](https://fonts.google.com/specimen/Alice)
-
-
-## Translation Notice
-
-From _min-book:1.3.0+_ there will be no automatic fallback to English anymore.
-Refer to the section _TRANSLATION_ at the end of the manual for more information.
