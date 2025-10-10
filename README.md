@@ -17,7 +17,7 @@ Simple and complete books without introducing new syntax
 [![Example PDF](https://img.shields.io/badge/Example-PDF-%23777?labelColor=%23353c44)](https://raw.githubusercontent.com/mayconfmelo/min-book/refs/tags/1.3.0/docs/example.pdf)
 [![Example SRC](https://img.shields.io/badge/Example-SRC-%23777?labelColor=%23353c44)](https://github.com/mayconfmelo/min-book/blob/1.3.0/template/main.typ)
 [![Changelog](https://img.shields.io/badge/Changelog-%23353c44)](https://github.com/mayconfmelo/min-book/blob/main/docs/changelog.md)
-[![Example PDF](https://img.shields.io/badge/Contribute-%23353c44)](https://github.com/mayconfmelo/min-book/blob/main/docs/dev.md)
+[![Contribute](https://img.shields.io/badge/Contribute-%23353c44)](https://github.com/mayconfmelo/min-book/blob/main/docs/contributing.md)
 
 <p class="hidden">
 
