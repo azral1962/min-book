@@ -71,10 +71,14 @@ dev:
   
 # release a new package version.
 [private]
-release version:
-  git add .
+release:
   git tag
-  git commit -m "VERSION: {{version}} released"
+  bash scripts/version.sh "{{version}}" "{{root}}"
+  just install
+  typst compile {{example}} docs/example.pdf
+  typst compile {{doc}} docs/manual.pdf
+  git add .
+  git commit -m "VERSION: {{version}} released" || true
   git push origin main --force
   git tag "{{version}}"
   git push origin "{{version}}"
@@ -87,16 +91,10 @@ build:
   
 # deploy to the Typst Universe repo in ../packages.
 [private]
-deploy version:
+deploy:
   #!/usr/bin/env bash
-  
-  # Generate docs
   bash scripts/version.sh "{{version}}" "{{root}}"
-  just install
-  typst compile {{example}} docs/example.pdf
-  typst compile {{doc}} docs/manual.pdf
   
-  # Get to typst/packages fork
   cd ../packages
   git checkout -b main
   just update
