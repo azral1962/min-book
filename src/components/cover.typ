@@ -7,7 +7,7 @@
         let m = page.margin
         let frame = image(
             width: 93%,
-            "../assets/frame.svg"
+            "../assets/AZRL2.png"
           )
           
         if type(m) != dictionary {
